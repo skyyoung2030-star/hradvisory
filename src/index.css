@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-bg text-primary-900;
+    /* Tour mode: prevent page-scroll on desktop so each step feels self-contained */
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: rgba(14, 165, 233, 0.2);
+    color: #0f172a;
+  }
+  /* hide native focus ring but keep keyboard focus visible */
+  :focus { outline: none; }
+  :focus-visible { outline: 2px solid #0EA5E9; outline-offset: 2px; }
+}
+
+@layer components {
+  /* ─────────────── Typography ─────────────── */
+  .h-hero { @apply text-[clamp(36px,5.5vw,56px)] font-bold tracking-[-0.025em] leading-[1.15]; }
+  .h-1    { @apply text-[clamp(28px,4.5vw,40px)] font-bold tracking-[-0.02em]  leading-[1.2]; }
+  .h-2    { @apply text-[clamp(22px,3.5vw,30px)] font-semibold tracking-[-0.015em] leading-[1.3]; }
+  .h-3    { @apply text-[20px] font-semibold tracking-[-0.01em] leading-[1.4]; }
+  .h-4    { @apply text-[18px] font-semibold leading-[1.4]; }
+  .body-lg{ @apply text-[18px] leading-[1.65]; }
+  .body   { @apply text-[16px] leading-[1.65]; }
+  .body-sm{ @apply text-[14px] leading-[1.55]; }
+  .caption{ @apply text-[13px] leading-[1.5] text-primary-400; }
+
+  /* ─────────────── Containers ─────────────── */
+  .container-x { @apply mx-auto max-w-container px-5 sm:px-8 lg:px-12; }
+  .container-tour { @apply mx-auto max-w-tour px-5 sm:px-8; }
+
+  /* ─────────────── Buttons ─────────────── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center h-11 px-6 rounded-lg
+           bg-accent-500 text-white font-medium
+           hover:bg-accent-600 active:scale-[0.98]
+           transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center h-11 px-6 rounded-lg
+           bg-white border border-primary-200 text-primary-900 font-medium
+           hover:border-accent-500 hover:text-accent-600
+           transition-colors disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center h-11 px-4 rounded-lg
+           text-primary-600 font-medium hover:bg-primary-50 transition-colors;
+  }
+  .btn-lg { @apply h-14 px-8 text-[16px]; }
+
+  /* ─────────────── Cards ─────────────── */
+  .card {
+    @apply bg-white border border-primary-200 rounded-2xl p-6 sm:p-8
+           transition-all;
+  }
+  .card-hover {
+    @apply hover:border-accent-500 hover:shadow-[0_8px_24px_-12px_rgba(14,165,233,0.25)]
+           cursor-pointer;
+  }
+  .card-soft { @apply bg-bg-soft border-primary-100; }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full
+           bg-primary-50 border border-primary-200
+           text-primary-600 text-[13px] font-medium;
+  }
+  .chip-accent {
+    @apply bg-accent-50 border-accent-500/30 text-accent-600;
+  }
+
+  /* ─────────────── Tour-specific ─────────────── */
+  .tour-shell {
+    /* Each step is a viewport-anchored card. We let pages scroll their inner content if needed. */
+    @apply min-h-[calc(100vh-128px)] flex flex-col;
+  }
+  .tour-content-grid {
+    @apply grid gap-8 lg:grid-cols-[1fr,1fr] items-center;
+  }
+}
