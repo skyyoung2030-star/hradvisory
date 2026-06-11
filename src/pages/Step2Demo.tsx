@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Send, Bot, User as UserIcon, Sparkles } from "lucide-react";
+import { Send, Bot, User as UserIcon, MessageCircleQuestion } from "lucide-react";
 import { motion } from "framer-motion";
 import { getStepBySlug } from "@/lib/tour-config";
 import StepShell from "@/components/StepShell";
@@ -8,11 +8,11 @@ import { cn } from "@/lib/utils";
 import { getChatReply } from "@/lib/api";
 import type { ChatMessage } from "@/lib/claude-mock";
 
-const SUGGESTED_QUESTIONS = [
-  "100명 회사에 평가제도가 없는데, 어떻게 시작하나요?",
-  "Pay Band는 직급 몇 단계로 나누는 게 좋나요?",
-  "MBO에서 OKR로 전환할 때 가장 큰 위험은 뭔가요?",
-  "팀장 리더십 진단, 어떤 문항으로 하나요?",
+const SUGGESTED: { number: string; q: string }[] = [
+  { number: "01", q: "100명 회사에 평가제도가 없는데, 어떻게 시작하나요?" },
+  { number: "02", q: "Pay Band는 직급 몇 단계로 나누는 게 좋나요?" },
+  { number: "03", q: "MBO에서 OKR로 전환할 때 가장 큰 위험은 뭔가요?" },
+  { number: "04", q: "팀장 리더십 진단, 어떤 문항으로 하나요?" },
 ];
 
 const SEED: ChatMessage = {
@@ -57,24 +57,24 @@ export default function Step2Demo() {
   return (
     <>
       <StepShell step={step}>
-        <div className="grid gap-6 lg:grid-cols-[1fr,320px] items-start">
-          <div className="card !p-0 overflow-hidden flex flex-col h-[540px]">
-            <div className="flex items-center gap-3 px-5 py-3 border-b border-primary-100 bg-bg-soft">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent-500 to-accent-700 text-white flex items-center justify-center font-semibold text-[13px]">
-                M
+        <div className="grid gap-5 lg:grid-cols-[1fr,320px] items-start">
+          {/* Chat panel */}
+          <div className="card !p-0 overflow-hidden flex flex-col h-[540px] bg-white shadow-xl shadow-primary-900/5">
+            <div className="flex items-center gap-3 px-5 py-3 border-b border-primary-100 bg-gradient-to-r from-bg-soft to-white">
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-500 to-accent-700 text-white flex items-center justify-center font-bold text-[14px]">
+                  M
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-success-500 border-2 border-white" />
               </div>
               <div>
                 <div className="text-[14px] font-semibold text-primary-900">
                   Master 컨설턴트
                 </div>
-                <div className="text-[12px] text-success-500 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse-soft" />
-                  온라인
+                <div className="text-[11px] text-primary-500">
+                  HCG · HR 자문 · 15년 경력
                 </div>
               </div>
-              <span className="ml-auto chip chip-accent">
-                <Sparkles size={11} className="mr-1" /> 데모
-              </span>
             </div>
 
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-5 space-y-4 bg-white">
@@ -99,7 +99,7 @@ export default function Step2Demo() {
               <button
                 type="submit"
                 disabled={loading || !input.trim()}
-                className="btn-primary !h-11 !px-4"
+                className="inline-flex items-center justify-center w-11 h-11 rounded-lg bg-accent-500 text-white hover:bg-accent-600 disabled:opacity-40 active:scale-95 transition-all"
                 aria-label="메시지 전송"
               >
                 <Send size={16} />
@@ -107,53 +107,51 @@ export default function Step2Demo() {
             </form>
           </div>
 
-          <aside className="space-y-4">
-            <div className="card card-soft">
-              <h3 className="h-4">실제 자문은 이렇게 진행됩니다</h3>
-              <ul className="mt-4 space-y-2 body-sm text-primary-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-accent-500 mt-0.5">·</span>
-                  실시간 핫라인 (평일 응답)
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-accent-500 mt-0.5">·</span>
-                  월 1회 현장 방문 (대면)
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-accent-500 mt-0.5">·</span>
-                  제도 초안 함께 작성
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-accent-500 mt-0.5">·</span>
-                  분기 진단 · 서베이
-                </li>
-              </ul>
-            </div>
-
-            <div className="card card-soft">
-              <h3 className="h-4">이런 걸 물어보세요</h3>
-              <div className="mt-4 flex flex-col gap-2">
-                {SUGGESTED_QUESTIONS.map((q, i) => (
+          {/* Side panel — branching dialogue style */}
+          <aside className="space-y-3">
+            <div className="px-1">
+              <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent-600 mb-2 inline-flex items-center gap-1">
+                <MessageCircleQuestion size={11} />
+                예시 질문
+              </div>
+              <div className="flex flex-col gap-1.5">
+                {SUGGESTED.map((s) => (
                   <button
-                    key={i}
+                    key={s.number}
                     type="button"
-                    onClick={() => send(q)}
+                    onClick={() => send(s.q)}
                     disabled={loading}
-                    className="text-left body-sm text-primary-700 px-3 py-2 rounded-lg border border-primary-200 bg-white hover:border-accent-500 hover:text-accent-600 transition-colors disabled:opacity-50"
+                    className="group text-left p-3 rounded-lg border border-primary-200 bg-white hover:border-accent-500 hover:bg-accent-50/40 transition-colors disabled:opacity-50 active:scale-[0.99]"
                   >
-                    {q}
+                    <div className="flex items-start gap-2.5">
+                      <span className="text-[11px] font-mono font-bold text-accent-500 tabular-nums pt-0.5">
+                        [{s.number}]
+                      </span>
+                      <span className="body-sm text-primary-700 group-hover:text-primary-900 leading-snug">
+                        {s.q}
+                      </span>
+                    </div>
                   </button>
                 ))}
               </div>
+            </div>
+
+            <div className="card card-soft !p-4">
+              <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary-500 mb-2">
+                실제 자문 채널
+              </div>
+              <ul className="space-y-1.5 text-[13px] text-primary-700">
+                <li>· 실시간 핫라인 (평일 응답)</li>
+                <li>· 월 1회 현장 방문</li>
+                <li>· 제도 초안 함께 작성</li>
+                <li>· 분기 진단 · 서베이</li>
+              </ul>
             </div>
           </aside>
         </div>
       </StepShell>
 
-      <TourNav
-        current={step}
-        nextLabel={messages.length > 1 ? "다음: 산출물 보기" : "둘러봐도 됩니다 →"}
-      />
+      <TourNav current={step} nextLabel="산출물 보기" />
     </>
   );
 }
@@ -177,7 +175,7 @@ function Bubble({ role, content }: { role: ChatMessage["role"]; content: string 
       </div>
       <div
         className={cn(
-          "max-w-[78%] rounded-2xl px-4 py-2.5 body-sm whitespace-pre-wrap",
+          "max-w-[78%] rounded-2xl px-4 py-2.5 body-sm whitespace-pre-wrap leading-relaxed",
           isUser ? "bg-accent-500 text-white rounded-tr-md" : "bg-primary-50 text-primary-800 rounded-tl-md",
         )}
       >

@@ -64,7 +64,7 @@ const PHASES: Phase[] = [
     id: "3",
     weekRange: "Week 13~20",
     title: "시범 운영",
-    goal: "한 사이클을 함께 돌려봅니다 (rehearsal)",
+    goal: "한 사이클을 함께 돌려봅니다",
     activities: [
       { icon: Calendar, text: "Check-in 면담 시범 운영" },
       { icon: BarChart3, text: "Calibration 회의 동석" },
@@ -94,6 +94,7 @@ export default function Step4Process() {
   return (
     <>
       <StepShell step={step}>
+        {/* Phase selector — timeline with dots */}
         <div className="relative">
           <div className="absolute left-0 right-0 top-4 h-[2px] bg-primary-200" />
           <div
@@ -113,12 +114,13 @@ export default function Step4Process() {
                 >
                   <span
                     className={cn(
-                      "w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold transition-all border-2",
+                      "w-9 h-9 rounded-full flex items-center justify-center text-[12px] font-bold transition-all border-2",
+                      "group-active:scale-95",
                       isActive
-                        ? "bg-accent-500 text-white border-accent-500 scale-110 shadow-lg shadow-accent-500/30"
+                        ? "bg-accent-500 text-white border-accent-500 scale-110 shadow-lg shadow-accent-500/40"
                         : isDone
                         ? "bg-accent-500 text-white border-accent-500"
-                        : "bg-white text-primary-400 border-primary-200 group-hover:border-accent-500",
+                        : "bg-white text-primary-400 border-primary-200 group-hover:border-accent-500 group-hover:text-accent-600",
                     )}
                   >
                     {isDone ? <CheckCircle2 size={14} /> : i + 1}
@@ -140,6 +142,7 @@ export default function Step4Process() {
           </div>
         </div>
 
+        {/* Active phase detail */}
         <AnimatePresence mode="wait">
           <motion.div
             key={phase.id}
@@ -149,14 +152,14 @@ export default function Step4Process() {
             transition={{ duration: 0.25 }}
             className="mt-12 grid lg:grid-cols-[1fr,1fr] gap-6"
           >
-            <div className="card">
-              <span className="chip chip-accent uppercase tracking-wider text-[11px] font-semibold">
+            <div className="card shadow-sm">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-accent-50 text-accent-700 text-[11px] font-bold uppercase tracking-wider">
                 {phase.weekRange}
-              </span>
+              </div>
               <h2 className="h-2 mt-4">{phase.title}</h2>
               <p className="body text-primary-600 mt-3">{phase.goal}</p>
 
-              <h3 className="text-[13px] font-semibold uppercase tracking-wider text-primary-400 mt-7 mb-3">
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary-400 mt-7 mb-3">
                 이 기간 활동
               </h3>
               <ul className="space-y-2.5">
@@ -164,7 +167,7 @@ export default function Step4Process() {
                   const Icon = a.icon;
                   return (
                     <li key={i} className="flex items-start gap-3">
-                      <span className="w-7 h-7 rounded-md bg-accent-50 text-accent-600 flex items-center justify-center flex-shrink-0">
+                      <span className="w-7 h-7 rounded-lg bg-accent-50 text-accent-600 flex items-center justify-center flex-shrink-0">
                         <Icon size={14} />
                       </span>
                       <span className="body-sm text-primary-700 pt-1">{a.text}</span>
@@ -175,7 +178,7 @@ export default function Step4Process() {
             </div>
 
             <div className="card card-soft">
-              <h3 className="text-[13px] font-semibold uppercase tracking-wider text-primary-400 mb-3">
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary-400 mb-3">
                 전달 산출물
               </h3>
               <ul className="space-y-3">
@@ -194,7 +197,7 @@ export default function Step4Process() {
         </AnimatePresence>
       </StepShell>
 
-      <TourNav current={step} nextLabel="다음: Before / After" />
+      <TourNav current={step} nextLabel="Before / After" />
     </>
   );
 }

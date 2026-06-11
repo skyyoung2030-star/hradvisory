@@ -8,6 +8,7 @@ import {
   Phone,
   Building2,
   User,
+  Star,
   type LucideIcon,
 } from "lucide-react";
 import { getStepBySlug } from "@/lib/tour-config";
@@ -129,7 +130,7 @@ export default function Step6Master() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-          className="w-16 h-16 rounded-full bg-success-500 text-white flex items-center justify-center mb-6"
+          className="w-16 h-16 rounded-full bg-success-500 text-white flex items-center justify-center mb-6 shadow-lg shadow-success-500/30"
         >
           <Check size={28} strokeWidth={3} />
         </motion.div>
@@ -165,24 +166,25 @@ export default function Step6Master() {
                 type="button"
                 onClick={() => setSelectedTier(t.id)}
                 className={cn(
-                  "text-left card relative transition-all flex flex-col",
+                  "text-left card relative transition-all flex flex-col bg-white",
+                  "active:translate-y-0",
                   isSelected
-                    ? "border-accent-500 bg-white ring-2 ring-accent-500/30 shadow-lg shadow-accent-500/10"
-                    : "hover:border-accent-500/50",
+                    ? "border-accent-500 ring-2 ring-accent-500/30 shadow-xl shadow-accent-500/15 -translate-y-1"
+                    : "border-primary-200 hover:border-accent-500/50 hover:-translate-y-0.5 hover:shadow-md",
                 )}
               >
                 {isRecommended && (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 chip chip-accent flex items-center gap-1 shadow-sm">
-                    <Sparkles size={11} /> 추천
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent-500 text-white text-[11px] font-bold tracking-wider shadow-md shadow-accent-500/30">
+                    <Star size={10} fill="currentColor" /> 추천
                   </span>
                 )}
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="h-3">{t.name}</h3>
                   <span
                     className={cn(
-                      "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0",
+                      "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all",
                       isSelected
-                        ? "border-accent-500 bg-accent-500"
+                        ? "border-accent-500 bg-accent-500 scale-110"
                         : "border-primary-300 bg-white",
                     )}
                   >
@@ -217,12 +219,18 @@ export default function Step6Master() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: 0.15 }}
-            className="card mt-10 max-w-[640px] mx-auto"
+            className="card mt-10 max-w-[640px] mx-auto shadow-sm"
           >
-            <h2 className="h-3 text-center">상담 신청</h2>
-            <p className="body-sm text-primary-500 text-center mt-1">
-              담당 컨설턴트가 영업일 기준 1일 내에 연락드립니다
-            </p>
+            <div className="text-center">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-50 text-accent-700 text-[11px] font-bold uppercase tracking-wider mb-3">
+                <Sparkles size={11} />
+                상담 신청
+              </div>
+              <h2 className="h-3">담당 컨설턴트가 직접 연락드립니다</h2>
+              <p className="body-sm text-primary-500 mt-1">
+                영업일 기준 1일 내 회신
+              </p>
+            </div>
 
             <div className="grid sm:grid-cols-2 gap-3 mt-6">
               <Field
@@ -274,10 +282,15 @@ export default function Step6Master() {
             <button
               type="submit"
               disabled={!canSubmit || submitting}
-              className="btn-primary btn-lg w-full mt-6"
+              className={cn(
+                "w-full mt-6 inline-flex items-center justify-center gap-2 h-12 rounded-lg font-semibold text-[15px] transition-all",
+                canSubmit && !submitting
+                  ? "bg-accent-500 text-white hover:bg-accent-600 shadow-lg shadow-accent-500/30 active:scale-[0.99]"
+                  : "bg-primary-200 text-primary-400 cursor-not-allowed",
+              )}
             >
               {submitting ? "전송 중…" : `${TIERS.find((t) => t.id === selectedTier)?.name} 플랜 상담 신청`}
-              <ArrowRight size={16} className="ml-2" />
+              <ArrowRight size={16} />
             </button>
 
             <p className="caption text-center mt-3">
@@ -322,7 +335,7 @@ function Field({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           required={required}
-          className="w-full h-11 pl-9 pr-3 rounded-lg border border-primary-200 bg-white text-[14px] focus:border-accent-500"
+          className="w-full h-11 pl-9 pr-3 rounded-lg border border-primary-200 bg-white text-[14px] focus:border-accent-500 transition-colors"
         />
       </div>
     </label>

@@ -44,22 +44,20 @@ export default function Step5BeforeAfter() {
           </div>
         )}
 
-        <div className="space-y-5">
+        <div className="space-y-4">
           {items.map((it, i) => (
             <motion.div
               key={it.id}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: i * 0.07 }}
-              className="card !p-0 overflow-hidden"
+              className="card !p-0 overflow-hidden shadow-sm"
             >
               <div className="grid md:grid-cols-[1fr,80px,1fr] items-stretch">
                 <div className="p-6 sm:p-7 bg-bg-soft border-r border-primary-100">
-                  <div className="flex items-center gap-2 mb-3">
-                    <AlertTriangle size={14} className="text-danger-500" />
-                    <span className="caption text-danger-500 font-semibold uppercase tracking-wider">
-                      Before
-                    </span>
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-danger-500/10 text-danger-500 text-[11px] font-bold uppercase tracking-wider mb-3">
+                    <AlertTriangle size={11} />
+                    Before
                   </div>
                   <p className="body-sm text-primary-500 mb-2">{it.area}</p>
                   <p className="body font-semibold text-primary-800 leading-snug">
@@ -68,17 +66,15 @@ export default function Step5BeforeAfter() {
                 </div>
 
                 <div className="flex items-center justify-center py-4 md:py-0 bg-bg-soft border-r border-primary-100">
-                  <span className="w-10 h-10 rounded-full bg-white border border-primary-200 flex items-center justify-center text-accent-500">
+                  <span className="w-10 h-10 rounded-full bg-white border border-primary-200 flex items-center justify-center text-accent-500 shadow-sm">
                     <ArrowRight size={18} />
                   </span>
                 </div>
 
                 <div className="p-6 sm:p-7 bg-white">
-                  <div className="flex items-center gap-2 mb-3">
-                    <CheckCircle2 size={14} className="text-success-500" />
-                    <span className="caption text-success-500 font-semibold uppercase tracking-wider">
-                      After
-                    </span>
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-success-500/10 text-success-500 text-[11px] font-bold uppercase tracking-wider mb-3">
+                    <CheckCircle2 size={11} />
+                    After
                   </div>
                   <p className="body font-semibold text-primary-900 leading-snug">
                     {it.after_text}
@@ -100,7 +96,7 @@ export default function Step5BeforeAfter() {
         </p>
       </StepShell>
 
-      <TourNav current={step} nextLabel="다음: Master 플랜 보기" />
+      <TourNav current={step} nextLabel="Master 플랜 보기" />
     </>
   );
 }

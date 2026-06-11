@@ -65,6 +65,12 @@ export default function Step1Diagnose() {
 
   const canProceed = Boolean(companySize && hrCapacity && pains.length > 0);
 
+  const missingHint =
+    !companySize ? "회사 규모 선택 필요"
+    : !hrCapacity ? "HR 역량 선택 필요"
+    : pains.length === 0 ? "페인포인트 1개 이상 선택 필요"
+    : undefined;
+
   const onBeforeNext = async () => {
     const data: DiagnoseState = { companySize, hrCapacity, pains };
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -75,8 +81,8 @@ export default function Step1Diagnose() {
   return (
     <>
       <StepShell step={step}>
-        <div className="grid gap-10">
-          <Question label="회사 규모는?">
+        <div className="grid gap-7">
+          <Question stepNumber={1} label="회사 규모는?" done={Boolean(companySize)}>
             <div className="flex flex-wrap gap-2">
               {COMPANY_SIZES.map((opt) => (
                 <Pill
@@ -90,7 +96,7 @@ export default function Step1Diagnose() {
             </div>
           </Question>
 
-          <Question label="현재 HR 역량은?">
+          <Question stepNumber={2} label="현재 HR 역량은?" done={Boolean(hrCapacity)}>
             <div className="flex flex-wrap gap-2">
               {HR_CAPACITIES.map((opt) => (
                 <Pill
@@ -104,7 +110,12 @@ export default function Step1Diagnose() {
             </div>
           </Question>
 
-          <Question label="가장 큰 페인포인트는? (복수 선택 가능)">
+          <Question
+            stepNumber={3}
+            label="가장 큰 페인포인트는?"
+            sublabel="복수 선택 가능"
+            done={pains.length > 0}
+          >
             <div className="grid sm:grid-cols-2 gap-2">
               {PAIN_POINTS.map((p) => {
                 const selected = pains.includes(p.id);
@@ -114,17 +125,18 @@ export default function Step1Diagnose() {
                     type="button"
                     onClick={() => togglePain(p.id)}
                     className={cn(
-                      "flex items-start gap-3 text-left p-4 rounded-xl border transition-colors",
+                      "flex items-start gap-3 text-left p-4 rounded-xl border transition-all bg-white",
+                      "active:scale-[0.99]",
                       selected
-                        ? "border-accent-500 bg-accent-50"
-                        : "border-primary-200 bg-white hover:border-accent-500",
+                        ? "border-accent-500 bg-accent-50 shadow-sm shadow-accent-500/20"
+                        : "border-primary-200 hover:border-accent-500",
                     )}
                   >
                     <span
                       className={cn(
-                        "mt-0.5 w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-colors",
+                        "mt-0.5 w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all",
                         selected
-                          ? "border-accent-500 bg-accent-500"
+                          ? "border-accent-500 bg-accent-500 scale-110"
                           : "border-primary-300 bg-white",
                       )}
                     >
@@ -146,11 +158,13 @@ export default function Step1Diagnose() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="card card-soft border-accent-500/30"
+                className="card border-accent-500/30 bg-gradient-to-r from-accent-50/50 to-white"
               >
-                <p className="body-sm text-primary-600">
-                  좋아요. 선택하신 페인포인트 <strong className="text-accent-600">{pains.length}개</strong> 기반으로,
-                  다음 화면부터는 실제 자문이 어떻게 흘러가는지 단계별로 보여드릴게요.
+                <p className="body-sm text-primary-700">
+                  <strong className="text-accent-600">진단 완료.</strong>{" "}
+                  선택하신 페인포인트{" "}
+                  <strong className="text-accent-600">{pains.length}개</strong>{" "}
+                  기반으로, 다음 화면부터 실제 자문이 어떻게 흘러가는지 보여드릴게요.
                 </p>
               </motion.div>
             )}
@@ -161,18 +175,48 @@ export default function Step1Diagnose() {
       <TourNav
         current={step}
         disableNext={!canProceed}
-        nextLabel="다음: 자문 체험"
+        hintWhenDisabled={missingHint}
+        nextLabel="자문 체험으로"
         onBeforeNext={onBeforeNext}
       />
     </>
   );
 }
 
-function Question({ label, children }: { label: string; children: React.ReactNode }) {
+/* ───────── Local primitives ───────── */
+
+function Question({
+  stepNumber,
+  label,
+  sublabel,
+  done,
+  children,
+}: {
+  stepNumber: number;
+  label: string;
+  sublabel?: string;
+  done: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <h2 className="h-4 mb-4">{label}</h2>
-      {children}
+      <div className="flex items-center gap-3 mb-4">
+        <span
+          className={cn(
+            "w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold transition-colors",
+            done
+              ? "bg-success-500 text-white"
+              : "bg-white text-primary-500 border-2 border-primary-200",
+          )}
+        >
+          {done ? <Check size={14} strokeWidth={3} /> : stepNumber}
+        </span>
+        <div>
+          <h2 className="text-[18px] font-semibold text-primary-900">{label}</h2>
+          {sublabel && <p className="caption mt-0.5">{sublabel}</p>}
+        </div>
+      </div>
+      <div className="pl-10">{children}</div>
     </div>
   );
 }
@@ -191,9 +235,10 @@ function Pill({
       type="button"
       onClick={onClick}
       className={cn(
-        "px-4 py-2.5 rounded-full border transition-colors text-[14px]",
+        "px-4 py-2.5 rounded-full border text-[14px] font-medium transition-all",
+        "active:scale-[0.97]",
         selected
-          ? "border-accent-500 bg-accent-500 text-white"
+          ? "border-accent-500 bg-accent-500 text-white shadow-md shadow-accent-500/30"
           : "border-primary-200 bg-white text-primary-700 hover:border-accent-500 hover:text-accent-600",
       )}
     >
