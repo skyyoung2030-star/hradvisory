@@ -259,7 +259,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
 
           <div className="relative">
             <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
-              마스터 계약형 컨설팅
+              마스터 자문형 컨설팅
             </h2>
             <p className="block text-[14px] text-accent-400 font-medium mt-1.5">
               전문컨설턴트를 HRBP로 활용하며 조직체질 개선
