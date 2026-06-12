@@ -8,47 +8,90 @@ type Props = {
 };
 
 /**
- * Per-step shell. framer-motion was removed here because its translateY enter
- * animation was producing a transient sub-pixel double-paint on Korean glyphs
- * over the dark background (h1 + subtitle ghosting on top of each other on
- * first paint). Replaced with a plain CSS opacity fade that doesn't move the
- * layout, and the heading column uses flex-gap instead of margin-top so
- * vertical rhythm can't collapse.
+ * Per-step shell. All header layout uses inline styles so nothing — external
+ * CSS, Tailwind purge edge cases, browser UA defaults, Bolt's WebContainer
+ * style injection — can override the flex column or the explicit gaps.
+ *
+ * Critically: h1 and the subtitle p are each forced to position:static,
+ * display:block, margin:0, padding:0. They sit inside a flex column with a
+ * 16px rowGap that cannot collapse. Animations removed entirely so there is
+ * no transient transform state that could mid-paint the glyphs twice.
  */
 export default function StepShell({ step, rightSlot, children }: Props) {
   return (
     <section className="container-tour py-8 sm:py-10 flex-1">
-      <div className="flex flex-col animate-fade-in">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8">
-          <div className="flex flex-col gap-3 min-w-0">
-            <div className="inline-flex items-center gap-2 leading-none">
-              <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-accent-400 uppercase">
-                STEP {String(step.number).padStart(2, "0")}
-              </span>
-              <span className="w-1 h-1 rounded-full bg-ink-400" />
-              <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-ink-600 uppercase">
-                {step.label}
-              </span>
-            </div>
-
-            <h1 className="h-1" style={{ display: "block", margin: 0 }}>
-              {step.title}
-            </h1>
-
-            {step.subtitle && (
-              <p
-                className="body text-ink-600 max-w-[680px]"
-                style={{ display: "block", margin: 0 }}
-              >
-                {step.subtitle}
-              </p>
-            )}
+      <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            rowGap: 16,
+            marginBottom: 32,
+          }}
+        >
+          {/* Eyebrow */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              lineHeight: 1,
+              position: "static",
+            }}
+          >
+            <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-accent-400 uppercase">
+              STEP {String(step.number).padStart(2, "0")}
+            </span>
+            <span
+              aria-hidden
+              style={{
+                width: 4,
+                height: 4,
+                borderRadius: 9999,
+                background: "#3F4150",
+                display: "inline-block",
+              }}
+            />
+            <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-ink-600 uppercase">
+              {step.label}
+            </span>
           </div>
 
-          {rightSlot && <div className="flex-shrink-0">{rightSlot}</div>}
+          {/* H1 title */}
+          <h1
+            className="h-1"
+            style={{
+              display: "block",
+              margin: 0,
+              padding: 0,
+              position: "static",
+            }}
+          >
+            {step.title}
+          </h1>
+
+          {/* Subtitle */}
+          {step.subtitle && (
+            <p
+              className="body text-ink-600"
+              style={{
+                display: "block",
+                margin: 0,
+                padding: 0,
+                position: "static",
+                maxWidth: 680,
+              }}
+            >
+              {step.subtitle}
+            </p>
+          )}
+
+          {rightSlot && (
+            <div style={{ position: "static" }}>{rightSlot}</div>
+          )}
         </div>
 
-        <div className="block">{children}</div>
+        <div style={{ display: "block", position: "static" }}>{children}</div>
       </div>
     </section>
   );
