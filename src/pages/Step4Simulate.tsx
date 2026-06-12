@@ -250,35 +250,47 @@ export default function Step4Simulate() {
           }}
         >
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
-            {/* ─── Scenario picker grid ─── */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mb-5">
-              {SCENARIOS.map((s) => (
-                <ScenarioCard
-                  key={s.id} scenario={s}
-                  isSelected={s.id === selectedId}
-                  values={effectiveValues(s)}
-                  onClick={() => setSelectedId(s.id)}
-                />
-              ))}
+            <div className="grid lg:grid-cols-[300px,1fr] gap-4">
+              {/* ─── LEFT — Scenario picker (sticky on lg) ─── */}
+              <aside>
+                <div className="lg:sticky lg:top-4 space-y-2.5">
+                  <div
+                    className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-ink-500 px-1"
+                    style={{ display: "block", margin: 0, marginBottom: 4, padding: "0 4px", position: "static" }}
+                  >
+                    시나리오 {SCENARIOS.length}개
+                  </div>
+                  {SCENARIOS.map((s) => (
+                    <ScenarioCard
+                      key={s.id} scenario={s}
+                      isSelected={s.id === selectedId}
+                      values={effectiveValues(s)}
+                      onClick={() => setSelectedId(s.id)}
+                    />
+                  ))}
+                </div>
+              </aside>
+
+              {/* ─── RIGHT — Detail panel ─── */}
+              <main>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={selected.id}
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <ScenarioDetail scenario={selected} changedDrivers={changedDrivers} values={values} />
+                  </motion.div>
+                </AnimatePresence>
+
+                <p
+                  className="text-[10px] font-mono text-ink-500 mt-3 text-center"
+                  style={{ display: "block", margin: 0, marginTop: 12, padding: 0, position: "static" }}
+                >
+                  ⓘ HCG 평균 사례 기반 추정. 실제 자문에서는 회사 데이터로 시나리오를 맞춤화합니다.
+                </p>
+              </main>
             </div>
-
-            {/* ─── Detail panel ─── */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selected.id}
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-              >
-                <ScenarioDetail scenario={selected} changedDrivers={changedDrivers} values={values} />
-              </motion.div>
-            </AnimatePresence>
-
-            <p
-              className="text-[10px] font-mono text-ink-500 mt-3 text-center"
-              style={{ display: "block", margin: 0, marginTop: 12, padding: 0, position: "static" }}
-            >
-              ⓘ HCG 평균 사례 기반 추정. 실제 자문에서는 회사 데이터로 시나리오를 맞춤화합니다.
-            </p>
           </div>
         </div>
       </StepShell>
