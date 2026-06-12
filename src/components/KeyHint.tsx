@@ -2,12 +2,11 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Small visual "press X" key indicator. Used in TourNav and various
- * call-to-actions to communicate keyboard shortcuts game-tutorial-style.
+ * Visual keyboard-key indicator. Two variants:
+ * - light (default): pale chip suitable on dark surfaces
+ * - dark: deep-black chip suitable on accent-coloured buttons
  *
- * Example:
- *   <KeyHint>Enter</KeyHint>  →  ▶ Enter
- *   <KeyHint variant="dark">→</KeyHint>
+ * Both have a subtle bottom-border and inset highlight to read 3D.
  */
 export default function KeyHint({
   children,
@@ -21,11 +20,11 @@ export default function KeyHint({
   return (
     <kbd
       className={cn(
-        "inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-md text-[11px] font-bold font-mono",
-        "border-b-2 shadow-sm select-none",
+        "inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-md",
+        "text-[11px] font-mono font-bold border select-none",
         variant === "dark"
-          ? "bg-primary-800 text-white border-primary-900"
-          : "bg-white text-primary-700 border-primary-300",
+          ? "bg-black/40 text-white/90 border-white/20 border-b-[2px] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]"
+          : "bg-white/[0.08] text-ink-800 border-white/15 border-b-[2px] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]",
         className,
       )}
     >

@@ -2,46 +2,22 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
-  ArrowUpRight,
-  ShieldCheck,
-  MessageCircle,
-  Calendar,
-  Wrench,
-  BookOpen,
-  Layers,
-  FileStack,
-  Users,
-  Award,
-  Sparkles,
+  ArrowRight, ArrowUpRight,
+  ShieldCheck, MessageCircle, Calendar, Wrench, BookOpen,
+  Layers, FileStack, Users, Award, Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import { recordTurnkeyClick } from "@/lib/api";
 import KeyHint from "@/components/KeyHint";
 
-/**
- * Step 0 — Welcome.
- *
- * Design language: a meaningful first choice rendered as two distinct PATHS,
- * styled with game-tutorial / premium-onboarding cues:
- *   • Corner crosshair marks framing the viewport
- *   • System-tone monospaced labels ("PATH 01" / "PATH 02")
- *   • Keyboard key visualisations ([1], [2], [Enter]) the player can actually press
- *   • A bottom controls line that mirrors a tutorial HUD
- *
- * Tone stays consulting-premium, not arcade — no XP, no flashing badges.
- */
 export default function Welcome() {
   const navigate = useNavigate();
-
   const handleTurnkeyClick = async () => {
     void recordTurnkeyClick("welcome");
     window.open("https://e-hcg.com/professional-services", "_blank");
   };
-
   const startMasterTour = () => navigate("/tour/1-diagnose");
 
-  // Keyboard shortcuts: 1 / 2 / Enter
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
@@ -56,48 +32,43 @@ export default function Welcome() {
   }, []);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-white">
-      <BackgroundDecor />
+    <main className="relative min-h-screen overflow-hidden bg-ink-50 bg-spotlight">
+      {/* Layered background textures */}
+      <div aria-hidden className="absolute inset-0 bg-grid-line mask-vignette opacity-60 pointer-events-none" />
       <CornerMarks />
 
-      {/* ─────────────── Top header ─────────────── */}
       <header className="relative z-10 h-14 flex items-center container-x">
-        <Link
-          to="/"
-          className="flex items-center gap-2 font-semibold text-primary-900 tracking-tight"
-        >
+        <Link to="/" className="flex items-center gap-2 font-semibold text-ink-900 tracking-tight">
           <LogoMark />
           <span>HCG Master</span>
         </Link>
-
-        <span className="ml-auto inline-flex items-center gap-2 text-[11px] font-mono text-primary-400 tracking-wider">
+        <span className="ml-auto inline-flex items-center gap-2 text-[11px] font-mono text-ink-500 tracking-wider">
           <span className="hidden md:inline">INTERACTIVE TOUR</span>
           <span className="hidden md:inline opacity-40">·</span>
           <span>EST. 5 MIN</span>
         </span>
       </header>
 
-      {/* ─────────────── Hero ─────────────── */}
       <section className="relative z-10 container-tour pt-8 sm:pt-12 text-center">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
         >
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-primary-200 shadow-sm text-[11px] font-mono font-semibold text-primary-600 tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse-soft" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur text-[11px] font-mono font-semibold text-ink-700 tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse-soft shadow-[0_0_8px_rgba(14,165,233,0.8)]" />
             KOSPI 200 상장사 30%가 선택한 HCG
           </div>
 
           <h1 className="h-hero mt-5">
             HR 컨설팅,{" "}
             <span className="relative inline-block">
-              <span className="relative z-10 bg-gradient-to-r from-accent-600 to-accent-500 bg-clip-text text-transparent">
+              <span className="relative z-10 bg-gradient-to-br from-accent-400 via-accent-500 to-accent-600 bg-clip-text text-transparent">
                 5분
               </span>
               <span
                 aria-hidden
-                className="absolute inset-x-0 bottom-1 h-2.5 bg-accent-100/80 -z-0"
+                className="absolute inset-x-0 bottom-1 h-3 bg-accent-500/30 blur-md -z-0"
               />
             </span>
             으로
@@ -106,49 +77,35 @@ export default function Welcome() {
             압축해서 보여드릴게요
           </h1>
 
-          <p className="body text-primary-500 mt-5 max-w-[520px] mx-auto">
-            진단 → 자문 → 산출물 → 프로세스 → 변화 → 플랜.
-            <br className="hidden sm:block" />
+          <p className="body text-ink-600 mt-5 max-w-[520px] mx-auto">
+            진단 → 자문 → 도구 → 시뮬레이션 → 협업 방식.<br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            컨설턴트가 어떻게 함께하는지 직접 체험하실 수 있어요.
+            Master 컨설턴트가 어떻게 옆에 있는지 직접 체험하실 수 있어요.
           </p>
         </motion.div>
 
-        {/* ─────────────── Branch label ─────────────── */}
+        {/* Branch label */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.3 }}
-          className="mt-12 sm:mt-14 flex items-center justify-center gap-3 text-[10px] font-mono font-bold tracking-[0.22em] text-primary-400 uppercase"
+          className="mt-12 sm:mt-14 flex items-center justify-center gap-3 text-[10px] font-mono font-bold tracking-[0.22em] text-ink-500 uppercase"
         >
-          <span className="h-px w-12 bg-primary-200" />
+          <span className="h-px w-12 bg-white/10" />
           <span>경로를 선택하세요</span>
-          <span className="h-px w-12 bg-primary-200" />
+          <span className="h-px w-12 bg-white/10" />
         </motion.div>
 
-        {/* ─────────────── Two paths ─────────────── */}
+        {/* Two paths */}
         <motion.div
-          initial="hidden"
-          animate="show"
-          variants={{
-            hidden: {},
-            show: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } },
-          }}
+          initial="hidden" animate="show"
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } } }}
           className="grid md:grid-cols-2 gap-4 mt-6 text-left"
         >
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
-            }}
-          >
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }}>
             <PathCard
-              pathNumber="01"
-              keyLabel="1"
-              status="준비 중"
-              tone="muted"
-              title="통합 컨설팅"
-              subtitle="3~4개월 상주형 · 풀패키지"
+              pathNumber="01" keyLabel="1" status="준비 중" tone="muted"
+              title="통합 컨설팅" subtitle="3~4개월 상주형 · 풀패키지"
               description="처음부터 끝까지 새로 설계해야 할 때. 직급 · 평가 · 보상 · 진단을 한 번에 풀세트로 함께 만듭니다."
               chipsLabel="포함 영역"
               chips={[
@@ -156,52 +113,37 @@ export default function Welcome() {
                 { icon: FileStack, label: "평가 설계" },
                 { icon: Users, label: "보상 · 진단" },
               ]}
-              ctaLabel="HCG 본사 사이트에서 상담"
-              ctaIcon={ArrowUpRight}
+              ctaLabel="HCG 본사에서 상담" ctaIcon={ArrowUpRight}
               onClick={handleTurnkeyClick}
             />
           </motion.div>
 
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
-            }}
-          >
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }}>
             <PathCard
-              pathNumber="02"
-              keyLabel="2"
-              status="지금 체험"
-              tone="featured"
-              recommended
-              title="Master 자문"
-              subtitle="월 retainer · 필요할 때 함께"
-              description="HR 담당자 옆에 전문가 한 명을 두는 비용으로. 핫라인 · 정기 방문 · 템플릿 · 제도 설계까지 — 매달 함께 운영합니다."
-              chipsLabel="이용 가능 채널"
+              pathNumber="02" keyLabel="2" status="지금 체험" tone="featured" recommended
+              title="Master 자문" subtitle="월 retainer · 필요할 때 함께"
+              description="제도를 같이 짜고, 실행하면서 fine-tune하고, 사이사이 도구와 시뮬레이션도 제공합니다. 정해진 일정이 아니라 elastic 협업."
+              chipsLabel="협업 모드"
               chips={[
-                { icon: MessageCircle, label: "실시간 핫라인" },
-                { icon: Calendar, label: "정기 방문" },
-                { icon: BookOpen, label: "템플릿 라이브러리" },
-                { icon: Wrench, label: "제도 설계" },
+                { icon: Wrench, label: "페어 디자인" },
+                { icon: MessageCircle, label: "실행 도우미" },
+                { icon: BookOpen, label: "도구 제공" },
+                { icon: Calendar, label: "시뮬레이션" },
               ]}
-              ctaLabel="투어 시작"
-              ctaIcon={ArrowRight}
-              ctaKey="Enter"
+              ctaLabel="투어 시작" ctaIcon={ArrowRight} ctaKey="Enter"
               onClick={startMasterTour}
             />
           </motion.div>
         </motion.div>
 
-        {/* ─────────────── Controls hint ─────────────── */}
+        {/* Controls hint */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.7 }}
-          className="mt-8 mb-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] font-mono text-primary-400"
+          className="mt-8 mb-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] font-mono text-ink-500"
         >
           <span className="inline-flex items-center gap-1.5">
-            <KeyHint>1</KeyHint>
-            <KeyHint>2</KeyHint>
+            <KeyHint>1</KeyHint><KeyHint>2</KeyHint>
             <span>경로 선택</span>
           </span>
           <span className="opacity-30">·</span>
@@ -211,12 +153,11 @@ export default function Welcome() {
           </span>
         </motion.div>
 
-        {/* ─────────────── Trust strip ─────────────── */}
+        {/* Trust strip */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-4 mb-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-primary-400 pt-6 border-t border-primary-100 max-w-[680px] mx-auto"
+          className="mt-4 mb-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-ink-500 pt-6 border-t border-white/[0.06] max-w-[680px] mx-auto"
         >
           <TrustItem icon={Award} label="국내 HR Tech 시장 1위" />
           <span className="opacity-30">·</span>
@@ -224,7 +165,7 @@ export default function Welcome() {
           <span className="opacity-30">·</span>
           <TrustItem icon={ShieldCheck} label="ISMS 인증" />
           <span className="opacity-30">·</span>
-          <TrustItem icon={Sparkles} label="AI 피드백 감정 분석 특허" />
+          <TrustItem icon={Sparkles} label="AI 감정 분석 특허" />
         </motion.div>
       </section>
     </main>
@@ -246,119 +187,88 @@ type PathCardProps = {
   chips: { icon: LucideIcon; label: string }[];
   ctaLabel: string;
   ctaIcon: LucideIcon;
-  /** Optional small key hint next to the CTA (e.g. "Enter"). */
   ctaKey?: string;
   onClick: () => void;
 };
 
 function PathCard({
-  pathNumber,
-  keyLabel,
-  status,
-  tone,
-  recommended,
-  title,
-  subtitle,
-  description,
-  chipsLabel,
-  chips,
-  ctaLabel,
-  ctaIcon: CtaIcon,
-  ctaKey,
-  onClick,
+  pathNumber, keyLabel, status, tone, recommended,
+  title, subtitle, description, chipsLabel, chips,
+  ctaLabel, ctaIcon: CtaIcon, ctaKey, onClick,
 }: PathCardProps) {
   const isFeatured = tone === "featured";
 
   return (
     <div
-      role="button"
-      tabIndex={0}
+      role="button" tabIndex={0}
       onClick={onClick}
-      onKeyDown={(e) => {
-        if (e.key === " ") {
-          e.preventDefault();
-          onClick();
-        }
-      }}
-      className={`group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 rounded-2xl ${
-        isFeatured ? "" : ""
-      }`}
+      onKeyDown={(e) => { if (e.key === " ") { e.preventDefault(); onClick(); } }}
+      className="group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-50 rounded-2xl"
     >
       <div
-        className={`relative flex flex-col h-full rounded-2xl transition-all duration-300 overflow-hidden ${
+        className={`relative flex flex-col h-full rounded-2xl backdrop-blur-xl overflow-hidden transition-all duration-300 ${
           isFeatured
-            ? "bg-white border-2 border-accent-500 shadow-[0_24px_56px_-24px_rgba(14,165,233,0.4)] group-hover:shadow-[0_32px_64px_-20px_rgba(14,165,233,0.5)] group-hover:-translate-y-1"
-            : "bg-bg-soft border border-dashed border-primary-300 group-hover:border-primary-400 group-hover:bg-white"
+            ? "bg-accent-500/[0.05] border-2 border-accent-500/40 shadow-glow-accent group-hover:shadow-glow-accent-lg group-hover:-translate-y-1"
+            : "bg-white/[0.03] border border-dashed border-white/[0.15] group-hover:border-white/25 group-hover:bg-white/[0.05]"
         }`}
       >
-        {/* ── Top strip: PATH N · status · key ── */}
+        {/* Top edge highlight via pseudo */}
+        <span
+          aria-hidden
+          className="absolute top-0 inset-x-0 h-px"
+          style={{
+            background: isFeatured
+              ? "linear-gradient(90deg, transparent, rgba(56,189,248,0.5), transparent)"
+              : "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
+          }}
+        />
+
+        {/* Header strip */}
         <div
           className={`relative flex items-center justify-between gap-3 px-7 py-3 border-b ${
-            isFeatured
-              ? "bg-gradient-to-r from-accent-500/8 to-transparent border-accent-100"
-              : "bg-primary-100/50 border-primary-200"
+            isFeatured ? "bg-accent-500/[0.06] border-accent-500/20" : "bg-white/[0.02] border-white/[0.06]"
           }`}
         >
           <div className="flex items-center gap-2">
-            <span
-              className={`text-[10px] font-mono font-bold tracking-[0.22em] ${
-                isFeatured ? "text-accent-700" : "text-primary-500"
-              }`}
-            >
+            <span className={`text-[10px] font-mono font-bold tracking-[0.22em] ${isFeatured ? "text-accent-400" : "text-ink-600"}`}>
               PATH {pathNumber}
             </span>
             <span className="w-1 h-1 rounded-full bg-current opacity-40" />
-            <span
-              className={`text-[10px] font-mono font-bold tracking-[0.18em] uppercase ${
-                isFeatured ? "text-accent-600" : "text-primary-400"
-              }`}
-            >
+            <span className={`text-[10px] font-mono font-bold tracking-[0.18em] uppercase ${isFeatured ? "text-accent-400" : "text-ink-500"}`}>
               {status}
             </span>
           </div>
           <KeyHint variant={isFeatured ? "dark" : "light"}>{keyLabel}</KeyHint>
         </div>
 
-        {/* ── Recommended ribbon ── */}
         {recommended && (
-          <span className="absolute top-3 right-14 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-500 text-white text-[10px] font-bold tracking-wider shadow-md shadow-accent-500/30">
+          <span className="absolute top-3 right-14 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-500 text-white text-[10px] font-bold tracking-wider shadow-[0_4px_12px_-2px_rgba(14,165,233,0.7)]">
             <Sparkles size={9} />
             추천
           </span>
         )}
 
-        {/* ── Body ── */}
         <div className="relative flex flex-col flex-1 p-7 sm:p-8">
           {isFeatured && (
             <div
               aria-hidden
-              className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gradient-to-br from-accent-200 to-accent-100 blur-3xl opacity-70 pointer-events-none"
+              className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gradient-to-br from-accent-500/30 to-accent-700/10 blur-3xl pointer-events-none"
             />
           )}
 
           <div className="relative">
-            <h2
-              className={`block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight ${
-                isFeatured ? "text-primary-900" : "text-primary-700"
-              }`}
-            >
+            <h2 className={`block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight ${isFeatured ? "text-ink-900" : "text-ink-800"}`}>
               {title}
             </h2>
-            <p
-              className={`block text-[14px] mt-1.5 ${
-                isFeatured ? "text-accent-600 font-medium" : "text-primary-500"
-              }`}
-            >
+            <p className={`block text-[14px] mt-1.5 ${isFeatured ? "text-accent-400 font-medium" : "text-ink-500"}`}>
               {subtitle}
             </p>
           </div>
 
-          <p className="relative body-sm text-primary-600 mt-5 leading-relaxed">
-            {description}
-          </p>
+          <p className="relative body-sm text-ink-600 mt-5 leading-relaxed">{description}</p>
 
           <div className="relative mt-6">
-            <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary-400 mb-2.5">
+            <div className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-ink-500 mb-2.5">
               {chipsLabel}
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -369,8 +279,8 @@ function PathCard({
                     key={i}
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[12px] font-medium ${
                       isFeatured
-                        ? "bg-accent-50 text-accent-700 border border-accent-100"
-                        : "bg-white text-primary-600 border border-primary-200"
+                        ? "bg-accent-500/15 text-accent-300 border border-accent-500/30"
+                        : "bg-white/[0.05] text-ink-700 border border-white/10"
                     }`}
                   >
                     <Icon size={11} />
@@ -381,25 +291,17 @@ function PathCard({
             </div>
           </div>
 
-          {/* ── CTA row ── */}
           <div className="relative mt-auto pt-7">
             <div
               className={`inline-flex items-center gap-2 px-4 h-11 rounded-lg font-semibold text-[14px] transition-all ${
                 isFeatured
-                  ? "bg-accent-500 text-white shadow-lg shadow-accent-500/30 group-hover:bg-accent-600 group-hover:shadow-xl group-hover:shadow-accent-500/40"
-                  : "border border-primary-200 bg-white text-primary-700 group-hover:border-primary-400"
+                  ? "bg-accent-500 text-white shadow-[0_8px_24px_-8px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:bg-accent-400 group-hover:shadow-[0_12px_32px_-8px_rgba(14,165,233,0.75),inset_0_1px_0_rgba(255,255,255,0.25)]"
+                  : "border border-white/15 bg-white/[0.04] text-ink-800 group-hover:bg-white/[0.08] group-hover:border-white/25"
               }`}
             >
               <span>{ctaLabel}</span>
-              <CtaIcon
-                size={14}
-                className="transition-transform group-hover:translate-x-0.5"
-              />
-              {ctaKey && (
-                <KeyHint variant="dark" className="ml-1">
-                  {ctaKey}
-                </KeyHint>
-              )}
+              <CtaIcon size={14} className="transition-transform group-hover:translate-x-0.5" />
+              {ctaKey && <KeyHint variant="dark" className="ml-1">{ctaKey}</KeyHint>}
             </div>
           </div>
         </div>
@@ -408,7 +310,7 @@ function PathCard({
   );
 }
 
-/* ─────────────── Decorative pieces ─────────────── */
+/* ─────────────── Decor ─────────────── */
 
 function TrustItem({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
   return (
@@ -423,65 +325,25 @@ function LogoMark() {
   return (
     <span
       aria-hidden
-      className="inline-flex w-7 h-7 rounded-md bg-gradient-to-br from-accent-500 to-accent-700 text-white items-center justify-center font-bold text-[13px] shadow-sm shadow-accent-500/20"
+      className="inline-flex w-7 h-7 rounded-md bg-gradient-to-br from-accent-400 to-accent-600 text-white items-center justify-center font-bold text-[13px] shadow-[0_4px_12px_-2px_rgba(14,165,233,0.5),inset_0_1px_0_rgba(255,255,255,0.25)]"
     >
       H
     </span>
   );
 }
 
-/**
- * Four small crosshair marks framing the viewport — a subtle tutorial/HUD cue.
- * Hidden on mobile to avoid visual noise on small screens.
- */
 function CornerMarks() {
   const mark = (
-    <svg width="14" height="14" viewBox="0 0 14 14" className="text-primary-300">
+    <svg width="14" height="14" viewBox="0 0 14 14" className="text-white/15">
       <path d="M0 1h6M1 0v6" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   );
   return (
     <>
-      <span aria-hidden className="hidden md:block absolute top-6 left-6 z-10">
-        {mark}
-      </span>
-      <span aria-hidden className="hidden md:block absolute top-6 right-6 z-10 rotate-90">
-        {mark}
-      </span>
-      <span aria-hidden className="hidden md:block absolute bottom-6 left-6 z-10 -rotate-90">
-        {mark}
-      </span>
-      <span aria-hidden className="hidden md:block absolute bottom-6 right-6 z-10 rotate-180">
-        {mark}
-      </span>
-    </>
-  );
-}
-
-function BackgroundDecor() {
-  return (
-    <>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 -right-40 w-[640px] h-[640px] rounded-full bg-gradient-to-br from-accent-200/60 via-accent-100/40 to-transparent blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-32 -left-32 w-[560px] h-[560px] rounded-full bg-gradient-to-tr from-rose-100/40 via-orange-50/30 to-transparent blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.35]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #CBD5E1 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-          maskImage:
-            "radial-gradient(ellipse at center, black 30%, transparent 75%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse at center, black 30%, transparent 75%)",
-        }}
-      />
+      <span aria-hidden className="hidden md:block absolute top-6 left-6 z-10">{mark}</span>
+      <span aria-hidden className="hidden md:block absolute top-6 right-6 z-10 rotate-90">{mark}</span>
+      <span aria-hidden className="hidden md:block absolute bottom-6 left-6 z-10 -rotate-90">{mark}</span>
+      <span aria-hidden className="hidden md:block absolute bottom-6 right-6 z-10 rotate-180">{mark}</span>
     </>
   );
 }

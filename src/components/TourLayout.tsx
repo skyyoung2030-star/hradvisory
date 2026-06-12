@@ -1,17 +1,17 @@
 import { Outlet } from "react-router-dom";
 import TourProgressBar from "./TourProgressBar";
 
-/**
- * Layout for /tour/* routes. Top progress bar + step content via Outlet.
- * Bottom TourNav lives inside each step page (steps own their nav props).
- */
 export default function TourLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-bg-soft">
-      <TourProgressBar />
-      <main className="flex-1 flex flex-col">
-        <Outlet />
-      </main>
+    <div className="min-h-screen flex flex-col bg-ink-50 bg-spotlight relative">
+      {/* Subtle line-grid texture across all tour steps for surface depth */}
+      <div aria-hidden className="absolute inset-0 bg-grid-line mask-vignette opacity-60 pointer-events-none" />
+      <div className="relative flex flex-col min-h-screen">
+        <TourProgressBar />
+        <main className="flex-1 flex flex-col">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

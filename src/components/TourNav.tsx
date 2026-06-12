@@ -9,18 +9,11 @@ type Props = {
   current: TourStep;
   disableNext?: boolean;
   nextLabel?: string;
-  /** When disableNext is true, this hint appears explaining what's needed. */
   hintWhenDisabled?: string;
   onBeforeNext?: () => Promise<boolean> | boolean;
   hidePrev?: boolean;
 };
 
-/**
- * Bottom-fixed navigation, game-tutorial style.
- * - Buttons have visual keyboard shortcut chips
- * - ← / → / Enter trigger Prev / Next globally (skipped when typing in inputs)
- * - When Next is disabled, a hint chip explains what's needed
- */
 export default function TourNav({
   current,
   disableNext = false,
@@ -42,24 +35,15 @@ export default function TourNav({
     navigate(next.path);
   };
 
-  const goPrev = () => {
-    if (!prev) return;
-    navigate(prev.path);
-  };
+  const goPrev = () => { if (prev) navigate(prev.path); };
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
       const tag = t?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || t?.isContentEditable) return;
-
-      if (e.key === "ArrowRight" || e.key === "Enter") {
-        e.preventDefault();
-        void goNext();
-      } else if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        goPrev();
-      }
+      if (e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); void goNext(); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); goPrev(); }
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
@@ -67,22 +51,15 @@ export default function TourNav({
   }, [disableNext, onBeforeNext, current.slug]);
 
   return (
-    <div className="sticky bottom-0 z-30 bg-white/95 backdrop-blur-md border-t border-primary-100">
+    <div className="sticky bottom-0 z-30 bg-ink-50/80 backdrop-blur-xl border-t border-white/[0.06]">
       <div className="container-x py-4 flex items-center justify-between gap-3">
         {!hidePrev && prev ? (
-          <button
-            type="button"
-            onClick={goPrev}
-            className="group inline-flex items-center gap-2 px-4 h-11 rounded-lg border border-primary-200 text-primary-700 bg-white hover:border-primary-400 hover:bg-bg-soft transition-colors"
-            aria-label={`이전: ${prev.label}`}
-          >
-            <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
-            <span className="text-[14px] font-medium">이전</span>
-            <KeyHint className="ml-1">←</KeyHint>
+          <button type="button" onClick={goPrev} className="btn-secondary group" aria-label={`이전: ${prev.label}`}>
+            <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5 mr-2" />
+            이전
+            <KeyHint className="ml-2">←</KeyHint>
           </button>
-        ) : (
-          <span />
-        )}
+        ) : <span />}
 
         <AnimatePresence>
           {disableNext && hintWhenDisabled && (
@@ -90,7 +67,7 @@ export default function TourNav({
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
-              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-[12px] font-medium"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-warning-500/10 border border-warning-500/30 text-warning-500 text-[12px] font-medium"
             >
               <AlertCircle size={12} />
               {hintWhenDisabled}
@@ -103,31 +80,18 @@ export default function TourNav({
             type="button"
             onClick={() => void goNext()}
             disabled={disableNext}
-            className={`group inline-flex items-center gap-2 px-6 h-12 rounded-lg font-semibold text-[15px] transition-all ${
-              disableNext
-                ? "bg-primary-200 text-primary-400 cursor-not-allowed"
-                : "bg-accent-500 text-white hover:bg-accent-600 shadow-lg shadow-accent-500/30 active:scale-[0.98]"
-            }`}
+            className="btn-primary btn-lg group"
             aria-label={`다음: ${next.label}`}
           >
             <span>{nextLabel ?? `다음: ${next.label}`}</span>
-            <ArrowRight
-              size={16}
-              className={`transition-transform ${disableNext ? "" : "group-hover:translate-x-0.5"}`}
-            />
-            {!disableNext && (
-              <span className="hidden sm:flex items-center gap-1 ml-1 opacity-80">
-                <KeyHint variant="dark">↵</KeyHint>
-              </span>
-            )}
+            <ArrowRight size={16} className={`ml-2 transition-transform ${disableNext ? "" : "group-hover:translate-x-0.5"}`} />
+            {!disableNext && <KeyHint variant="dark" className="ml-2">↵</KeyHint>}
           </button>
-        ) : (
-          <span />
-        )}
+        ) : <span />}
       </div>
 
       {disableNext && hintWhenDisabled && (
-        <div className="md:hidden border-t border-amber-100 bg-amber-50 px-5 py-2 text-[12px] text-amber-700 flex items-center gap-1.5">
+        <div className="md:hidden border-t border-warning-500/20 bg-warning-500/10 px-5 py-2 text-[12px] text-warning-500 flex items-center gap-1.5">
           <AlertCircle size={12} />
           {hintWhenDisabled}
         </div>
