@@ -486,9 +486,13 @@ export const TEMPLATES: Template[] = [
 /* PAIN_TO_AREA — Step 1에서 선택한 페인포인트 id를 area에 매핑 */
 export const PAIN_TO_AREA: Record<string, Template["area"]> = {
   job_grade_complex: "직급",
+  decision_slow:     "직급",
   eval_unfair:       "평가",
+  poor_alignment:    "조직문화",
   no_payband:        "보상",
+  key_talent_risk:   "보상",
   unclear_job:       "직무",
+  hire_difficulty:   "직무",
   promo_unclear:     "승진",
   weak_leadership:   "리더십",
   culture_drift:     "조직문화",
