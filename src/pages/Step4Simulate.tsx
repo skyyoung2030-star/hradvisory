@@ -289,8 +289,8 @@ export default function Step4Simulate() {
                 </div>
               </aside>
 
-              {/* ─── RIGHT — Detail panel ─── */}
-              <main>
+              {/* ─── RIGHT — Detail panel (sticky + internal scroll) ─── */}
+              <main className="lg:sticky lg:top-4">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={selected.id}
@@ -444,9 +444,9 @@ function ScenarioDetail({ scenario, changedDrivers, values }: {
   const isBaseline = scenario.id === "baseline";
 
   return (
-    <div className="card !p-0 overflow-hidden">
-      {/* Header */}
-      <div className="px-4 sm:px-5 py-3.5 border-b border-white/[0.08] bg-gradient-to-b from-accent-500/[0.06] to-transparent">
+    <div className="card !p-0 overflow-hidden flex flex-col lg:max-h-[calc(100vh-2rem)]">
+      {/* Header — fixed */}
+      <div className="flex-shrink-0 px-4 sm:px-5 py-3.5 border-b border-white/[0.08] bg-gradient-to-b from-accent-500/[0.06] to-transparent">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <div>
             <div
@@ -469,8 +469,9 @@ function ScenarioDetail({ scenario, changedDrivers, values }: {
         </div>
       </div>
 
-      {/* Body — three columns: insights / driver changes / outcomes */}
-      <div className="grid lg:grid-cols-[1fr,1fr,1.2fr] gap-px bg-white/[0.05]">
+      {/* Body — scrollable 3-column grid */}
+      <div className="flex-1 overflow-y-auto hcg-scrollbar">
+        <div className="grid lg:grid-cols-[1fr,1fr,1.2fr] gap-px bg-white/[0.05]">
         {/* ── Insights ── */}
         <div className="bg-ink-50 p-4 sm:p-5">
           <SectionHead icon={Sparkles} label="핵심 인사이트" accent />
@@ -557,6 +558,7 @@ function ScenarioDetail({ scenario, changedDrivers, values }: {
             })}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
