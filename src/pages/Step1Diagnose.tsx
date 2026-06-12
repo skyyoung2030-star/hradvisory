@@ -113,10 +113,7 @@ export default function Step1Diagnose() {
                     >
                       {selected && <Check size={12} strokeWidth={3} className="text-white" />}
                     </span>
-                    <span className="flex flex-col">
-                      <span className="text-[11px] font-mono uppercase tracking-wider text-ink-500 mb-0.5">{p.area}</span>
-                      <span className="body-sm text-ink-800">{p.label}</span>
-                    </span>
+                    <span className="body-sm text-ink-800">{p.label}</span>
                   </button>
                 );
               })}
