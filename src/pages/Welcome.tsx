@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, ArrowUpRight,
   ShieldCheck, MessageCircle, Calendar, Wrench, BookOpen, Users2,
-  Layers, FileStack, Users, Award, Sparkles,
+  Award, Sparkles, Check, Building, Building2,
   type LucideIcon,
 } from "lucide-react";
 import { recordTurnkeyClick } from "@/lib/api";
@@ -33,7 +33,6 @@ export default function Welcome() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-ink-50 bg-spotlight">
-      {/* Layered background textures */}
       <div aria-hidden className="absolute inset-0 bg-grid-line mask-vignette opacity-60 pointer-events-none" />
       <CornerMarks />
 
@@ -66,10 +65,7 @@ export default function Welcome() {
               <span className="relative z-10 bg-gradient-to-br from-accent-400 via-accent-500 to-accent-600 bg-clip-text text-transparent">
                 5분
               </span>
-              <span
-                aria-hidden
-                className="absolute inset-x-0 bottom-1 h-3 bg-accent-500/30 blur-md -z-0"
-              />
+              <span aria-hidden className="absolute inset-x-0 bottom-1 h-3 bg-accent-500/30 blur-md -z-0" />
             </span>
             으로
             <br className="hidden sm:block" />
@@ -84,7 +80,6 @@ export default function Welcome() {
           </p>
         </motion.div>
 
-        {/* Branch label */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -96,48 +91,22 @@ export default function Welcome() {
           <span className="h-px w-12 bg-white/10" />
         </motion.div>
 
-        {/* Two paths */}
         <motion.div
           initial="hidden" animate="show"
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } } }}
           className="grid md:grid-cols-2 gap-4 mt-6 text-left"
         >
+          {/* ─────────── PATH 01 — Turnkey (muted, but CTA is alive) ─────────── */}
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }}>
-            <PathCard
-              pathNumber="01" keyLabel="1" status="준비 중" tone="muted"
-              title="통합 컨설팅" subtitle="3~4개월 상주형 · 풀패키지"
-              description="처음부터 끝까지 새로 설계해야 할 때. 직급 · 평가 · 보상 · 진단을 한 번에 풀세트로 함께 만듭니다."
-              chipsLabel="포함 영역"
-              chips={[
-                { icon: Layers, label: "직급 통합" },
-                { icon: FileStack, label: "평가 설계" },
-                { icon: Users, label: "보상 · 진단" },
-              ]}
-              ctaLabel="HCG 본사에서 상담" ctaIcon={ArrowUpRight}
-              onClick={handleTurnkeyClick}
-            />
+            <TurnkeyPath onCtaClick={handleTurnkeyClick} />
           </motion.div>
 
+          {/* ─────────── PATH 02 — Master (featured) ─────────── */}
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }}>
-            <PathCard
-              pathNumber="02" keyLabel="2" status="지금 체험" tone="featured" recommended
-              title="Master 자문" subtitle="월 retainer · 필요할 때 함께"
-              description="제도를 같이 짜고, 실행하면서 fine-tune하고, 사이사이 도구와 시뮬레이션도 제공합니다. 정해진 일정이 아니라 elastic 협업."
-              chipsLabel="협업 모드 5가지"
-              chips={[
-                { icon: Wrench, label: "페어 디자인" },
-                { icon: MessageCircle, label: "실행 도우미" },
-                { icon: BookOpen, label: "도구 제공" },
-                { icon: Calendar, label: "시뮬레이션" },
-                { icon: Users2, label: "정렬 워크숍" },
-              ]}
-              ctaLabel="투어 시작" ctaIcon={ArrowRight} ctaKey="Enter"
-              onClick={startMasterTour}
-            />
+            <MasterPath onCtaClick={startMasterTour} />
           </motion.div>
         </motion.div>
 
-        {/* Controls hint */}
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.7 }}
@@ -154,7 +123,6 @@ export default function Welcome() {
           </span>
         </motion.div>
 
-        {/* Trust strip */}
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.8 }}
@@ -173,116 +141,166 @@ export default function Welcome() {
   );
 }
 
-/* ─────────────── Path card ─────────────── */
+/* ─────────────── Path 01 — Turnkey (dimmed body, alive CTA) ─────────────── */
 
-type PathCardProps = {
-  pathNumber: string;
-  keyLabel: string;
-  status: string;
-  tone: "muted" | "featured";
-  recommended?: boolean;
-  title: string;
-  subtitle: string;
-  description: string;
-  chipsLabel: string;
-  chips: { icon: LucideIcon; label: string }[];
-  ctaLabel: string;
-  ctaIcon: LucideIcon;
-  ctaKey?: string;
-  onClick: () => void;
-};
-
-function PathCard({
-  pathNumber, keyLabel, status, tone, recommended,
-  title, subtitle, description, chipsLabel, chips,
-  ctaLabel, ctaIcon: CtaIcon, ctaKey, onClick,
-}: PathCardProps) {
-  const isFeatured = tone === "featured";
-
+function TurnkeyPath({ onCtaClick }: { onCtaClick: () => void }) {
   return (
-    <div
-      role="button" tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => { if (e.key === " ") { e.preventDefault(); onClick(); } }}
-      className="group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-50 rounded-2xl"
-    >
-      <div
-        className={`relative flex flex-col h-full rounded-2xl backdrop-blur-xl overflow-hidden transition-all duration-300 ${
-          isFeatured
-            ? "bg-accent-500/[0.05] border-2 border-accent-500/40 shadow-glow-accent group-hover:shadow-glow-accent-lg group-hover:-translate-y-1"
-            : "bg-white/[0.03] border border-dashed border-white/[0.15] group-hover:border-white/25 group-hover:bg-white/[0.05]"
-        }`}
-      >
-        {/* Top edge highlight via pseudo */}
+    <div className="relative h-full rounded-2xl backdrop-blur-xl overflow-hidden border border-dashed border-white/[0.12] bg-white/[0.02]">
+      {/* deeply muted body — keep card from drawing attention */}
+      <div className="opacity-65">
+        {/* Top edge highlight (very subtle) */}
         <span
           aria-hidden
           className="absolute top-0 inset-x-0 h-px"
-          style={{
-            background: isFeatured
-              ? "linear-gradient(90deg, transparent, rgba(56,189,248,0.5), transparent)"
-              : "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
-          }}
+          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)" }}
         />
 
-        {/* Header strip */}
-        <div
-          className={`relative flex items-center justify-between gap-3 px-7 py-3 border-b ${
-            isFeatured ? "bg-accent-500/[0.06] border-accent-500/20" : "bg-white/[0.02] border-white/[0.06]"
-          }`}
-        >
+        <div className="flex items-center justify-between gap-3 px-7 py-3 border-b border-white/[0.05] bg-white/[0.015]">
           <div className="flex items-center gap-2">
-            <span className={`text-[10px] font-mono font-bold tracking-[0.22em] ${isFeatured ? "text-accent-400" : "text-ink-600"}`}>
-              PATH {pathNumber}
-            </span>
-            <span className="w-1 h-1 rounded-full bg-current opacity-40" />
-            <span className={`text-[10px] font-mono font-bold tracking-[0.18em] uppercase ${isFeatured ? "text-accent-400" : "text-ink-500"}`}>
-              {status}
-            </span>
+            <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-ink-500">PATH 01</span>
+            <span className="w-1 h-1 rounded-full bg-ink-500/40" />
+            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-ink-500">통합 컨설팅</span>
           </div>
-          <KeyHint variant={isFeatured ? "dark" : "light"}>{keyLabel}</KeyHint>
+          <KeyHint variant="light">1</KeyHint>
         </div>
 
-        {recommended && (
-          <span className="absolute top-3 right-14 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-500 text-white text-[10px] font-bold tracking-wider shadow-[0_4px_12px_-2px_rgba(14,165,233,0.7)]">
-            <Sparkles size={9} />
-            추천
-          </span>
-        )}
+        <div className="p-7 sm:p-8 pb-4">
+          <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-700">
+            풀패키지 컨설팅
+          </h2>
+          <p className="block text-[14px] text-ink-500 mt-1.5">
+            3~4개월 상주형 · 처음부터 끝까지
+          </p>
+
+          <p className="body-sm text-ink-600 mt-5 leading-relaxed">
+            직급·평가·보상·진단을 한 번에 새로 설계해야 할 때.
+            컨설턴트가 상주하며 풀세트로 함께 만듭니다.
+          </p>
+
+          {/* Fit profile */}
+          <div className="mt-5">
+            <div className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-ink-500 mb-2.5">
+              이런 회사에 적합
+            </div>
+            <ul className="space-y-1.5">
+              <FitRow text="규모 500명+ / 또는 인사제도 전면 개편이 필요한 시점" />
+              <FitRow text="IPO 준비 · M&A 직후 · 사업 전환기" />
+              <FitRow text="기존 제도가 거의 없거나 큰 폭의 재설계 필요" />
+              <FitRow text="자체 HR 역량이 충분히 갖춰진 회사" />
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA stays active — undimmed */}
+      <div className="p-7 sm:p-8 pt-0">
+        <button
+          type="button"
+          onClick={onCtaClick}
+          className="group inline-flex items-center gap-2 px-4 h-11 rounded-lg font-semibold text-[14px]
+                     border border-white/15 bg-white/[0.06] text-ink-800
+                     hover:bg-white/[0.10] hover:border-white/30 hover:text-ink-900
+                     active:translate-y-px transition-all
+                     shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+        >
+          <span>HCG 본사에서 상담</span>
+          <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function FitRow({ text }: { text: string }) {
+  return (
+    <li className="flex items-start gap-2 text-[12px] text-ink-600 leading-relaxed">
+      <span className="text-ink-500 mt-1 flex-shrink-0">·</span>
+      <span>{text}</span>
+    </li>
+  );
+}
+
+/* ─────────────── Path 02 — Master (featured) ─────────────── */
+
+function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
+  return (
+    <div
+      role="button" tabIndex={0}
+      onClick={onCtaClick}
+      onKeyDown={(e) => { if (e.key === " ") { e.preventDefault(); onCtaClick(); } }}
+      className="group block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-50 rounded-2xl h-full"
+    >
+      <div className="relative flex flex-col h-full rounded-2xl backdrop-blur-xl overflow-hidden bg-accent-500/[0.05] border-2 border-accent-500/40 shadow-glow-accent group-hover:shadow-glow-accent-lg group-hover:-translate-y-1 transition-all duration-300">
+        <span
+          aria-hidden
+          className="absolute top-0 inset-x-0 h-px"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(56,189,248,0.5), transparent)" }}
+        />
+
+        <div className="relative flex items-center justify-between gap-3 px-7 py-3 border-b border-accent-500/20 bg-accent-500/[0.06]">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-accent-400">PATH 02</span>
+            <span className="w-1 h-1 rounded-full bg-accent-400/40" />
+            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-accent-400">지금 체험</span>
+          </div>
+          <KeyHint variant="dark">2</KeyHint>
+        </div>
+
+        <span className="absolute top-3 right-14 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-500 text-white text-[10px] font-bold tracking-wider shadow-[0_4px_12px_-2px_rgba(14,165,233,0.7)]">
+          <Sparkles size={9} />
+          추천
+        </span>
 
         <div className="relative flex flex-col flex-1 p-7 sm:p-8">
-          {isFeatured && (
-            <div
-              aria-hidden
-              className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gradient-to-br from-accent-500/30 to-accent-700/10 blur-3xl pointer-events-none"
-            />
-          )}
+          <div
+            aria-hidden
+            className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gradient-to-br from-accent-500/30 to-accent-700/10 blur-3xl pointer-events-none"
+          />
 
           <div className="relative">
-            <h2 className={`block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight ${isFeatured ? "text-ink-900" : "text-ink-800"}`}>
-              {title}
+            <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
+              Master 자문
             </h2>
-            <p className={`block text-[14px] mt-1.5 ${isFeatured ? "text-accent-400 font-medium" : "text-ink-500"}`}>
-              {subtitle}
+            <p className="block text-[14px] text-accent-400 font-medium mt-1.5">
+              월 retainer · 필요할 때 함께
             </p>
           </div>
 
-          <p className="relative body-sm text-ink-600 mt-5 leading-relaxed">{description}</p>
+          <p className="relative body-sm text-ink-600 mt-5 leading-relaxed">
+            제도를 같이 짜고, 실행하면서 fine-tune하고, 사이사이 도구와 시뮬레이션도 제공합니다.
+            정해진 일정이 아니라 elastic 협업.
+          </p>
+
+          {/* Fit profile */}
+          <div className="relative mt-5">
+            <div className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-ink-500 mb-2.5">
+              이런 회사에 적합
+            </div>
+            <ul className="space-y-1.5">
+              <FitRowFeatured text="규모 50~500명 / 성장 중인 스타트업·중견기업" />
+              <FitRowFeatured text="제도는 어느 정도 있지만 운영이 어려운 상태" />
+              <FitRowFeatured text="HR 담당이 1~2명, 전문가 부재" />
+              <FitRowFeatured text="필요할 때 도움받고 평소엔 자율 운영하고 싶은 회사" />
+            </ul>
+          </div>
 
           <div className="relative mt-6">
             <div className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-ink-500 mb-2.5">
-              {chipsLabel}
+              협업 모드 5가지
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {chips.map((c, i) => {
+              {[
+                { icon: Wrench, label: "페어 디자인" },
+                { icon: MessageCircle, label: "실행 도우미" },
+                { icon: BookOpen, label: "도구 제공" },
+                { icon: Calendar, label: "시뮬레이션" },
+                { icon: Users2, label: "정렬 워크숍" },
+              ].map((c, i) => {
                 const Icon = c.icon;
                 return (
                   <span
                     key={i}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[12px] font-medium ${
-                      isFeatured
-                        ? "bg-accent-500/15 text-accent-300 border border-accent-500/30"
-                        : "bg-white/[0.05] text-ink-700 border border-white/10"
-                    }`}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[12px] font-medium bg-accent-500/15 text-accent-300 border border-accent-500/30"
                   >
                     <Icon size={11} />
                     {c.label}
@@ -293,21 +311,24 @@ function PathCard({
           </div>
 
           <div className="relative mt-auto pt-7">
-            <div
-              className={`inline-flex items-center gap-2 px-4 h-11 rounded-lg font-semibold text-[14px] transition-all ${
-                isFeatured
-                  ? "bg-accent-500 text-white shadow-[0_8px_24px_-8px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:bg-accent-400 group-hover:shadow-[0_12px_32px_-8px_rgba(14,165,233,0.75),inset_0_1px_0_rgba(255,255,255,0.25)]"
-                  : "border border-white/15 bg-white/[0.04] text-ink-800 group-hover:bg-white/[0.08] group-hover:border-white/25"
-              }`}
-            >
-              <span>{ctaLabel}</span>
-              <CtaIcon size={14} className="transition-transform group-hover:translate-x-0.5" />
-              {ctaKey && <KeyHint variant="dark" className="ml-1">{ctaKey}</KeyHint>}
+            <div className="inline-flex items-center gap-2 px-4 h-11 rounded-lg font-semibold text-[14px] bg-accent-500 text-white shadow-[0_8px_24px_-8px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:bg-accent-400 group-hover:shadow-[0_12px_32px_-8px_rgba(14,165,233,0.75),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all">
+              <span>투어 시작</span>
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+              <KeyHint variant="dark" className="ml-1">Enter</KeyHint>
             </div>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+function FitRowFeatured({ text }: { text: string }) {
+  return (
+    <li className="flex items-start gap-2 text-[12px] text-ink-700 leading-relaxed">
+      <Check size={11} className="text-accent-400 mt-0.5 flex-shrink-0" />
+      <span>{text}</span>
+    </li>
   );
 }
 
