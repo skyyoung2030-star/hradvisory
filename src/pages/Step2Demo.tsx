@@ -218,21 +218,6 @@ function InlineChannelHeader({ badge, title, tagline, icon: Icon }: {
           position: "static",
         }}
       >
-        {/* ⚠ DEBUG MARKER — small red v6 to confirm new file is loaded */}
-        <span
-          style={{
-            background: "#7f1d1d",
-            color: "white",
-            padding: "1px 4px",
-            fontSize: 9,
-            marginRight: 6,
-            borderRadius: 2,
-            fontFamily: "monospace",
-            verticalAlign: "middle",
-          }}
-        >
-          v6
-        </span>
         <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-accent-400 uppercase">
           {badge}
         </span>
