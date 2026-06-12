@@ -15,11 +15,25 @@ export const PAIN_IMPACT_MAP: PainImpact[] = [
     metric_text: "의사결정 속도 +30%, 승진 명분 명확화",
   },
   {
+    id: "decision_slow",
+    pain_text: "의사결정이 느리고 조직이 비대하다",
+    area: "직급",
+    after_text: "직급 단계 통합 + 의사결정 권한 위임",
+    metric_text: "의사결정 속도 +35%",
+  },
+  {
     id: "eval_unfair",
     pain_text: "평가가 공정하지 않다 / 변별력이 없다",
     area: "평가",
     after_text: "OKR + Check-in 도입, Calibration 정착",
     metric_text: "평가 일관성 ±15% 이내, S/D 격차 1.4배",
+  },
+  {
+    id: "poor_alignment",
+    pain_text: "부서 간 silo / 목표 정렬이 안 된다",
+    area: "조직문화",
+    after_text: "OKR + 분기 정렬 워크숍",
+    metric_text: "목표 달성률 +12%p, 변화 수용성 +20",
   },
   {
     id: "no_payband",
@@ -29,11 +43,25 @@ export const PAIN_IMPACT_MAP: PainImpact[] = [
     metric_text: "인상 재원 산정 시간 -70%",
   },
   {
+    id: "key_talent_risk",
+    pain_text: "S급 핵심인재 이탈 우려 / 경쟁사 적극 영입",
+    area: "보상",
+    after_text: "차등 보상 + 핵심인재 retention 패키지",
+    metric_text: "핵심인재 유지율 +6~10%p",
+  },
+  {
     id: "unclear_job",
     pain_text: "직무 분장이 모호하다",
     area: "직무",
     after_text: "직무 카드 (R&R 명세) 도입",
     metric_text: "업무 중복 -40%, 신입 온보딩 -30%",
+  },
+  {
+    id: "hire_difficulty",
+    pain_text: "채용이 어렵거나 신규 입사자 적응이 느리다",
+    area: "직무",
+    after_text: "직무기술서 명문화 + 채용 페르소나 정의",
+    metric_text: "채용 소요일 -25%, 6개월 retention +8%p",
   },
   {
     id: "promo_unclear",
@@ -44,16 +72,16 @@ export const PAIN_IMPACT_MAP: PainImpact[] = [
   },
   {
     id: "weak_leadership",
-    pain_text: "팀장 리더십이 약하다",
+    pain_text: "팀장 리더십이 약하거나 편차가 크다",
     area: "리더십",
     after_text: "Derailer 진단 기반 1:1 코칭",
     metric_text: "리더십 수준 진단 +0.5 (5점 척도)",
   },
   {
     id: "culture_drift",
-    pain_text: "조직문화가 흔들린다 / 핵심인재 이탈",
+    pain_text: "직원 몰입도·만족도가 낮다",
     area: "조직문화",
-    after_text: "명시적 핵심인재 풀 + LTI 도입",
-    metric_text: "핵심인재 retention +3%p",
+    after_text: "심리적 안전 진단 + 정렬 워크숍 + 리더 코칭",
+    metric_text: "eNPS +15, 1년 retention +3%p",
   },
 ];
