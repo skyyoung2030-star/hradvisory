@@ -262,7 +262,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
               Master 자문
             </h2>
             <p className="block text-[14px] text-accent-400 font-medium mt-1.5">
-              월 retainer · 필요할 때 함께
+              전문컨설턴트를 HRBP로 활용하며 조직체질 개선
             </p>
           </div>
 
