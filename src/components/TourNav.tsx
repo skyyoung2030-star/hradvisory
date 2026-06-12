@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, AlertCircle } from "lucide-react";
+import { ArrowRight, AlertCircle } from "lucide-react";
 import { type TourStep, getNextStep, getPrevStep } from "@/lib/tour-config";
 import KeyHint from "./KeyHint";
 
@@ -55,7 +55,6 @@ export default function TourNav({
       <div className="container-x py-4 flex items-center justify-between gap-3">
         {!hidePrev && prev ? (
           <button type="button" onClick={goPrev} className="btn-secondary group" aria-label={`이전: ${prev.label}`}>
-            <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5 mr-2" />
             이전
             <KeyHint className="ml-2">←</KeyHint>
           </button>
