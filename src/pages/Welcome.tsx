@@ -262,7 +262,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
               HR 마스터 계약
             </h2>
             <p className="block text-[14px] text-accent-400 font-medium mt-1.5">
-              전문컨설턴트를 HRBP로 활용하며 조직체질 개선
+              전문컨설턴트를 일정기간 HRBP로 활용하며 조직체질 개선
             </p>
           </div>
 
