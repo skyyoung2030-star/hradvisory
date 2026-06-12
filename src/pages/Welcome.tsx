@@ -279,7 +279,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
             </div>
             <ul className="space-y-1.5">
               <FitRowFeatured text="규모 50~500명 / 성장 중인 스타트업·중견기업" />
-              <FitRowFeatured text="제도는 어느 정도 있지만 운영이 어려운 상태" />
+              <FitRowFeatured text="제도가 비어있고 운영이슈가 항상 새로운 상태" />
               <FitRowFeatured text="HR 담당이 1~2명, 전문가 부재" />
               <FitRowFeatured text="Lean하게 운영하고 수정하고 파인튜닝하면서 개선하고싶은 회사" />
                 <FitRowFeatured text="합리적 월별 자문료" />
