@@ -267,7 +267,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
           </div>
 
           <p className="relative body-sm text-ink-600 mt-5 leading-relaxed">
-            제도를 같이 짜고, 실행하면서 fine-tune하고, 사이사이 도구와 시뮬레이션도 제공합니다.
+            계약 기간 동안 전문 컨설턴트를 통해 제도 수립 지원, 운영 자문을 받으며 조직을 업그레이드 시킵니다.
             정해진 일정이 아니라 elastic 협업.
           </p>
 
