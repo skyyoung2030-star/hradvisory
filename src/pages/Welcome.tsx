@@ -166,7 +166,7 @@ function TurnkeyPath({ onCtaClick }: { onCtaClick: () => void }) {
 
         <div className="p-7 sm:p-8 pb-4">
           <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-700">
-            풀패키지 컨설팅
+            제도설계 컨설팅
           </h2>
           <p className="block text-[14px] text-ink-500 mt-1.5">
             3~4개월 상주형 · 처음부터 끝까지
@@ -259,7 +259,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
 
           <div className="relative">
             <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
-              마스터 자문형 컨설팅
+              HR 마스터 계약
             </h2>
             <p className="block text-[14px] text-accent-400 font-medium mt-1.5">
               전문컨설턴트를 HRBP로 활용하며 조직체질 개선
