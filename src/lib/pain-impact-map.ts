@@ -30,7 +30,7 @@ export const PAIN_IMPACT_MAP: PainImpact[] = [
   },
   {
     id: "goal_miss",
-    pain_text: "팀·개인의 목표 달성률이 낮다",
+    pain_text: "팀·개인의 목표 달성률이 낮아 조직성과가 향상되지 않는다",
     area: "평가",
     after_text: "OKR + 분기 Check-in 운영",
     metric_text: "목표 달성률 +12~18%p",
