@@ -187,6 +187,7 @@ function TurnkeyPath({ onCtaClick }: { onCtaClick: () => void }) {
               <FitRow text="IPO 준비 · M&A 직후 · 사업 전환기" />
               <FitRow text="기존 제도가 거의 없거나 큰 폭의 재설계 필요" />
               <FitRow text="자체 HR 역량이 충분히 갖춰진 회사" />
+                 <FitRow text="고비용" />
             </ul>
           </div>
         </div>
