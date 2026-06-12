@@ -281,6 +281,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
               <FitRowFeatured text="제도는 어느 정도 있지만 운영이 어려운 상태" />
               <FitRowFeatured text="HR 담당이 1~2명, 전문가 부재" />
               <FitRowFeatured text="필요할 때 도움받고 평소엔 자율 운영하고 싶은 회사" />
+                <FitRowFeatured text="합리적 월별 자문료" />
             </ul>
           </div>
 
