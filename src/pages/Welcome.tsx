@@ -267,7 +267,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
           </div>
 
           <p className="relative body-sm text-ink-600 mt-5 leading-relaxed">
-            계약 기간 동안 전문 컨설턴트가 밀착 관리하며 제도 수립 지원, 운영 자문을 받아 인력과 조직을 얼라인시키고, 업그레이드 시키며 코어를 강화할 수있습니다.
+            계약 기간 동안 전문 컨설턴트가 밀착 관리합니다. 제도 수립 지원, 운영 자문을 받아 인력과 조직을 얼라인시키고, 업그레이드 시키며 코어를 강화하세요
             
           </p>
 
