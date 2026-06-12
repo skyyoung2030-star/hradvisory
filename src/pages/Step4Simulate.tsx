@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   TrendingUp, TrendingDown, Minus, Sparkles, Target, AlertTriangle,
-  ArrowRight, CheckCircle2,
+  ArrowRight, CheckCircle2, Layers as LayersIcon, ListChecks,
   type LucideIcon,
 } from "lucide-react";
 import { getStepBySlug } from "@/lib/tour-config";
@@ -10,7 +10,7 @@ import StepShell from "@/components/StepShell";
 import TourNav from "@/components/TourNav";
 import { cn } from "@/lib/utils";
 
-/* ═════════════════ Drivers & Outcomes (data) ═════════════════ */
+/* ═════════════════ Drivers ═════════════════ */
 
 type Module = "보상" | "평가" | "직급" | "직무" | "조직문화" | "리더십";
 type Driver = {
@@ -64,20 +64,20 @@ const OUTCOMES: Outcome[] = [
 
 const OUTCOME_GROUPS: OutcomeGroup[] = ["Retention", "Hiring", "성과·생산성", "몰입·문화", "비용"];
 
-/* ═════════════════ Scenarios — curated improvement bundles ═════════════════ */
+/* ═════════════════ Scenarios — storytelling names ═════════════════ */
 
 type Scenario = {
   id: string;
   num: string;
+  /** 스토리텔링 이름 — 시나리오의 비즈니스 의도가 한눈에 보이게 */
   name: string;
+  /** 한 줄 설명 — 어떻게 달성하는지 */
   tagline: string;
   modules: Module[];
   fitFor: string;
-  /** driver id → 조정된 값 (없으면 default 사용) */
   drivers: Record<string, number>;
   insights: string[];
   caveats?: string[];
-  /** 강조해서 미리보기에 띄울 outcome id 1-2개 */
   preview: string[];
 };
 
@@ -86,7 +86,7 @@ const SCENARIOS: Scenario[] = [
     id: "baseline",
     num: "00",
     name: "현재 상태",
-    tagline: "어떤 개입도 하지 않은 baseline 상태",
+    tagline: "어떤 개입도 하지 않은 baseline",
     modules: [],
     fitFor: "비교 기준점",
     drivers: {},
@@ -94,16 +94,16 @@ const SCENARIOS: Scenario[] = [
     preview: [],
   },
   {
-    id: "eval_comp_overhaul",
+    id: "key_talent",
     num: "01",
-    name: "평가 + 보상 통합 개선",
-    tagline: "변별력 있는 평가와 차등 보상으로 핵심인재 잡기",
+    name: "핵심인재 Retention",
+    tagline: "변별력 있는 평가와 차등 보상으로 S급 이탈 차단",
     modules: ["평가", "보상"],
-    fitFor: "100~500명 / 핵심인재 이탈 우려 회사",
+    fitFor: "100~500명 / 핵심인재 이탈 우려",
     drivers: { payband_uplift: 3, perf_differential: 3.5, grade_top_ratio: 25, eval_frequency: 4 },
     insights: [
-      "변별력 있는 평가가 차등 보상의 정당성을 제공합니다.",
       "핵심인재는 인상폭보다 '인정받는다'는 신호에 더 민감하게 반응합니다.",
+      "변별력 있는 평가가 차등 보상의 정당성을 제공합니다.",
       "분기 평가는 HR 운영 부담을 늘리지만 retention ROI가 충분히 보상합니다.",
     ],
     caveats: [
@@ -113,30 +113,30 @@ const SCENARIOS: Scenario[] = [
     preview: ["key_talent_retention", "productivity"],
   },
   {
-    id: "eval_only",
+    id: "performance_motivation",
     num: "02",
-    name: "평가만 단독 강화",
-    tagline: "적은 투자로 변별력과 정렬도부터 확보",
+    name: "성과 동기부여",
+    tagline: "적은 투자로 변별력과 목표 정렬도부터 확보",
     modules: ["평가"],
     fitFor: "재원 여유 없음 · 평가가 형식화된 회사",
     drivers: { grade_top_ratio: 25, eval_frequency: 4 },
     insights: [
       "보상 재원 증가 없이도 변별력 있는 평가만으로 목표 달성률을 끌어올릴 수 있습니다.",
       "잦은 Check-in 사이클은 정렬도와 피드백 문화를 만듭니다.",
-      "다만 변별만 강화하고 보상이 따르지 않으면 단기적으로 만족도 하락 위험.",
+      "다만 변별만 강화하고 보상이 따르지 않으면 단기적으로 만족도 하락 위험이 있습니다.",
     ],
     caveats: [
-      "보상으로 이어지지 않으면 평가 무력감 발생 — 6~12개월 내 보상 연계 권장.",
+      "보상으로 이어지지 않으면 평가 무력감 발생 — 6~12개월 내 보상 연계를 권장합니다.",
     ],
     preview: ["goal_achievement", "hr_burden"],
   },
   {
-    id: "comp_culture",
+    id: "engagement_trust",
     num: "03",
-    name: "보상 + 조직문화 개선",
-    tagline: "직원 만족도와 retention을 함께 끌어올리는 패키지",
+    name: "신뢰와 안전",
+    tagline: "심리적 안전과 정렬 워크숍으로 평균 만족도 회복",
     modules: ["보상", "조직문화"],
-    fitFor: "이탈률 높음 · 직원 만족도 낮음 회사",
+    fitFor: "이탈률 높음 · 직원 만족도 낮음",
     drivers: { payband_uplift: 4, alignment_workshops: 6, psych_safety: 80 },
     insights: [
       "보상만으로는 한계 — 심리적 안전이 retention의 더 큰 driver입니다.",
@@ -146,25 +146,25 @@ const SCENARIOS: Scenario[] = [
     preview: ["engagement", "retention_1y"],
   },
   {
-    id: "job_leader",
+    id: "productivity_boost",
     num: "04",
-    name: "직무 명확화 + 리더십 강화",
-    tagline: "생산성과 운영 효율을 동시에",
+    name: "생산성 가속",
+    tagline: "직무 명확화 + 리더십 강화로 일하는 방식 개선",
     modules: ["직무", "리더십"],
     fitFor: "급성장 회사 · 역할 모호 · 팀장 역량 편차",
     drivers: { job_clarity: 90, leader_coaching: 4 },
     insights: [
       "직무가 명확하면 채용 소요일과 운영 부담이 동시에 줄어듭니다.",
-      "팀장 코칭은 단일 변수 중 생산성과 목표 달성률에 가장 큰 영향을 주는 driver.",
+      "팀장 코칭은 단일 변수 중 생산성·목표 달성률에 가장 큰 영향을 주는 driver.",
       "비용 없는 개입이지만 시간 투자가 필요 — 경영진 commitment가 핵심입니다.",
     ],
     preview: ["productivity", "hire_days"],
   },
   {
-    id: "flatten",
+    id: "decision_speed",
     num: "05",
-    name: "조직 슬림화",
-    tagline: "직급 통합 + 직무 명확화로 의사결정 가속",
+    name: "빠른 의사결정",
+    tagline: "직급 통합과 직무 명확화로 조직 평탄화",
     modules: ["직급", "직무"],
     fitFor: "스타트업 → 중견 성장기 · 의사결정 느림",
     drivers: { grade_levels: 4, job_clarity: 85 },
@@ -179,10 +179,10 @@ const SCENARIOS: Scenario[] = [
     preview: ["decision_speed", "productivity"],
   },
   {
-    id: "key_talent_full",
+    id: "all_in",
     num: "06",
-    name: "핵심인재 retention 종합",
-    tagline: "모든 영역을 활용한 프리미엄 패키지",
+    name: "올인 패키지",
+    tagline: "보상 · 평가 · 문화 · 리더십 전 영역 동시 강화",
     modules: ["보상", "평가", "조직문화", "리더십"],
     fitFor: "S급 인재 다수 보유 · 경쟁사 적극 영입 중",
     drivers: {
@@ -195,8 +195,8 @@ const SCENARIOS: Scenario[] = [
       "비용은 크지만 핵심 1명 이탈 시 대체 비용이 연봉의 2~3배인 것과 비교하면 ROI는 명확합니다.",
     ],
     caveats: [
-      "HR 운영 부담이 크게 증가 — HRIS 도입 권장.",
-      "도입 후 6개월 시점 효과 측정 + 조정 필요.",
+      "HR 운영 부담이 크게 증가 — HRIS 도입을 권장합니다.",
+      "도입 후 6개월 시점 효과 측정 + 조정이 필요합니다.",
     ],
     preview: ["key_talent_retention", "engagement"],
   },
@@ -226,7 +226,7 @@ function computeOutcome(o: Outcome, values: Record<string, number>): number {
 
 export default function Step4Simulate() {
   const step = getStepBySlug("4-simulate")!;
-  const [selectedId, setSelectedId] = useState<string>("eval_comp_overhaul");
+  const [selectedId, setSelectedId] = useState<string>("key_talent");
   const selected = SCENARIOS.find((s) => s.id === selectedId)!;
   const values = useMemo(() => effectiveValues(selected), [selected]);
   const changedDrivers = useMemo(() => DRIVERS.filter((d) => Object.prototype.hasOwnProperty.call(selected.drivers, d.id)), [selected]);
@@ -250,24 +250,42 @@ export default function Step4Simulate() {
           }}
         >
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
-            <div className="grid lg:grid-cols-[300px,1fr] gap-4">
-              {/* ─── LEFT — Scenario picker (sticky on lg) ─── */}
-              <aside>
-                <div className="lg:sticky lg:top-4 space-y-2.5">
-                  <div
-                    className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-ink-500 px-1"
-                    style={{ display: "block", margin: 0, marginBottom: 4, padding: "0 4px", position: "static" }}
-                  >
-                    시나리오 {SCENARIOS.length}개
+            <div className="grid lg:grid-cols-[320px,1fr] gap-4 items-start">
+              {/* ─── LEFT — Scenario picker box (sticky, scrollable inside) ─── */}
+              <aside className="lg:sticky lg:top-4">
+                <div className="card !p-0 overflow-hidden flex flex-col lg:max-h-[calc(100vh-2rem)]">
+                  {/* Box header */}
+                  <div className="px-4 py-3 border-b border-white/[0.08] bg-white/[0.02] flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.08] text-ink-700 flex items-center justify-center flex-shrink-0">
+                      <ListChecks size={13} />
+                    </div>
+                    <div style={{ display: "block", lineHeight: 1 }}>
+                      <div
+                        className="text-[9px] font-mono font-bold tracking-[0.22em] uppercase text-ink-500"
+                        style={{ display: "block", margin: 0, padding: 0, lineHeight: 1 }}
+                      >SCENARIOS</div>
+                      <div
+                        className="text-[14px] font-bold text-ink-900"
+                        style={{ display: "block", margin: 0, marginTop: 3, padding: 0, lineHeight: 1 }}
+                      >개선 시나리오</div>
+                    </div>
+                    <span
+                      className="ml-auto text-[10px] font-mono text-ink-500 tabular-nums whitespace-nowrap"
+                      style={{ display: "inline-block", margin: 0, padding: 0 }}
+                    >{SCENARIOS.length}개</span>
                   </div>
-                  {SCENARIOS.map((s) => (
-                    <ScenarioCard
-                      key={s.id} scenario={s}
-                      isSelected={s.id === selectedId}
-                      values={effectiveValues(s)}
-                      onClick={() => setSelectedId(s.id)}
-                    />
-                  ))}
+
+                  {/* Scrollable list */}
+                  <div className="flex-1 overflow-y-auto p-2 space-y-1.5 hcg-scrollbar">
+                    {SCENARIOS.map((s) => (
+                      <ScenarioCard
+                        key={s.id} scenario={s}
+                        isSelected={s.id === selectedId}
+                        values={effectiveValues(s)}
+                        onClick={() => setSelectedId(s.id)}
+                      />
+                    ))}
+                  </div>
                 </div>
               </aside>
 
@@ -296,6 +314,23 @@ export default function Step4Simulate() {
       </StepShell>
 
       <TourNav current={step} nextLabel="협업 방식 보기" />
+
+      {/* Custom scrollbar styling — inline so no global CSS edit needed */}
+      <style>{`
+        .hcg-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255,255,255,0.12) transparent;
+        }
+        .hcg-scrollbar::-webkit-scrollbar { width: 6px; }
+        .hcg-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .hcg-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.10);
+          border-radius: 3px;
+        }
+        .hcg-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255,255,255,0.18);
+        }
+      `}</style>
     </>
   );
 }
@@ -305,7 +340,6 @@ export default function Step4Simulate() {
 function ScenarioCard({ scenario, isSelected, values, onClick }: {
   scenario: Scenario; isSelected: boolean; values: Record<string, number>; onClick: () => void;
 }) {
-  // Compute preview outcome diffs
   const previewOutcomes = scenario.preview
     .map((id) => OUTCOMES.find((o) => o.id === id))
     .filter((o): o is Outcome => !!o)
@@ -322,28 +356,37 @@ function ScenarioCard({ scenario, isSelected, values, onClick }: {
     <button
       type="button" onClick={onClick}
       className={cn(
-        "text-left p-3 rounded-xl border transition-all relative overflow-hidden h-full flex flex-col",
+        "text-left w-full p-2.5 rounded-lg border transition-all relative",
         isSelected
-          ? "bg-accent-500/[0.08] border-accent-500/50 shadow-[0_0_24px_-4px_rgba(14,165,233,0.5),inset_0_1px_0_rgba(255,255,255,0.05)]"
-          : "bg-white/[0.03] border-white/[0.08] hover:border-accent-500/30 hover:bg-white/[0.05] hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-12px_rgba(0,0,0,0.6)]",
+          ? "bg-accent-500/[0.10] border-accent-500/50 shadow-[0_0_20px_-6px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.06)]"
+          : "bg-white/[0.02] border-white/[0.06] hover:border-accent-500/30 hover:bg-white/[0.04]",
       )}
     >
       {isSelected && (
-        <span aria-hidden className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-500/70 to-transparent" />
+        <span aria-hidden className="absolute top-0 inset-x-2 h-px bg-gradient-to-r from-transparent via-accent-500/70 to-transparent" />
       )}
 
-      {/* Number + module chips */}
-      <div className="flex items-center justify-between mb-1.5">
-        <span className={cn(
-          "text-[9px] font-mono font-bold tracking-[0.22em]",
-          isSelected ? "text-accent-400" : "text-ink-500",
-        )}>#{scenario.num}</span>
-        {isSelected && <CheckCircle2 size={12} className="text-accent-400" />}
+      {/* Number + name row */}
+      <div className="flex items-baseline justify-between gap-2 mb-1">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          <span className={cn(
+            "text-[9px] font-mono font-bold tracking-[0.22em] flex-shrink-0",
+            isSelected ? "text-accent-400" : "text-ink-500",
+          )}>#{scenario.num}</span>
+          <span
+            className="text-[13px] font-bold text-ink-900 truncate"
+            style={{ display: "inline-block", margin: 0, padding: 0, position: "static" }}
+          >
+            {scenario.name}
+          </span>
+        </div>
+        {isSelected && <CheckCircle2 size={13} className="text-accent-400 flex-shrink-0" />}
       </div>
 
-      <div className="flex flex-wrap gap-1 mb-2">
+      {/* Module chips */}
+      <div className="flex flex-wrap gap-1 mb-1.5">
         {isBaseline ? (
-          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-white/[0.06] text-ink-500 uppercase tracking-wider">
+          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-white/[0.05] text-ink-500 uppercase tracking-wider">
             기준점
           </span>
         ) : scenario.modules.map((m) => (
@@ -359,25 +402,17 @@ function ScenarioCard({ scenario, isSelected, values, onClick }: {
         ))}
       </div>
 
-      {/* Name */}
-      <div
-        className="text-[14px] font-bold text-ink-900 leading-tight mb-1"
-        style={{ display: "block", margin: 0, marginBottom: 4, padding: 0, position: "static" }}
-      >
-        {scenario.name}
-      </div>
-
       {/* Tagline */}
       <div
-        className="text-[11px] text-ink-500 leading-snug mb-2.5 flex-1"
-        style={{ display: "block", margin: 0, marginBottom: 10, padding: 0, position: "static" }}
+        className="text-[10px] text-ink-500 leading-snug mb-1.5"
+        style={{ display: "block", margin: 0, marginBottom: 6, padding: 0, position: "static" }}
       >
         {scenario.tagline}
       </div>
 
       {/* Preview effects */}
       {previewOutcomes.length > 0 && (
-        <div className="space-y-1 pt-2 border-t border-white/[0.05]">
+        <div className="space-y-0.5 pt-1.5 border-t border-white/[0.05]">
           {previewOutcomes.map(({ o, diff, isGood }) => {
             const decimals = o.decimals ?? 1;
             const Icon = diff > 0 ? TrendingUp : TrendingDown;
@@ -421,7 +456,7 @@ function ScenarioDetail({ scenario, changedDrivers, values }: {
               선택된 시나리오 #{scenario.num}
             </div>
             <div
-              className="text-[18px] font-bold text-ink-900 mt-1"
+              className="text-[18px] font-bold text-ink-900"
               style={{ display: "block", margin: 0, marginTop: 4, padding: 0, position: "static", lineHeight: 1.2 }}
             >
               {scenario.name}
@@ -450,25 +485,23 @@ function ScenarioDetail({ scenario, changedDrivers, values }: {
             ))}
           </ul>
           {scenario.caveats && scenario.caveats.length > 0 && (
-            <>
-              <div className="mt-4 pt-3 border-t border-white/[0.06]">
-                <SectionHead icon={AlertTriangle} label="유의사항" />
-                <ul className="space-y-2 mt-2.5">
-                  {scenario.caveats.map((c, i) => (
-                    <li key={i} className="flex items-start gap-2 text-[11px] text-warning-500/90 leading-relaxed">
-                      <span className="text-warning-500 mt-0.5 flex-shrink-0">·</span>
-                      <span>{c}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </>
+            <div className="mt-4 pt-3 border-t border-white/[0.06]">
+              <SectionHead icon={AlertTriangle} label="유의사항" />
+              <ul className="space-y-2 mt-2.5">
+                {scenario.caveats.map((c, i) => (
+                  <li key={i} className="flex items-start gap-2 text-[11px] text-warning-500/90 leading-relaxed">
+                    <span className="text-warning-500 mt-0.5 flex-shrink-0">·</span>
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
 
         {/* ── Driver changes ── */}
         <div className="bg-ink-50 p-4 sm:p-5">
-          <SectionHead icon={ArrowRight} label="조정되는 변수" />
+          <SectionHead icon={LayersIcon} label="조정되는 변수" />
           {isBaseline || changedDrivers.length === 0 ? (
             <div className="text-[12px] text-ink-500 mt-3 italic">조정되는 변수가 없습니다 (baseline).</div>
           ) : (
