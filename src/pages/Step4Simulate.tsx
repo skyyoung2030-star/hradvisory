@@ -1,8 +1,9 @@
-import { useState, useMemo, useCallback } from "react";
-import { motion } from "framer-motion";
+import { useState, useMemo, useRef, useLayoutEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Coins, BarChart3, Layers, FileSearch, Users2, MessageCircle,
-  TrendingUp, TrendingDown, Minus, RotateCcw, Sparkles,
+  DollarSign, BarChart3, Layers,
+  TrendingUp, TrendingDown, Minus,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import { getStepBySlug } from "@/lib/tour-config";
@@ -10,248 +11,209 @@ import StepShell from "@/components/StepShell";
 import TourNav from "@/components/TourNav";
 import { cn } from "@/lib/utils";
 
-/* ═════════════════ Drivers (input) ═════════════════ */
+/* ─────────────── Scenarios ───────────────
+   Each scenario defines:
+   - a slider with a min, max, default, suffix
+   - a model function that turns the slider value into 3 metric outcomes
+   The model is intentionally simple (linear interpolation) — labelled "추정치"
+   so the user understands these are illustrative, not promises. */
 
-type DriverGroup = "보상" | "평가" | "직급" | "직무" | "조직문화" | "리더십";
-
-type Driver = {
-  id: string;
-  group: DriverGroup;
+type Metric = {
   label: string;
   unit: string;
-  min: number;
-  max: number;
-  step: number;
-  default: number;
-  help?: string;
-};
-
-const DRIVERS: Driver[] = [
-  /* 보상 */
-  { id: "payband_uplift",   group: "보상",     label: "Pay Band 하위 인원 추가 인상", unit: "%",     min: 0,  max: 10, step: 1,   default: 0,  help: "Compa-Ratio 하위에 적용" },
-  { id: "perf_differential",group: "보상",     label: "성과급 차등폭 (S vs C)",         unit: "배",    min: 1,  max: 5,  step: 0.5, default: 2,  help: "S등급 인상률 / C등급 인상률" },
-  /* 평가 */
-  { id: "grade_top_ratio",  group: "평가",     label: "상위 등급 비율 (S+A)",           unit: "%",     min: 15, max: 35, step: 5,   default: 20, help: "변별력 vs 운영 부담" },
-  { id: "eval_frequency",   group: "평가",     label: "평가 사이클 빈도",               unit: "회/년", min: 1,  max: 4,  step: 1,   default: 2,  help: "연 1회 / 반기 / 분기 / 월" },
-  /* 직급 */
-  { id: "grade_levels",     group: "직급",     label: "직급 단계 수",                   unit: "단계",  min: 3,  max: 7,  step: 1,   default: 6,  help: "단계 적을수록 평탄" },
-  /* 직무 */
-  { id: "job_clarity",      group: "직무",     label: "직무 명세 명확도",               unit: "/100",  min: 30, max: 100,step: 10,  default: 60, help: "역할·책임이 명문화된 정도" },
-  /* 조직문화 */
-  { id: "alignment_workshops", group: "조직문화", label: "정렬 워크숍 빈도",            unit: "회/년", min: 0,  max: 12, step: 1,   default: 2,  help: "타운홀 · 부서별 액션 워크숍" },
-  { id: "psych_safety",     group: "조직문화", label: "심리적 안전 (피드백·실패 용인)", unit: "/100",  min: 30, max: 100,step: 10,  default: 55, help: "구성원 서베이 점수" },
-  /* 리더십 */
-  { id: "leader_coaching",  group: "리더십",   label: "팀장 코칭 빈도",                 unit: "회/분기",min: 0,  max: 6,  step: 1,   default: 1,  help: "1:1 코칭 세션 횟수" },
-];
-
-const DRIVER_GROUPS: { name: DriverGroup; icon: LucideIcon }[] = [
-  { name: "보상",       icon: Coins },
-  { name: "평가",       icon: BarChart3 },
-  { name: "직급",       icon: Layers },
-  { name: "직무",       icon: FileSearch },
-  { name: "조직문화",   icon: Users2 },
-  { name: "리더십",     icon: MessageCircle },
-];
-
-/* ═════════════════ Outcomes (output) ═════════════════
-   Each outcome is a linear combination of normalized driver positions.
-   `range` defines the maximum swing around `base`. Weights can be negative
-   (driver pulling outcome down) or positive. */
-
-type OutcomeGroup = "Retention" | "Hiring" | "성과·생산성" | "몰입·문화" | "비용";
-
-type Outcome = {
-  id: string;
-  group: OutcomeGroup;
-  label: string;
-  unit: string;
+  /** baseline value (slider at min) */
   base: number;
-  range: number;
+  /** delta added per unit of slider movement (so result = base + delta * (val - min)) */
+  delta: number;
+  /** bigger is better? false flips the up/down arrow + colour */
   higherIsBetter: boolean;
-  decimals?: number;
-  /** driver id → weight (sum of |weight| should be ≤ ~1.5 to keep result in band) */
-  weights: Record<string, number>;
+  format?: (n: number) => string;
 };
 
-const OUTCOMES: Outcome[] = [
-  /* Retention */
+type Scenario = {
+  id: string;
+  icon: LucideIcon;
+  label: string;
+  title: string;
+  description: string;
+  slider: { label: string; min: number; max: number; default: number; suffix: string; help: string };
+  metrics: Metric[];
+};
+
+const SCENARIOS: Scenario[] = [
   {
-    id: "retention_1y", group: "Retention", label: "1년 직원 retention",
-    unit: "%", base: 86, range: 8, higherIsBetter: true, decimals: 1,
-    weights: { payband_uplift: 0.35, perf_differential: 0.10, eval_frequency: -0.05, grade_levels: -0.05,
-               job_clarity: 0.15, alignment_workshops: 0.15, psych_safety: 0.25, leader_coaching: 0.20 },
+    id: "payband",
+    icon: DollarSign,
+    label: "Pay Band 조정",
+    title: "Pay Band 하단 인원에게 추가 인상",
+    description: "Compa-Ratio가 낮은 인원에게 시장 보상 격차를 메우면 어떻게 될까?",
+    slider: {
+      label: "추가 인상률",
+      min: 0, max: 10, default: 5, suffix: "%",
+      help: "Band 하단 인원 한정 추가 인상. 다음 1년치 재원 시뮬레이션.",
+    },
+    metrics: [
+      { label: "시장 경쟁력 지수", unit: "pts", base: 65, delta: 1.7, higherIsBetter: true,
+        format: (n) => n.toFixed(0) },
+      { label: "1년 retention 추정", unit: "%",   base: 87, delta: 0.4, higherIsBetter: true,
+        format: (n) => n.toFixed(1) },
+      { label: "추가 인상 재원",       unit: "억원", base: 0,  delta: 0.23, higherIsBetter: false,
+        format: (n) => n.toFixed(1) },
+    ],
   },
   {
-    id: "key_talent_retention", group: "Retention", label: "핵심인재 유지율",
-    unit: "%", base: 78, range: 15, higherIsBetter: true, decimals: 1,
-    weights: { payband_uplift: 0.15, perf_differential: 0.30, grade_top_ratio: 0.15, eval_frequency: 0.05,
-               job_clarity: 0.10, psych_safety: 0.25, leader_coaching: 0.25 },
-  },
-  /* Hiring */
-  {
-    id: "hire_success", group: "Hiring", label: "신규 채용 성공률",
-    unit: "%", base: 68, range: 22, higherIsBetter: true, decimals: 0,
-    weights: { payband_uplift: 0.30, perf_differential: 0.05, job_clarity: 0.30,
-               psych_safety: 0.20, leader_coaching: 0.10, alignment_workshops: 0.05 },
-  },
-  {
-    id: "hire_days", group: "Hiring", label: "평균 채용 소요일",
-    unit: "일", base: 58, range: 22, higherIsBetter: false, decimals: 0,
-    weights: { payband_uplift: -0.20, job_clarity: -0.30, psych_safety: -0.10,
-               alignment_workshops: -0.05, leader_coaching: -0.05 },
-  },
-  /* 성과·생산성 */
-  {
-    id: "productivity", group: "성과·생산성", label: "직원 생산성 지수",
-    unit: "", base: 100, range: 28, higherIsBetter: true, decimals: 0,
-    weights: { perf_differential: 0.15, grade_top_ratio: 0.05, eval_frequency: 0.10,
-               grade_levels: -0.15, job_clarity: 0.25, psych_safety: 0.20, leader_coaching: 0.25 },
+    id: "evalgrade",
+    icon: BarChart3,
+    label: "평가 등급 분포",
+    title: "S·A 등급 비율 조정",
+    description: "상위 등급 비율을 바꾸면 변별력과 운영 부담이 어떻게 변할까?",
+    slider: {
+      label: "S/A 합산 비율",
+      min: 15, max: 35, default: 20, suffix: "%",
+      help: "S+A를 합한 상위 비율. 나머지는 B/C/D로 자동 분배.",
+    },
+    metrics: [
+      { label: "변별력 점수",        unit: "/5",   base: 3.0,  delta: 0.06, higherIsBetter: true,
+        format: (n) => n.toFixed(2) },
+      { label: "핵심인재 retention", unit: "%",    base: 82,   delta: 0.55, higherIsBetter: true,
+        format: (n) => n.toFixed(1) },
+      { label: "Calibration 시간",   unit: "시간", base: 14,   delta: 0.55, higherIsBetter: false,
+        format: (n) => n.toFixed(0) },
+    ],
   },
   {
-    id: "decision_speed", group: "성과·생산성", label: "의사결정 속도",
-    unit: "", base: 100, range: 35, higherIsBetter: true, decimals: 0,
-    weights: { grade_levels: -0.50, job_clarity: 0.20, psych_safety: 0.15,
-               alignment_workshops: 0.10, leader_coaching: 0.10 },
-  },
-  {
-    id: "goal_achievement", group: "성과·생산성", label: "목표 달성률 (OKR)",
-    unit: "%", base: 72, range: 18, higherIsBetter: true, decimals: 0,
-    weights: { grade_top_ratio: 0.05, eval_frequency: 0.20, perf_differential: 0.10,
-               job_clarity: 0.20, alignment_workshops: 0.15, psych_safety: 0.10, leader_coaching: 0.25 },
-  },
-  /* 몰입·문화 */
-  {
-    id: "engagement", group: "몰입·문화", label: "직원 몰입도 (eNPS)",
-    unit: "", base: 18, range: 35, higherIsBetter: true, decimals: 0,
-    weights: { payband_uplift: 0.15, perf_differential: -0.05, eval_frequency: -0.10,
-               grade_levels: -0.10, job_clarity: 0.15, alignment_workshops: 0.20, psych_safety: 0.30, leader_coaching: 0.25 },
-  },
-  {
-    id: "change_readiness", group: "몰입·문화", label: "변화 수용성",
-    unit: "/100", base: 52, range: 28, higherIsBetter: true, decimals: 0,
-    weights: { alignment_workshops: 0.30, psych_safety: 0.35, leader_coaching: 0.20,
-               job_clarity: 0.10, eval_frequency: 0.05 },
-  },
-  /* 비용 */
-  {
-    id: "hr_burden", group: "비용", label: "HR 운영 부담",
-    unit: "시간/월", base: 70, range: 45, higherIsBetter: false, decimals: 0,
-    weights: { eval_frequency: 0.40, alignment_workshops: 0.25, leader_coaching: 0.15,
-               grade_top_ratio: 0.05, job_clarity: -0.10 },
+    id: "joblevel",
+    icon: Layers,
+    label: "직급 단계",
+    title: "직급 단계 수 통합",
+    description: "6단계에서 단계를 줄이면 의사결정 속도와 승진 적체가 어떻게 변할까?",
+    slider: {
+      label: "직급 단계 수",
+      min: 3, max: 7, default: 6, suffix: "단계",
+      help: "단계가 줄어들수록 평탄해짐. 통합 시 호칭 동요는 별도 관리 필요.",
+    },
+    metrics: [
+      { label: "의사결정 속도",        unit: "%",  base: 100, delta: 7,    higherIsBetter: true,
+        format: (n) => `+${(n - 100).toFixed(0)}` },
+      { label: "승진 적체 평균 대기",   unit: "년", base: 1.6, delta: -0.18, higherIsBetter: false,
+        format: (n) => n.toFixed(1) },
+      { label: "호칭 통합 영향 인원",   unit: "명", base: 0,   delta: 8,    higherIsBetter: false,
+        format: (n) => `~${n.toFixed(0)}` },
+    ],
   },
 ];
 
-const OUTCOME_GROUPS: { name: OutcomeGroup }[] = [
-  { name: "Retention" }, { name: "Hiring" },
-  { name: "성과·생산성" }, { name: "몰입·문화" }, { name: "비용" },
-];
-
-/* ═════════════════ Model ═════════════════ */
-
-function defaultValues(): Record<string, number> {
-  const v: Record<string, number> = {};
-  DRIVERS.forEach((d) => { v[d.id] = d.default; });
-  return v;
+/* When slider is at value v, compute base + delta * (v - min). For 직급 단계
+   the slider invert is needed (smaller = bigger effect on speed). We handle
+   that by allowing negative `delta` and the higherIsBetter flag for colour. */
+function computeMetric(m: Metric, slider: { min: number; max: number }, value: number): number {
+  // For 직급 단계, smaller value = bigger effect — model: effect proportional to (max - value)
+  // For others, value-min. We pick by checking if delta is large enough that base alone would be the "no change" case.
+  // Simplification: always use (value - min) as the dial position; sliders are defined so
+  // value at min = baseline. For 직급 단계 we set min=3 (most aggressive) max=7, and use (max - value) effect.
+  // Easiest: if slider min == 3 (joblevel case), invert.
+  const isInverted = slider.min === 3 && slider.max === 7;
+  const offset = isInverted ? (slider.max - value) : (value - slider.min);
+  return m.base + m.delta * offset;
 }
-
-function computeOutcome(o: Outcome, values: Record<string, number>): number {
-  let weightedSum = 0;
-  for (const [driverId, weight] of Object.entries(o.weights)) {
-    const driver = DRIVERS.find((d) => d.id === driverId);
-    if (!driver) continue;
-    const v = values[driverId];
-    // Normalized -0.5 ~ +0.5 around default position
-    const span = driver.max - driver.min;
-    const normalized = span === 0 ? 0 : (v - driver.default) / span;
-    weightedSum += normalized * weight;
-  }
-  // weightedSum typically lands in -0.5 ~ +0.5 range; expand to ±range
-  return o.base + weightedSum * o.range * 2;
-}
-
-/* ═════════════════ Page ═════════════════ */
 
 export default function Step4Simulate() {
   const step = getStepBySlug("4-simulate")!;
-  const [values, setValues] = useState<Record<string, number>>(() => defaultValues());
+  const [activeId, setActiveId] = useState(SCENARIOS[0].id);
+  const active = SCENARIOS.find((s) => s.id === activeId)!;
+  const [sliderValue, setSliderValue] = useState(active.slider.default);
 
-  const setOne = useCallback((id: string, v: number) => {
-    setValues((curr) => ({ ...curr, [id]: v }));
-  }, []);
+  // Reset slider when scenario changes
+  const onScenarioChange = (id: string) => {
+    const s = SCENARIOS.find((x) => x.id === id)!;
+    setActiveId(id);
+    setSliderValue(s.slider.default);
+  };
 
-  const reset = () => setValues(defaultValues());
-
-  const isBaseline = useMemo(() => {
-    return DRIVERS.every((d) => values[d.id] === d.default);
-  }, [values]);
+  const isBaseline = sliderValue === active.slider.default;
 
   return (
     <>
       <StepShell step={step}>
-        <p
-          className="body text-ink-600 max-w-[720px]"
-          style={{ display: "block", margin: 0, marginBottom: 24, padding: 0, position: "static" }}
-        >
-          Master 자문의 핵심 도구. 보상·평가·직급·직무·조직문화·리더십 변수를 동시에 조정하면, 10개 지표가 어떻게 함께 움직이는지 추정합니다. 실제 자문에서는 회사 데이터로 모델을 보정합니다.
+        <p className="body text-ink-600 mb-6 max-w-[720px]">
+          Master 자문의 핵심 도구 중 하나. 현재 회사 지표를 기준으로,{" "}
+          <strong className="text-ink-900">수치를 조정하면 어떻게 변할지</strong> 미리 추정합니다.
+          실제 자문에서는 회사 데이터를 넣고 더 정교한 모델로 계산합니다.
         </p>
 
-        {/* Top bar — baseline indicator + reset */}
-        <div className="flex items-center justify-between gap-3 mb-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-mono">
-            {isBaseline ? (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-ink-500" />
-                <span className="text-ink-600">BASELINE — 변수를 조정해보세요</span>
-              </>
-            ) : (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse-soft shadow-[0_0_8px_rgba(14,165,233,0.8)]" />
-                <span className="text-accent-300">SIMULATING — 실시간 추정 중</span>
-              </>
-            )}
-          </div>
-          <button
-            type="button" onClick={reset} disabled={isBaseline}
-            className="btn-ghost text-[12px] disabled:opacity-30"
+        {/* Scenario tabs */}
+        <ScenarioTabs scenarios={SCENARIOS} activeId={activeId} onChange={onScenarioChange} />
+
+        {/* Active scenario */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active.id}
+            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25 }}
+            className="mt-8 grid lg:grid-cols-[1fr,1.2fr] gap-5"
           >
-            <RotateCcw size={12} className="mr-1.5" />
-            기본값 복원
-          </button>
-        </div>
+            {/* Left: scenario title + slider */}
+            <div className="card flex flex-col">
+              <h2 className="h-3">{active.title}</h2>
+              <p className="body-sm text-ink-600 mt-2">{active.description}</p>
 
-        {/* Main grid — drivers (left) + outcomes (right) */}
-        <div className="grid lg:grid-cols-[1.05fr,1fr] gap-5">
-          {/* ─── Drivers ─── */}
-          <div className="space-y-3">
-            <SectionLabel label="DRIVERS — 조정 가능한 변수" />
-            {DRIVER_GROUPS.map((g) => (
-              <DriverGroupCard
-                key={g.name}
-                group={g.name}
-                icon={g.icon}
-                drivers={DRIVERS.filter((d) => d.group === g.name)}
-                values={values}
-                onChange={setOne}
-              />
-            ))}
-          </div>
+              <div className="mt-7 pt-6 border-t border-white/[0.06]">
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="text-[12px] font-mono font-bold uppercase tracking-[0.18em] text-ink-500">
+                    {active.slider.label}
+                  </span>
+                  <span className="text-[24px] font-bold text-accent-400 tabular-nums">
+                    {sliderValue}<span className="text-ink-500 text-[14px] font-medium ml-1">{active.slider.suffix}</span>
+                  </span>
+                </div>
 
-          {/* ─── Outcomes ─── */}
-          <div className="space-y-3">
-            <SectionLabel label="OUTCOMES — 기대 효과 추정" />
-            {OUTCOME_GROUPS.map((g) => (
-              <OutcomeGroupCard
-                key={g.name}
-                group={g.name}
-                outcomes={OUTCOMES.filter((o) => o.group === g.name)}
-                values={values}
-              />
-            ))}
-            <p className="text-[11px] text-ink-500 leading-relaxed px-1 pt-1">
-              ⓘ 추정치는 HCG 평균 사례 기반 선형 모델입니다. 회사 데이터를 넣으면 더 정교한 비선형 모델로 보정합니다.
-            </p>
-          </div>
-        </div>
+                <Slider
+                  min={active.slider.min} max={active.slider.max}
+                  value={sliderValue} onChange={setSliderValue}
+                  defaultMarker={active.slider.default}
+                />
+
+                <div className="flex items-center justify-between mt-2 text-[11px] font-mono text-ink-500">
+                  <span>{active.slider.min}{active.slider.suffix}</span>
+                  <span>{active.slider.max}{active.slider.suffix}</span>
+                </div>
+
+                <p className="caption mt-5">{active.slider.help}</p>
+              </div>
+            </div>
+
+            {/* Right: metric cards */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <div className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-accent-400 inline-flex items-center gap-1.5">
+                  <Sparkles size={11} /> 추정 결과
+                </div>
+                <div className="text-[10px] font-mono text-ink-500">
+                  {isBaseline ? "BASELINE" : "AFTER CHANGE"}
+                </div>
+              </div>
+
+              {active.metrics.map((m, i) => {
+                const baseValue = computeMetric(m, active.slider, active.slider.default);
+                const currentValue = computeMetric(m, active.slider, sliderValue);
+                return (
+                  <MetricCard
+                    key={`${active.id}-${i}`}
+                    metric={m}
+                    baseValue={baseValue}
+                    currentValue={currentValue}
+                  />
+                );
+              })}
+
+              <div className="px-1 pt-2">
+                <p className="caption">
+                  ⓘ 추정치는 HCG 평균 사례 기준 모델입니다. 실제 자문에서는 회사 데이터로 보정합니다.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </StepShell>
 
       <TourNav current={step} nextLabel="협업 방식 보기" />
@@ -259,194 +221,133 @@ export default function Step4Simulate() {
   );
 }
 
-/* ═════════════════ Section label ═════════════════ */
+/* ─────────────── Scenario tabs ─────────────── */
 
-function SectionLabel({ label }: { label: string }) {
-  return (
-    <div
-      className="text-[10px] font-mono font-bold tracking-[0.22em] text-accent-400 uppercase px-1"
-      style={{ display: "block", margin: 0, padding: "0 4px", position: "static" }}
-    >
-      {label}
-    </div>
-  );
-}
-
-/* ═════════════════ Driver group ═════════════════ */
-
-function DriverGroupCard({ group, icon: Icon, drivers, values, onChange }: {
-  group: DriverGroup; icon: LucideIcon; drivers: Driver[];
-  values: Record<string, number>; onChange: (id: string, v: number) => void;
+function ScenarioTabs({ scenarios, activeId, onChange }: {
+  scenarios: Scenario[]; activeId: string; onChange: (id: string) => void;
 }) {
-  return (
-    <div className="card !p-4">
-      <div
-        className="flex items-center gap-2 mb-3"
-        style={{ display: "flex", margin: 0, marginBottom: 12, padding: 0, position: "static" }}
-      >
-        <div className="w-7 h-7 rounded-lg bg-accent-500/15 border border-accent-500/30 text-accent-400 flex items-center justify-center">
-          <Icon size={13} />
-        </div>
-        <span className="text-[13px] font-bold text-ink-900">{group}</span>
-      </div>
-      <div className="space-y-3">
-        {drivers.map((d) => (
-          <DriverRow key={d.id} driver={d} value={values[d.id]} onChange={onChange} />
-        ))}
-      </div>
-    </div>
-  );
-}
+  const refs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [pill, setPill] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
 
-function DriverRow({ driver, value, onChange }: {
-  driver: Driver; value: number; onChange: (id: string, v: number) => void;
-}) {
-  const isChanged = value !== driver.default;
+  useLayoutEffect(() => {
+    const el = refs.current[activeId];
+    if (el) setPill({ left: el.offsetLeft, width: el.offsetWidth });
+  }, [activeId]);
+
   return (
-    <div>
-      <div className="flex items-baseline justify-between gap-2 mb-1.5">
-        <span className="text-[12px] text-ink-700 leading-tight flex-1">{driver.label}</span>
-        <span
-          className={cn(
-            "text-[13px] font-mono font-bold tabular-nums whitespace-nowrap",
-            isChanged ? "text-accent-400" : "text-ink-600",
-          )}
-        >
-          {value}
-          <span className="text-ink-500 text-[10px] font-medium ml-0.5">{driver.unit}</span>
-        </span>
-      </div>
-      <Slider
-        min={driver.min} max={driver.max} step={driver.step}
-        value={value} defaultMarker={driver.default}
-        onChange={(v) => onChange(driver.id, v)}
+    <div className="relative inline-flex p-1 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+      {/* Sliding active pill */}
+      <motion.span
+        aria-hidden animate={pill}
+        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+        className="absolute top-1 bottom-1 bg-accent-500 rounded-lg shadow-[0_4px_16px_-4px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.2)]"
       />
-      {driver.help && (
-        <div className="text-[10px] text-ink-500 mt-1 font-mono">{driver.help}</div>
-      )}
-    </div>
-  );
-}
-
-/* ═════════════════ Outcome group ═════════════════ */
-
-function OutcomeGroupCard({ group, outcomes, values }: {
-  group: OutcomeGroup; outcomes: Outcome[]; values: Record<string, number>;
-}) {
-  return (
-    <div className="card !p-4">
-      <div
-        className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-ink-500 mb-3"
-        style={{ display: "block", margin: 0, marginBottom: 12, padding: 0, position: "static" }}
-      >
-        {group}
-      </div>
-      <div className="space-y-3">
-        {outcomes.map((o) => <OutcomeRow key={o.id} outcome={o} values={values} />)}
-      </div>
-    </div>
-  );
-}
-
-function OutcomeRow({ outcome, values }: { outcome: Outcome; values: Record<string, number> }) {
-  const current = computeOutcome(outcome, values);
-  const diff = current - outcome.base;
-  const isZero = Math.abs(diff) < 0.01;
-  const isGood = (diff > 0 && outcome.higherIsBetter) || (diff < 0 && !outcome.higherIsBetter);
-  const decimals = outcome.decimals ?? 1;
-  const Icon = isZero ? Minus : (diff > 0 ? TrendingUp : TrendingDown);
-
-  // Bar position — current vs base on a -range ~ +range scale around base
-  const minVal = outcome.base - outcome.range;
-  const maxVal = outcome.base + outcome.range;
-  const basePct = ((outcome.base - minVal) / (maxVal - minVal)) * 100;
-  const currentPct = Math.max(0, Math.min(100, ((current - minVal) / (maxVal - minVal)) * 100));
-
-  return (
-    <div>
-      <div className="flex items-baseline justify-between gap-2 mb-1.5">
-        <span className="text-[12px] text-ink-700 leading-tight flex-1">{outcome.label}</span>
-        <span className="flex items-baseline gap-1.5">
-          <span className="text-[14px] font-mono font-bold tabular-nums text-ink-900">
-            {current.toFixed(decimals)}{outcome.unit && <span className="text-[10px] text-ink-500 ml-0.5">{outcome.unit}</span>}
-          </span>
-        </span>
-      </div>
-
-      {/* Visual bar — base marker + current fill */}
-      <div className="relative h-2 rounded-full bg-white/[0.04] border border-white/[0.04] mb-1">
-        {/* Base marker */}
-        <div
-          className="absolute top-1/2 -translate-y-1/2 w-px h-3 bg-ink-500/60"
-          style={{ left: `${basePct}%` }}
-          aria-label="기본값"
-        />
-        {/* Current dot with fill from base to current */}
-        {!isZero && (
-          <div
+      {scenarios.map((s) => {
+        const Icon = s.icon;
+        const isActive = activeId === s.id;
+        return (
+          <button
+            key={s.id}
+            ref={(el) => { refs.current[s.id] = el; }}
+            type="button" onClick={() => onChange(s.id)}
             className={cn(
-              "absolute top-1/2 -translate-y-1/2 h-1.5 rounded-full",
-              isGood ? "bg-success-500/60" : "bg-warning-500/60",
+              "relative inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold transition-colors",
+              isActive ? "text-white" : "text-ink-600 hover:text-ink-900",
             )}
-            style={{
-              left: `${Math.min(basePct, currentPct)}%`,
-              width: `${Math.abs(currentPct - basePct)}%`,
-            }}
-          />
-        )}
-        <div
-          className={cn(
-            "absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 shadow-md",
-            isZero ? "bg-ink-500 border-ink-400" :
-            isGood ? "bg-success-500 border-success-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
-                   : "bg-warning-500 border-warning-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]",
-          )}
-          style={{ left: `calc(${currentPct}% - 5px)` }}
-        />
-      </div>
-
-      <div className="flex items-center justify-between text-[10px] font-mono text-ink-500">
-        <span>기본 {outcome.base.toFixed(decimals)}</span>
-        <span className={cn(
-          "inline-flex items-center gap-1 font-bold",
-          isZero ? "text-ink-500" : isGood ? "text-success-500" : "text-warning-500",
-        )}>
-          <Icon size={10} />
-          {isZero ? "—" : `${diff > 0 ? "+" : ""}${diff.toFixed(decimals)}`}
-        </span>
-      </div>
+          >
+            <Icon size={14} />
+            {s.label}
+          </button>
+        );
+      })}
     </div>
   );
 }
 
-/* ═════════════════ Custom slider ═════════════════ */
+/* ─────────────── Custom dark slider ─────────────── */
 
-function Slider({ min, max, step, value, defaultMarker, onChange }: {
-  min: number; max: number; step: number; value: number; defaultMarker: number; onChange: (v: number) => void;
+function Slider({ min, max, value, onChange, defaultMarker }: {
+  min: number; max: number; value: number; onChange: (v: number) => void; defaultMarker: number;
 }) {
   const pct = ((value - min) / (max - min)) * 100;
   const defaultPct = ((defaultMarker - min) / (max - min)) * 100;
   return (
-    <div className="relative h-6 flex items-center">
+    <div className="relative h-7 flex items-center">
+      {/* Track */}
       <div className="absolute inset-x-0 h-1.5 rounded-full bg-white/[0.06] border border-white/[0.04]" />
+      {/* Filled */}
       <div
-        className="absolute h-1.5 rounded-full bg-gradient-to-r from-accent-600 to-accent-400 shadow-[0_0_8px_-1px_rgba(14,165,233,0.6)]"
+        className="absolute h-1.5 rounded-full bg-gradient-to-r from-accent-600 to-accent-400 shadow-[0_0_12px_-2px_rgba(14,165,233,0.6)]"
         style={{ width: `${pct}%` }}
       />
+      {/* Default marker */}
       <div
         className="absolute h-3 w-px bg-ink-500/60 top-1/2 -translate-y-1/2"
         style={{ left: `${defaultPct}%` }}
         title="기본값"
       />
+      {/* Input */}
       <input
-        type="range" min={min} max={max} value={value} step={step}
+        type="range" min={min} max={max} value={value} step={(max - min) <= 10 ? 1 : 1}
         onChange={(e) => onChange(Number(e.target.value))}
         className="absolute inset-0 w-full opacity-0 cursor-pointer"
       />
+      {/* Thumb */}
       <div
-        className="absolute w-4 h-4 rounded-full bg-white shadow-[0_2px_6px_rgba(0,0,0,0.5),0_0_0_3px_rgba(14,165,233,0.2)] border-2 border-accent-500 pointer-events-none"
-        style={{ left: `calc(${pct}% - 8px)` }}
+        className="absolute w-5 h-5 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.5),0_0_0_4px_rgba(14,165,233,0.2)] border-2 border-accent-500 pointer-events-none"
+        style={{ left: `calc(${pct}% - 10px)` }}
       />
     </div>
+  );
+}
+
+/* ─────────────── Metric card ─────────────── */
+
+function MetricCard({ metric, baseValue, currentValue }: {
+  metric: Metric; baseValue: number; currentValue: number;
+}) {
+  const diff = currentValue - baseValue;
+  const isZero = Math.abs(diff) < 0.001;
+  const isPositiveDirection = (diff > 0 && metric.higherIsBetter) || (diff < 0 && !metric.higherIsBetter);
+
+  const Icon = isZero ? Minus : (diff > 0 ? TrendingUp : TrendingDown);
+
+  const formatFn = metric.format ?? ((n: number) => n.toFixed(1));
+  const formattedCurrent = formatFn(currentValue);
+
+  // Color: green for "good direction", red for "bad direction", neutral for zero
+  const colour = isZero
+    ? "text-ink-600 border-white/[0.06]"
+    : isPositiveDirection
+    ? "text-success-500 border-success-500/30"
+    : "text-warning-500 border-warning-500/30";
+
+  return (
+    <motion.div
+      layout
+      animate={{ scale: isZero ? 1 : [1, 1.02, 1] }}
+      transition={{ duration: 0.3 }}
+      className="card !p-5 flex items-center justify-between gap-4"
+    >
+      <div>
+        <div className="text-[12px] text-ink-600 font-medium">{metric.label}</div>
+        <div className="flex items-baseline gap-2 mt-1">
+          <span className="text-[28px] font-bold text-ink-900 tabular-nums leading-none">
+            {formattedCurrent}
+          </span>
+          <span className="text-[13px] text-ink-500 font-medium">{metric.unit}</span>
+        </div>
+      </div>
+
+      <div className={cn(
+        "flex flex-col items-end gap-0.5 px-3 py-2 rounded-lg border bg-white/[0.02]",
+        colour,
+      )}>
+        <Icon size={14} />
+        <span className="text-[11px] font-mono font-bold tabular-nums">
+          {isZero ? "—" : `${diff > 0 ? "+" : ""}${diff.toFixed(1)}`}
+        </span>
+      </div>
+    </motion.div>
   );
 }
