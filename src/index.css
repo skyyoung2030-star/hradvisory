@@ -5,8 +5,6 @@
 @layer base {
   html {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     background: #08090D;
     color-scheme: dark;
   }
@@ -41,9 +39,7 @@
   .container-x    { @apply mx-auto max-w-container px-5 sm:px-8 lg:px-12; }
   .container-tour { @apply mx-auto max-w-tour      px-5 sm:px-8; }
 
-  /* ─────────────── Surfaces (glass cards) ───────────────
-     Top-edge highlight is layered via a ::before pseudo-element to give
-     each card the "lit from above" 3D feel. */
+  /* ─────────────── Surfaces (glass cards) ─────────────── */
   .card {
     @apply relative bg-white/[0.04] border border-white/[0.08] rounded-2xl p-6 sm:p-8 backdrop-blur-xl transition-all;
   }
@@ -60,7 +56,6 @@
   .card-soft  { @apply bg-white/[0.025] border-white/[0.06]; }
   .card-hover { @apply hover:bg-white/[0.06] hover:border-white/20 hover:-translate-y-0.5; }
 
-  /* Featured card — outer accent glow + slightly elevated */
   .card-featured {
     @apply bg-accent-500/[0.05] border-accent-500/40 shadow-glow-accent;
   }
@@ -112,14 +107,12 @@
 @layer utilities {
   /* ─────────────── 3D / depth utilities ─────────────── */
 
-  /* Background spotlight — accent glow descending from top-center */
   .bg-spotlight {
     background-image:
       radial-gradient(ellipse 90% 60% at 50% -10%, rgba(14,165,233,0.18), transparent 60%),
       radial-gradient(ellipse 80% 50% at 50% 110%, rgba(168, 85, 247, 0.08), transparent 60%);
   }
 
-  /* Subtle dot/grid texture for surfaces — adds tactile depth */
   .bg-grid-dot {
     background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
     background-size: 28px 28px;
@@ -131,14 +124,12 @@
     background-size: 56px 56px;
   }
 
-  /* Bevelled inset edge for "carved into surface" feel */
   .inset-bevel {
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.08),
       inset 0 -1px 0 rgba(0,0,0,0.4);
   }
 
-  /* Mask fading to transparent at edges — used over decorative bg textures */
   .mask-vignette {
     mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
     -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
