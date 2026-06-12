@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, useRef, useLayoutEffect } from "react";
-import { FileText, Lock, Unlock, Sparkles, X, FileType2 } from "lucide-react";
-import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { FileText, Lock, Unlock, Sparkles, X, FileType2, Mail, Check, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { getStepBySlug } from "@/lib/tour-config";
 import StepShell from "@/components/StepShell";
 import TourNav from "@/components/TourNav";
@@ -53,7 +54,10 @@ export default function Step3Deliverables() {
   return (
     <>
       <StepShell step={step}>
-        <p className="body text-ink-600 mb-6 max-w-[680px]">
+        <p
+          className="body text-ink-600 mb-6 max-w-[680px]"
+          style={{ display: "block", margin: 0, marginBottom: 24, padding: 0, position: "static" }}
+        >
           Master 자문에서는 제도를 같이 짜는 사이사이, 즉시 쓸 수 있는 매뉴얼과 템플릿을 전달드립니다. 실제 컨설팅 프로젝트(HMM·동희·한림제약·LEM 등)에서 만들어진 자료를 라이브러리화한 것입니다.
           {userPains.length > 0 && (
             <> 회사 페인포인트 기반으로 <strong className="text-accent-400">{Array.from(userAreas).join(" · ")}</strong> 영역이 강조됩니다.</>
@@ -94,7 +98,6 @@ export default function Step3Deliverables() {
                 </div>
               </div>
 
-              {/* highlight line — sets each template apart */}
               <div className="mt-3 pt-3 border-t border-white/[0.05]">
                 <div className="text-[11px] text-accent-400/90 leading-snug flex items-start gap-1.5">
                   <Sparkles size={10} className="mt-0.5 flex-shrink-0" />
@@ -102,7 +105,6 @@ export default function Step3Deliverables() {
                 </div>
               </div>
 
-              {/* meta row */}
               <div className="mt-auto pt-3 flex items-center justify-between text-[10px] font-mono text-ink-500">
                 <span className="truncate">{t.format}</span>
                 {t.pages && <span className="flex-shrink-0 ml-2">{t.pages}</span>}
@@ -111,9 +113,12 @@ export default function Step3Deliverables() {
           ))}
         </div>
 
-        <p className="caption mt-8">
+        <p
+          className="caption mt-8"
+          style={{ display: "block", margin: 0, marginTop: 32, padding: 0, position: "static" }}
+        >
           총 {TEMPLATES.length}개 매뉴얼/템플릿 중 일부 미리보기.{" "}
-          <span className="text-success-500 font-medium">Free</span>는 가입만 해도 받으실 수 있고,{" "}
+          <span className="text-success-500 font-medium">Free</span>는 이메일로 즉시 받으실 수 있고,{" "}
           <span className="text-ink-700 font-medium">Master</span>는 자문 계약 시 잠금 해제됩니다.
         </p>
       </StepShell>
@@ -175,9 +180,27 @@ function TabBar({ tabs, active, onChange, counts, highlighted }: {
 }
 
 /* ─────────────── Template detail modal ───────────────
-   Now shows the rich content: highlight, contents list, format, page count,
-   AND the visual mock preview. */
+   Free → email form → simulated send.
+   Master → unlock CTA → navigates to Step 6 (plan selection). */
 function TemplateModal({ template, onClose }: { template: Template; onClose: () => void }) {
+  const navigate = useNavigate();
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const validEmail = /\S+@\S+\.\S+/.test(email);
+
+  const handleFreeSend = () => {
+    if (!validEmail) return;
+    // Simulated send — in production this would hit Supabase / Resend
+    setSubmitted(true);
+  };
+
+  const handleMasterUnlock = () => {
+    onClose();
+    navigate("/tour/6-master");
+  };
+
   return (
     <div role="dialog" aria-modal="true"
       className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
@@ -197,11 +220,17 @@ function TemplateModal({ template, onClose }: { template: Template; onClose: () 
           {template.isFree ? (
             <span className="inline-flex items-center gap-1 text-success-500 text-[10px] font-bold uppercase tracking-wider"><Unlock size={10} /> Free 템플릿</span>
           ) : (
-            <span className="inline-flex items-center gap-1 text-ink-500 text-[10px] font-bold uppercase tracking-wider"><Lock size={10} /> Master 잠금 해제</span>
+            <span className="inline-flex items-center gap-1 text-ink-500 text-[10px] font-bold uppercase tracking-wider"><Lock size={10} /> Master 잠금</span>
           )}
         </div>
-        <h3 className="h-3 mb-2">{template.name}</h3>
-        <p className="body-sm text-ink-600 mb-4">{template.description}</p>
+        <h3
+          className="h-3"
+          style={{ display: "block", margin: 0, marginBottom: 8, padding: 0, position: "static" }}
+        >{template.name}</h3>
+        <p
+          className="body-sm text-ink-600"
+          style={{ display: "block", margin: 0, marginBottom: 16, padding: 0, position: "static" }}
+        >{template.description}</p>
 
         {/* Highlight banner */}
         <div className="mb-5 p-3 rounded-lg bg-accent-500/[0.08] border border-accent-500/20">
@@ -249,7 +278,95 @@ function TemplateModal({ template, onClose }: { template: Template; onClose: () 
           )}
         </div>
 
-        <button type="button" onClick={onClose} className="btn-secondary w-full mt-6">닫기</button>
+        {/* ─────────────── CTA — diverges by Free/Master ─────────────── */}
+        <div className="mt-6">
+          <AnimatePresence mode="wait">
+            {template.isFree ? (
+              submitted ? (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2.5 p-3 rounded-lg bg-success-500/15 border border-success-500/30"
+                >
+                  <div className="w-7 h-7 rounded-full bg-success-500 text-white flex items-center justify-center shadow-[0_0_16px_-2px_rgba(16,185,129,0.7)]">
+                    <Check size={14} strokeWidth={3} />
+                  </div>
+                  <div className="text-[13px] text-success-500">
+                    <strong>{email}</strong>로 전송했습니다. 이메일을 확인해주세요.
+                  </div>
+                </motion.div>
+              ) : !showEmailForm ? (
+                <motion.button
+                  key="free-cta"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                  type="button"
+                  onClick={() => setShowEmailForm(true)}
+                  className="btn-primary w-full"
+                >
+                  <Mail size={14} className="mr-2" />
+                  이메일로 무료 받기
+                </motion.button>
+              ) : (
+                <motion.div
+                  key="email-form"
+                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                  className="space-y-2"
+                >
+                  <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-500">
+                    수신 이메일
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@company.com"
+                      autoFocus
+                      className="input flex-1"
+                      onKeyDown={(e) => { if (e.key === "Enter" && validEmail) handleFreeSend(); }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleFreeSend}
+                      disabled={!validEmail}
+                      className="btn-primary"
+                    >
+                      <Mail size={14} className="mr-2" />
+                      전송
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-ink-500">
+                    가입 없이 받으실 수 있어요. 24시간 내 다운로드 링크 발송.
+                  </p>
+                </motion.div>
+              )
+            ) : (
+              <motion.div
+                key="master-cta"
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                className="space-y-3"
+              >
+                <div className="p-3 rounded-lg bg-white/[0.03] border border-white/[0.08] flex items-start gap-2.5">
+                  <Lock size={14} className="text-ink-500 mt-0.5 flex-shrink-0" />
+                  <p className="text-[12px] text-ink-600 leading-relaxed">
+                    이 매뉴얼은 실제 운영 노하우가 담긴 자료라 Master 자문 계약 시 잠금 해제됩니다. 회사 상황에 맞게 컨설턴트가 함께 적용해드려요.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleMasterUnlock}
+                  className="btn-primary w-full group"
+                >
+                  <Sparkles size={14} className="mr-2" />
+                  Master 플랜 보기
+                  <ArrowRight size={14} className="ml-2 transition-transform group-hover:translate-x-0.5" />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <button type="button" onClick={onClose} className="btn-secondary w-full mt-3">닫기</button>
       </motion.div>
     </div>
   );
