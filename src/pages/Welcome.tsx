@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ArrowRight, ArrowUpRight,
-  ShieldCheck, MessageCircle, Calendar, Wrench, BookOpen,
+  ShieldCheck, MessageCircle, Calendar, Wrench, BookOpen, Users2,
   Layers, FileStack, Users, Award, Sparkles,
   type LucideIcon,
 } from "lucide-react";
@@ -123,12 +123,13 @@ export default function Welcome() {
               pathNumber="02" keyLabel="2" status="지금 체험" tone="featured" recommended
               title="Master 자문" subtitle="월 retainer · 필요할 때 함께"
               description="제도를 같이 짜고, 실행하면서 fine-tune하고, 사이사이 도구와 시뮬레이션도 제공합니다. 정해진 일정이 아니라 elastic 협업."
-              chipsLabel="협업 모드"
+              chipsLabel="협업 모드 5가지"
               chips={[
                 { icon: Wrench, label: "페어 디자인" },
                 { icon: MessageCircle, label: "실행 도우미" },
                 { icon: BookOpen, label: "도구 제공" },
                 { icon: Calendar, label: "시뮬레이션" },
+                { icon: Users2, label: "정렬 워크숍" },
               ]}
               ctaLabel="투어 시작" ctaIcon={ArrowRight} ctaKey="Enter"
               onClick={startMasterTour}

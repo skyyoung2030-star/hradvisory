@@ -5,6 +5,7 @@ import { getStepBySlug } from "@/lib/tour-config";
 import StepShell from "@/components/StepShell";
 import TourNav from "@/components/TourNav";
 import { TEMPLATES, PAIN_TO_AREA, type Template } from "@/lib/templates";
+import { TemplatePreview } from "@/components/TemplatePreview";
 import { cn } from "@/lib/utils";
 
 type DiagnoseState = { companySize: string; hrCapacity: string; pains: string[]; };
@@ -182,12 +183,9 @@ function TemplatePreviewModal({ template, onClose }: { template: Template; onClo
           )}
         </div>
         <h3 className="h-3 mb-2">{template.name}</h3>
-        <p className="body-sm text-ink-600 mb-6">{template.description}</p>
+        <p className="body-sm text-ink-600 mb-5">{template.description}</p>
 
-        <div className="border border-dashed border-white/15 rounded-xl p-6 bg-white/[0.02] text-center">
-          <FileText size={32} className="text-ink-500 mx-auto mb-2" />
-          <p className="caption">미리보기 (실제 자문 시 PDF · Excel · Notion 형태로 전달)</p>
-        </div>
+        <TemplatePreview template={template} />
 
         <button type="button" onClick={onClose} className="btn-secondary w-full mt-6">닫기</button>
       </motion.div>

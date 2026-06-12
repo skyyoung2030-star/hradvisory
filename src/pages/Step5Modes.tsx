@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Wrench, MessageCircle, BookOpen, Sparkles, ArrowRight,
+  Wrench, MessageCircle, BookOpen, Sparkles, ArrowRight, Users2,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -83,6 +83,22 @@ const MODES: Mode[] = [
       "보상 재원 ROI 추정",
     ],
     bridge: { label: "Step 4에서 미니 시뮬레이터 보셨죠", to: "/tour/4-simulate" },
+  },
+  {
+    id: "workshop",
+    icon: Users2,
+    badge: "MODE 05",
+    title: "정렬 워크숍",
+    tagline: "직원과 함께 만드는 변화",
+    description:
+      "제도가 잘 굴러가려면 결국 직원이 받아들여야 합니다. 새 제도 도입, 조직문화 정렬, 팀장 정렬 — 단순 통보가 아니라 워크숍으로 직접 인볼브합니다.",
+    examples: [
+      "전사 타운홀 · 신제도 설명회 진행",
+      "팀장 정렬 워크숍 (분기 1회)",
+      "조직문화 진단 후 액션 워크숍",
+      "직원 참여 세션 (페르소나, 가치 정렬)",
+      "1:1 면담 가이드 코칭",
+    ],
   },
 ];
 
