@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useRef, useLayoutEffect } from "react";
-import { FileText, Lock, Unlock, Sparkles, X } from "lucide-react";
+import { FileText, Lock, Unlock, Sparkles, X, FileType2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { getStepBySlug } from "@/lib/tour-config";
 import StepShell from "@/components/StepShell";
@@ -54,9 +54,9 @@ export default function Step3Deliverables() {
     <>
       <StepShell step={step}>
         <p className="body text-ink-600 mb-6 max-w-[680px]">
-          Master 자문에서는 제도를 같이 짜는 사이사이, 즉시 쓸 수 있는 매뉴얼과 템플릿을 전달드립니다.
+          Master 자문에서는 제도를 같이 짜는 사이사이, 즉시 쓸 수 있는 매뉴얼과 템플릿을 전달드립니다. 실제 컨설팅 프로젝트(HMM·동희·한림제약·LEM 등)에서 만들어진 자료를 라이브러리화한 것입니다.
           {userPains.length > 0 && (
-            <> <strong className="text-accent-400">{Array.from(userAreas).join(" · ")}</strong> 영역이 강조됩니다.</>
+            <> 회사 페인포인트 기반으로 <strong className="text-accent-400">{Array.from(userAreas).join(" · ")}</strong> 영역이 강조됩니다.</>
           )}
         </p>
 
@@ -69,13 +69,12 @@ export default function Step3Deliverables() {
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.02 }}
               className={cn(
-                "text-left p-4 rounded-xl border bg-white/[0.03] backdrop-blur transition-all relative overflow-hidden",
+                "text-left p-4 rounded-xl border bg-white/[0.03] backdrop-blur transition-all relative overflow-hidden h-full flex flex-col",
                 "hover:border-accent-500/50 hover:bg-white/[0.06] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-12px_rgba(0,0,0,0.6)]",
                 "active:translate-y-0",
                 userAreas.has(t.area) ? "border-accent-500/30" : "border-white/[0.08]",
               )}
             >
-              {/* Top edge highlight */}
               <span aria-hidden className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
               <div className="flex items-center justify-between mb-3">
@@ -86,25 +85,40 @@ export default function Step3Deliverables() {
                   <span className="inline-flex items-center gap-1 text-ink-500 text-[10px] font-bold uppercase tracking-wider"><Lock size={10} /> Master</span>
                 )}
               </div>
+
               <div className="flex items-start gap-2.5">
                 <FileText size={16} className="text-accent-400 mt-1 flex-shrink-0" />
-                <div>
-                  <div className="body-sm font-semibold text-ink-900">{t.name}</div>
-                  <div className="text-[13px] text-ink-500 mt-1 leading-snug">{t.description}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="body-sm font-semibold text-ink-900 leading-snug">{t.name}</div>
+                  <div className="text-[12px] text-ink-500 mt-1 leading-snug">{t.description}</div>
                 </div>
+              </div>
+
+              {/* highlight line — sets each template apart */}
+              <div className="mt-3 pt-3 border-t border-white/[0.05]">
+                <div className="text-[11px] text-accent-400/90 leading-snug flex items-start gap-1.5">
+                  <Sparkles size={10} className="mt-0.5 flex-shrink-0" />
+                  <span>{t.highlight}</span>
+                </div>
+              </div>
+
+              {/* meta row */}
+              <div className="mt-auto pt-3 flex items-center justify-between text-[10px] font-mono text-ink-500">
+                <span className="truncate">{t.format}</span>
+                {t.pages && <span className="flex-shrink-0 ml-2">{t.pages}</span>}
               </div>
             </motion.button>
           ))}
         </div>
 
         <p className="caption mt-8">
-          총 {TEMPLATES.length}개 템플릿 중 일부 미리보기.{" "}
+          총 {TEMPLATES.length}개 매뉴얼/템플릿 중 일부 미리보기.{" "}
           <span className="text-success-500 font-medium">Free</span>는 가입만 해도 받으실 수 있고,{" "}
           <span className="text-ink-700 font-medium">Master</span>는 자문 계약 시 잠금 해제됩니다.
         </p>
       </StepShell>
 
-      {selected && <TemplatePreviewModal template={selected} onClose={() => setSelected(null)} />}
+      {selected && <TemplateModal template={selected} onClose={() => setSelected(null)} />}
 
       <TourNav current={step} nextLabel="시뮬레이션 보기" />
     </>
@@ -160,18 +174,22 @@ function TabBar({ tabs, active, onChange, counts, highlighted }: {
   );
 }
 
-function TemplatePreviewModal({ template, onClose }: { template: Template; onClose: () => void }) {
+/* ─────────────── Template detail modal ───────────────
+   Now shows the rich content: highlight, contents list, format, page count,
+   AND the visual mock preview. */
+function TemplateModal({ template, onClose }: { template: Template; onClose: () => void }) {
   return (
     <div role="dialog" aria-modal="true"
-      className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.2 }}
-        className="card max-w-lg w-full p-7 relative shadow-depth-3" onClick={(e) => e.stopPropagation()}
+        className="card max-w-2xl w-full p-7 relative shadow-depth-3 my-8 max-h-[calc(100vh-4rem)] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
       >
         <button type="button" onClick={onClose} aria-label="닫기"
-          className="absolute top-4 right-4 w-8 h-8 rounded-lg text-ink-500 hover:bg-white/[0.06] hover:text-ink-900 flex items-center justify-center transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 rounded-lg text-ink-500 hover:bg-white/[0.06] hover:text-ink-900 flex items-center justify-center transition-colors z-10"
         ><X size={16} /></button>
 
         <div className="flex items-center gap-2 mb-4">
@@ -183,9 +201,53 @@ function TemplatePreviewModal({ template, onClose }: { template: Template; onClo
           )}
         </div>
         <h3 className="h-3 mb-2">{template.name}</h3>
-        <p className="body-sm text-ink-600 mb-5">{template.description}</p>
+        <p className="body-sm text-ink-600 mb-4">{template.description}</p>
 
-        <TemplatePreview template={template} />
+        {/* Highlight banner */}
+        <div className="mb-5 p-3 rounded-lg bg-accent-500/[0.08] border border-accent-500/20">
+          <div className="flex items-start gap-2">
+            <Sparkles size={14} className="text-accent-400 mt-0.5 flex-shrink-0" />
+            <p className="text-[13px] text-accent-300 font-medium leading-snug">{template.highlight}</p>
+          </div>
+        </div>
+
+        {/* Visual mock preview */}
+        <div className="mb-5">
+          <TemplatePreview template={template} />
+        </div>
+
+        {/* Contents list */}
+        <div className="mb-5">
+          <div className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-ink-500 mb-3">
+            포함 내용
+          </div>
+          <ul className="space-y-2">
+            {template.contents.map((c, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-[13px] text-ink-700 leading-relaxed">
+                <span className="text-accent-400 mt-0.5 font-mono text-[10px] flex-shrink-0">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span>{c}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Format/pages meta */}
+        <div className="flex items-center gap-4 text-[12px] text-ink-500 pt-4 border-t border-white/[0.06]">
+          <span className="inline-flex items-center gap-1.5">
+            <FileType2 size={12} />
+            {template.format}
+          </span>
+          {template.pages && (
+            <>
+              <span className="opacity-40">·</span>
+              <span className="inline-flex items-center gap-1.5">
+                {template.pages}
+              </span>
+            </>
+          )}
+        </div>
 
         <button type="button" onClick={onClose} className="btn-secondary w-full mt-6">닫기</button>
       </motion.div>
