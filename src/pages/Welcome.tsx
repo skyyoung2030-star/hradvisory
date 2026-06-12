@@ -76,7 +76,7 @@ export default function Welcome() {
           <p className="body text-ink-600 mt-5 max-w-[520px] mx-auto">
             진단 → 자문 → 도구 → 시뮬레이션 → 협업 방식.<br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            Master 컨설턴트가 어떻게 옆에 있는지 직접 체험하실 수 있어요.
+            전문 HRBP 자문을 통해 조직을 어떻게 업그레이드 시킬 수 있는지 체험할 수 있어요.
           </p>
         </motion.div>
 
