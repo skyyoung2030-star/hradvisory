@@ -10,34 +10,19 @@ type Props = {
 /**
  * Per-step shell — bare-bones block layout.
  *
- * No flex, no gap, no animation, no framer-motion. Just plain block elements
- * with explicit margin-bottom. This is the simplest possible structure;
- * if h1 and p still overlap with this, the issue is outside this component.
- *
- * The red "StepShell v4" banner at the top is a debug marker — if you don't
- * see it, the file isn't being loaded. Remove the banner div once verified.
+ * No flex, no gap, no animation, no framer-motion. Just block elements with
+ * explicit margin-bottom. Earlier versions hit a transient overlap where
+ * subtitle <p> rendered on the same baseline as <h1>, traced back to a
+ * combination of flex-gap collapse + framer-motion transform animation +
+ * font swap timing. This version sidesteps the whole stack: position:static,
+ * display:block, margin/padding zeroed, then a margin-bottom on h1 provides
+ * the spacing to the subtitle. Plain HTML flow.
  */
 export default function StepShell({ step, rightSlot, children }: Props) {
   return (
     <section className="container-tour py-8 sm:py-10 flex-1">
-      {/* ⚠ DEBUG MARKER — remove this div once you've verified the new file is loaded */}
-      <div
-        style={{
-          background: "#7f1d1d",
-          color: "white",
-          padding: "4px 10px",
-          fontSize: 11,
-          fontFamily: "monospace",
-          marginBottom: 12,
-          borderRadius: 4,
-          display: "inline-block",
-        }}
-      >
-        ✓ StepShell v4 — block layout active
-      </div>
-
       <div style={{ marginBottom: 32 }}>
-        {/* Eyebrow — inline-style block with own marginBottom */}
+        {/* Eyebrow: STEP NN · label */}
         <div
           style={{
             marginBottom: 12,
@@ -66,7 +51,7 @@ export default function StepShell({ step, rightSlot, children }: Props) {
           </span>
         </div>
 
-        {/* H1 — explicit block, explicit marginBottom for spacing to subtitle */}
+        {/* H1 title — block element, explicit reset, marginBottom for spacing */}
         <h1
           className="h-1"
           style={{
@@ -88,7 +73,7 @@ export default function StepShell({ step, rightSlot, children }: Props) {
           {step.title}
         </h1>
 
-        {/* Subtitle — explicit block, no top margin (h1 provides spacing) */}
+        {/* Subtitle — block element, no top margin (h1 provides spacing) */}
         {step.subtitle && (
           <p
             className="body text-ink-600"
