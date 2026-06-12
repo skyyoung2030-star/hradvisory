@@ -20,7 +20,7 @@ const PAIN_POINTS = [
   { id: "job_grade_complex", area: "직급",     label: "직급체계가 복잡하거나 연공서열에 묶여있다" },
   { id: "decision_slow",     area: "직급",     label: "의사결정이 느리고 조직이 비대하다" },
   { id: "eval_unfair",       area: "평가",     label: "평가가 공정하지 않다 / 변별력이 없다" },
-  { id: "goal_miss",         area: "평가",     label: "팀·개인의 목표 달성률이 낮다" },
+  { id: "goal_miss",         area: "평가",     label: "팀·개인의 목표 달성률이 낮아 조직성과가 향상되지 않는다" },
   { id: "poor_alignment",    area: "조직문화", label: "부서 간 silo / 목표 정렬이 안 된다" },
   { id: "low_motivation",    area: "조직문화", label: "직원 동기부여가 약하다 / 의욕이 낮다" },
   { id: "culture_drift",     area: "조직문화", label: "직원 몰입도·만족도가 낮다" },
