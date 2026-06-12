@@ -252,8 +252,8 @@ export default function Step4Simulate() {
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
             <div className="grid lg:grid-cols-[320px,1fr] gap-4 items-start">
               {/* ─── LEFT — Scenario picker box (sticky, scrollable inside) ─── */}
-              <aside className="lg:sticky lg:top-4">
-                <div className="card !p-0 overflow-hidden flex flex-col lg:h-[calc(100vh_-_2rem)]">
+              <aside className="lg:sticky lg:top-4 lg:h-[calc(100vh_-_100px)] flex flex-col">
+                <div className="card !p-0 overflow-hidden flex flex-col h-full">
                   {/* Box header */}
                   <div className="px-4 py-3 border-b border-white/[0.08] bg-white/[0.02] flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.08] text-ink-700 flex items-center justify-center flex-shrink-0">
@@ -290,20 +290,21 @@ export default function Step4Simulate() {
               </aside>
 
               {/* ─── RIGHT — Detail panel (sticky + internal scroll) ─── */}
-              <main className="lg:sticky lg:top-4">
+              <main className="lg:sticky lg:top-4 lg:h-[calc(100vh_-_100px)] flex flex-col">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={selected.id}
                     initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.25 }}
+                    className="flex-1 min-h-0 flex flex-col"
                   >
                     <ScenarioDetail scenario={selected} changedDrivers={changedDrivers} values={values} />
                   </motion.div>
                 </AnimatePresence>
 
                 <p
-                  className="text-[10px] font-mono text-ink-500 mt-3 text-center"
-                  style={{ display: "block", margin: 0, marginTop: 12, padding: 0, position: "static" }}
+                  className="text-[10px] font-mono text-ink-500 mt-2 text-center flex-shrink-0"
+                  style={{ display: "block", margin: 0, marginTop: 8, padding: 0, position: "static" }}
                 >
                   ⓘ HCG 평균 사례 기반 추정. 실제 자문에서는 회사 데이터로 시나리오를 맞춤화합니다.
                 </p>
@@ -444,7 +445,7 @@ function ScenarioDetail({ scenario, changedDrivers, values }: {
   const isBaseline = scenario.id === "baseline";
 
   return (
-    <div className="card !p-0 overflow-hidden flex flex-col lg:h-[calc(100vh_-_2rem)]">
+    <div className="card !p-0 overflow-hidden flex flex-col h-full">
       {/* Header — fixed */}
       <div className="flex-shrink-0 px-4 sm:px-5 py-3.5 border-b border-white/[0.08] bg-gradient-to-b from-accent-500/[0.06] to-transparent">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
