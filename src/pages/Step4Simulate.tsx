@@ -362,7 +362,7 @@ export default function Step4Simulate() {
                   className="text-[10px] font-mono text-ink-500 mt-2 text-center flex-shrink-0"
                   style={{ display: "block", margin: 0, marginTop: 8, padding: 0, position: "static" }}
                 >
-                  ⓘ HCG 평균 사례 기반 추정. 실제 자문에서는 회사 데이터로 시나리오를 맞춤화합니다.
+                  ⓘ 평균 사례 기반 추정. 실제 자문에서는 회사 데이터로 시나리오를 맞춤화합니다.
                 </p>
               </main>
             </div>
