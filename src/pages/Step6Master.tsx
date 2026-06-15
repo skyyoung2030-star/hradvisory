@@ -156,8 +156,18 @@ export default function Step6Master() {
                 <Sparkles size={11} />
                 상담 신청
               </div>
-              <h2 className="h-3">담당 컨설턴트가 직접 연락드립니다</h2>
-              <p className="body-sm text-ink-500 mt-1">영업일 기준 1일 내 회신</p>
+              <h2
+                className="text-[22px] font-bold text-ink-900"
+                style={{ display: "block", margin: 0, marginBottom: 6, padding: 0, position: "static", lineHeight: 1.3, float: "none", clear: "both" }}
+              >
+                담당 컨설턴트가 직접 연락드립니다
+              </h2>
+              <p
+                className="text-[12px] text-ink-500"
+                style={{ display: "block", margin: 0, padding: 0, position: "static", lineHeight: 1.4, float: "none", clear: "both" }}
+              >
+                영업일 기준 1일 내 회신
+              </p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3 mt-6">
