@@ -191,7 +191,7 @@ export default function Step6Master() {
         </AnimatePresence>
       </StepShell>
 
-      <TourNav current={step} nextLabel="시스템 소개 보기" />
+      <TourNav current={step} disableNext={true} nextLabel="투어 완료" />
     </>
   );
 }
