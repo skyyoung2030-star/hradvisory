@@ -12,6 +12,8 @@ type Props = {
   hintWhenDisabled?: string;
   onBeforeNext?: () => Promise<boolean> | boolean;
   hidePrev?: boolean;
+  /** Render the next button as a subtle text link (for optional/extra-info steps) */
+  nextSubtle?: boolean;
 };
 
 export default function TourNav({
@@ -21,6 +23,7 @@ export default function TourNav({
   hintWhenDisabled,
   onBeforeNext,
   hidePrev = false,
+  nextSubtle = false,
 }: Props) {
   const navigate = useNavigate();
   const next = getNextStep(current);
@@ -75,17 +78,30 @@ export default function TourNav({
         </AnimatePresence>
 
         {next ? (
-          <button
-            type="button"
-            onClick={() => void goNext()}
-            disabled={disableNext}
-            className="btn-primary btn-lg group"
-            aria-label={`다음: ${next.label}`}
-          >
-            <span>{nextLabel ?? `다음: ${next.label}`}</span>
-            <ArrowRight size={16} className={`ml-2 transition-transform ${disableNext ? "" : "group-hover:translate-x-0.5"}`} />
-            {!disableNext && <KeyHint variant="dark" className="ml-2">↵</KeyHint>}
-          </button>
+          nextSubtle ? (
+            <button
+              type="button"
+              onClick={() => void goNext()}
+              disabled={disableNext}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 text-[12px] text-ink-500 hover:text-accent-400 transition-colors group disabled:opacity-40"
+              aria-label={`추가: ${next.label}`}
+            >
+              <span>{nextLabel ?? next.label}</span>
+              <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => void goNext()}
+              disabled={disableNext}
+              className="btn-primary btn-lg group"
+              aria-label={`다음: ${next.label}`}
+            >
+              <span>{nextLabel ?? `다음: ${next.label}`}</span>
+              <ArrowRight size={16} className={`ml-2 transition-transform ${disableNext ? "" : "group-hover:translate-x-0.5"}`} />
+              {!disableNext && <KeyHint variant="dark" className="ml-2">↵</KeyHint>}
+            </button>
+          )
         ) : <span />}
       </div>
 
