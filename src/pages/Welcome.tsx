@@ -70,16 +70,16 @@ export default function Welcome() {
             부터,
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            최고의 전문 HRBP와 함께 하세요
+            최고 전문 HRBP가 옆에 있어요
           </h1>
 
           <p className="body text-ink-600 mt-5 max-w-[560px] mx-auto">
-            수억 원 턴키 컨설팅도, HR 전문가 채용도 부담스럽다면.<br className="hidden sm:block" />
+            HR 전문가 채용이 부담스러우시죠?<br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            대기업 HR 출신 베테랑이 정기 방문 + 실시간 핫라인으로 함께합니다.
+            HCG의 베테랑 HR 컨설턴트가 매월 함께하며 조직을 한 단계 성장시켜드립니다.
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            5분 인터랙티브 투어로 어떻게 옆에 있는지 직접 확인해보세요.
+            5분 인터랙티브 투어로 어떻게 함께하는지 확인해보세요.
           </p>
         </motion.div>
 
