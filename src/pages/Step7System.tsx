@@ -38,9 +38,9 @@ const SYNERGY: SynergyItem[] = [
 type Stat = { value: string; label: string };
 const STATS: Stat[] = [
   { value: "80%",    label: "글로벌 헬스케어 A사 — 시스템 일원화 비용 절감" },
-  { value: "57%",    label: "에스디바이오센서 — 평가 운영 기간 단축" },
-  { value: "95%",    label: "대상 — 성과 면담 이행률 달성" },
-  { value: "1,100명", label: "SK바이오사이언스 — 성과관리 혁신" },
+  { value: "57%",    label: "바이오 B사 — 평가 운영 기간 단축" },
+  { value: "95%",    label: "제조 C사 — 성과 면담 이행률 달성" },
+  { value: "1,100명", label: "IT D사 — 성과관리 혁신" },
 ];
 
 /* ═════════════════ Page ═════════════════ */
@@ -90,6 +90,9 @@ export default function Step7System() {
 
         {/* Trust bar */}
         <TrustBar />
+
+        {/* CTA */}
+        <CTABanner />
       </StepShell>
 
       <TourNav current={step} disableNext={true} nextLabel="투어 완료" />
@@ -402,6 +405,53 @@ function TrustBar() {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+/* ═════════════════ CTA ═════════════════ */
+
+function CTABanner() {
+  return (
+    <div className="card !p-6 text-center relative overflow-hidden bg-gradient-to-b from-accent-500/[0.08] to-transparent border-accent-500/30">
+      <span aria-hidden className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-500/70 to-transparent" />
+
+      <div
+        className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-accent-400 mb-2"
+        style={{ display: "block", margin: 0, marginBottom: 8, padding: 0, position: "static" }}
+      >
+        투어를 마치며
+      </div>
+      <div
+        className="text-[22px] font-bold text-ink-900 mb-2"
+        style={{ display: "block", margin: 0, marginBottom: 8, padding: 0, position: "static", lineHeight: 1.3 }}
+      >
+        제도 설계부터 시스템 운영까지, HCG가 함께합니다
+      </div>
+      <p
+        className="text-[13px] text-ink-600 max-w-[520px] mx-auto mb-5"
+        style={{ display: "block", margin: "0 auto 20px", padding: 0, position: "static" }}
+      >
+        Master 자문 + talenx 운영이 결합되면 컨설팅 효과가 일회성이 아니라 지속됩니다.
+        궁금하신 게 있으면 언제든 문의주세요.
+      </p>
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        <a
+          href="https://e-hcg.com/inquiry" target="_blank" rel="noopener noreferrer"
+          className="btn-primary"
+        >
+          <Sparkles size={14} className="mr-2" />
+          도입 문의하기
+          <ExternalLink size={12} className="ml-2 opacity-70" />
+        </a>
+        <a
+          href="https://e-hcg.com/solutions/talenx" target="_blank" rel="noopener noreferrer"
+          className="btn-secondary"
+        >
+          talenx 알아보기
+          <ExternalLink size={12} className="ml-2 opacity-70" />
+        </a>
+      </div>
     </div>
   );
 }
