@@ -11,8 +11,9 @@ import TourNav from "@/components/TourNav";
 import { cn } from "@/lib/utils";
 import { getChatReply } from "@/lib/api";
 import type { ChatMessage } from "@/lib/claude-mock";
+import { PAIN_IMPACT_MAP } from "@/lib/pain-impact-map";
 
-const SUGGESTED: { number: string; q: string }[] = [
+const FALLBACK_SUGGESTED: { number: string; q: string }[] = [
   { number: "01", q: "100명 회사에 평가제도가 없는데, 어떻게 시작하나요?" },
   { number: "02", q: "Pay Band는 직급 몇 단계로 나누는 게 좋나요?" },
   { number: "03", q: "MBO에서 OKR로 전환할 때 가장 큰 위험은 뭔가요?" },
@@ -20,7 +21,7 @@ const SUGGESTED: { number: string; q: string }[] = [
 
 const SEED: ChatMessage = {
   role: "assistant",
-  content: "안녕하세요. HR Master 자문 컨설턴트입니다. 직급·평가·보상·리더십·조직문화 — 무엇이든 편하게 물어보세요. 실제 자문에서도 이런 식으로 함께 풀어갑니다.",
+  content: "안녕하세요. HCG Master 자문 컨설턴트입니다. 직급·평가·보상·리더십·조직문화 — 무엇이든 편하게 물어보세요. 실제 자문에서도 이런 식으로 함께 풀어갑니다.",
 };
 
 export default function Step2Demo() {
@@ -121,7 +122,33 @@ function HotlineChannel() {
   const [messages, setMessages] = useState<ChatMessage[]>([SEED]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [suggested, setSuggested] = useState(FALLBACK_SUGGESTED);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Read pain selections from Step 1 (sessionStorage) and build dynamic chips
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("hcg_tour_diagnose");
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as { pains?: string[] };
+      const pains = parsed?.pains;
+      if (!Array.isArray(pains) || pains.length === 0) return;
+
+      const qs = pains
+        .map((id) => PAIN_IMPACT_MAP.find((p) => p.id === id)?.question)
+        .filter((q): q is string => Boolean(q))
+        .slice(0, 4);
+
+      if (qs.length > 0) {
+        setSuggested(qs.map((q, i) => ({
+          number: String(i + 1).padStart(2, "0"),
+          q,
+        })));
+      }
+    } catch {
+      /* keep fallback */
+    }
+  }, []);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -181,7 +208,7 @@ function HotlineChannel() {
           예시 질문
         </div>
         <div className="grid grid-cols-1 gap-1.5">
-          {SUGGESTED.map((s) => (
+          {suggested.map((s) => (
             <button key={s.number} type="button" onClick={() => send(s.q)} disabled={loading} className="group text-left p-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-accent-500/40 hover:bg-accent-500/[0.05] transition-colors disabled:opacity-50">
               <div className="flex items-start gap-2">
                 <span className="text-[10px] font-mono font-bold text-accent-400 tabular-nums pt-0.5">[{s.number}]</span>
