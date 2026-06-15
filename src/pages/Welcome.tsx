@@ -70,7 +70,7 @@ export default function Welcome() {
             부터,
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            최고 전문 HRBP가 옆에 있어요
+            최고의 전문 HRBP와 함께 하세요
           </h1>
 
           <p className="body text-ink-600 mt-5 max-w-[560px] mx-auto">
