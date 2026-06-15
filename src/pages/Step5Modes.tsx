@@ -1,14 +1,12 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-  Wrench, MessageCircle, BookOpen, Sparkles, ArrowRight, Users2,
+  Wrench, MessageCircle, BookOpen, Sparkles, ArrowRight, Users2, BarChart3,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getStepBySlug } from "@/lib/tour-config";
 import StepShell from "@/components/StepShell";
 import TourNav from "@/components/TourNav";
-import { cn } from "@/lib/utils";
 
 type Mode = {
   id: string;
@@ -100,34 +98,44 @@ const MODES: Mode[] = [
       "1:1 면담 가이드 코칭",
     ],
   },
+  {
+    id: "review",
+    icon: BarChart3,
+    badge: "MODE 06",
+    title: "분기 HR 진단",
+    tagline: "숫자로 보는 우리 회사",
+    description:
+      "분기마다 이탈률, eNPS, Compa-Ratio, 평가 분포 등 회사 HR 지표를 점검합니다. 정성 진단과 결합해 다음 분기 우선순위를 함께 정합니다. talenx 도입 회사라면 데이터가 풍부하고, 아니어도 컨설턴트가 같이 집계해 드려요.",
+    examples: [
+      "분기 HR Health Check 리포트 (Excel · Notion)",
+      "이탈률 · eNPS · Compa-Ratio 분석",
+      "조직 진단 (Span of Control · Layer 점검)",
+      "경영진 대상 분기 리뷰 미팅",
+    ],
+  },
 ];
 
 export default function Step5Modes() {
   const step = getStepBySlug("5-modes")!;
-  const [activeId, setActiveId] = useState<string | null>("design");
 
   return (
     <>
       <StepShell step={step}>
         <p className="body text-ink-600 mb-8 max-w-[720px]">
           Master 자문은 정해진 일정대로 가는 풀패키지 컨설팅이 아닙니다.
-          회사 상황에 따라 <strong className="text-ink-900">아래 4가지 모드를 elastic하게</strong> 호출해서 씁니다.
-          어떤 달은 페어 디자인 위주, 어떤 달은 실행 도우미 위주 — 자유롭게.
+          회사 상황에 따라 <strong className="text-ink-900">아래 6가지 모드를 elastic하게</strong> 호출해서 씁니다.
+          어떤 달은 페어 디자인 위주, 어떤 달은 분기 진단 위주 — 자유롭게.
         </p>
 
-        {/* 2x2 mode grid */}
+        {/* 6 modes grid — all expanded by default */}
         <div className="grid md:grid-cols-2 gap-4">
           {MODES.map((m, i) => (
-            <ModeCard
-              key={m.id} mode={m} index={i}
-              isActive={activeId === m.id}
-              onSelect={() => setActiveId(activeId === m.id ? null : m.id)}
-            />
+            <ModeCard key={m.id} mode={m} index={i} />
           ))}
         </div>
 
         <p className="caption mt-8 text-center">
-          4가지 모드를 한 달에 모두 쓰는 회사도, 한두 가지만 쓰는 회사도 있습니다. retainer 안에서 자유롭게.
+          6가지 모드를 한 달에 모두 쓰는 회사도, 한두 가지만 쓰는 회사도 있습니다. retainer 안에서 자유롭게.
         </p>
       </StepShell>
 
@@ -136,41 +144,17 @@ export default function Step5Modes() {
   );
 }
 
-function ModeCard({ mode, index, isActive, onSelect }: {
-  mode: Mode; index: number; isActive: boolean; onSelect: () => void;
-}) {
+function ModeCard({ mode, index }: { mode: Mode; index: number }) {
   const Icon = mode.icon;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: index * 0.08 }}
+      transition={{ duration: 0.35, delay: index * 0.06 }}
     >
-      <button
-        type="button" onClick={onSelect}
-        className={cn(
-          "w-full text-left card transition-all relative overflow-hidden",
-          "active:translate-y-0",
-          isActive
-            ? "bg-accent-500/[0.05] border-accent-500/40 shadow-glow-accent -translate-y-0.5"
-            : "hover:bg-white/[0.06] hover:border-white/20 hover:-translate-y-0.5",
-        )}
-      >
-        {/* Glow blob on active */}
-        {isActive && (
-          <div
-            aria-hidden
-            className="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-gradient-to-br from-accent-500/30 to-accent-700/10 blur-3xl pointer-events-none"
-          />
-        )}
-
+      <div className="card transition-all relative overflow-hidden hover:bg-white/[0.04] hover:border-white/15 h-full">
         <div className="relative flex items-start gap-4">
-          <div className={cn(
-            "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all",
-            isActive
-              ? "bg-accent-500 text-white shadow-[0_8px_24px_-4px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.25)]"
-              : "bg-white/[0.06] text-accent-400 border border-white/10",
-          )}>
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-white/[0.06] text-accent-400 border border-white/10">
             <Icon size={20} />
           </div>
 
@@ -181,55 +165,37 @@ function ModeCard({ mode, index, isActive, onSelect }: {
             <h3 className="text-[20px] font-bold text-ink-900 leading-tight">{mode.title}</h3>
             <p className="text-[13px] text-accent-400 font-medium mt-0.5">{mode.tagline}</p>
           </div>
-
-          <ArrowRight
-            size={16}
-            className={cn(
-              "flex-shrink-0 transition-all",
-              isActive ? "text-accent-400 rotate-90" : "text-ink-500",
-            )}
-          />
         </div>
 
         <p className="relative body-sm text-ink-700 mt-4 leading-relaxed">
           {mode.description}
         </p>
 
-        <AnimatePresence>
-          {isActive && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}
-              className="relative overflow-hidden"
-            >
-              <div className="mt-5 pt-5 border-t border-white/[0.08]">
-                <div className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-ink-500 mb-3">
-                  실제 활동 예시
-                </div>
-                <ul className="space-y-2">
-                  {mode.examples.map((ex, i) => (
-                    <li key={i} className="flex items-start gap-2 body-sm text-ink-700">
-                      <span className="text-accent-400 mt-0.5">·</span>
-                      <span>{ex}</span>
-                    </li>
-                  ))}
-                </ul>
+        <div className="mt-5 pt-5 border-t border-white/[0.08]">
+          <div className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-ink-500 mb-3">
+            실제 활동 예시
+          </div>
+          <ul className="space-y-2">
+            {mode.examples.map((ex, i) => (
+              <li key={i} className="flex items-start gap-2 body-sm text-ink-700">
+                <span className="text-accent-400 mt-0.5">·</span>
+                <span>{ex}</span>
+              </li>
+            ))}
+          </ul>
 
-                {mode.bridge && (
-                  <Link
-                    to={mode.bridge.to}
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-flex items-center gap-1.5 text-[12px] font-medium text-accent-400 hover:text-accent-300 mt-4 transition-colors"
-                  >
-                    <Sparkles size={12} />
-                    {mode.bridge.label} →
-                  </Link>
-                )}
-              </div>
-            </motion.div>
+          {mode.bridge && (
+            <Link
+              to={mode.bridge.to}
+              className="inline-flex items-center gap-1.5 text-[12px] font-medium text-accent-400 hover:text-accent-300 mt-4 transition-colors"
+            >
+              <Sparkles size={12} />
+              {mode.bridge.label}
+              <ArrowRight size={11} />
+            </Link>
           )}
-        </AnimatePresence>
-      </button>
+        </div>
+      </div>
     </motion.div>
   );
 }
