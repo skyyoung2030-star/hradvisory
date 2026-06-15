@@ -56,27 +56,30 @@ export default function Welcome() {
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur text-[11px] font-mono font-semibold text-ink-700 tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse-soft shadow-[0_0_8px_rgba(14,165,233,0.8)]" />
-            KOSPI 200 상장사 30%가 선택한 HCG
+            국내 굴지의 기업과 중소형 기업이 함께 선택한 HCG
           </div>
 
           <h1 className="h-hero mt-5">
-            HR 컨설팅,{" "}
+            월{" "}
             <span className="relative inline-block">
               <span className="relative z-10 bg-gradient-to-br from-accent-400 via-accent-500 to-accent-600 bg-clip-text text-transparent">
-                5분
+                50만원
               </span>
               <span aria-hidden className="absolute inset-x-0 bottom-1 h-3 bg-accent-500/30 blur-md -z-0" />
             </span>
-            으로
+            부터,
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            압축해서 보여드릴게요
+            최고 전문 HRBP가 옆에 있어요
           </h1>
 
-          <p className="body text-ink-600 mt-5 max-w-[520px] mx-auto">
-            진단 → 자문 → 도구 → 시뮬레이션 → 협업 방식.<br className="hidden sm:block" />
+          <p className="body text-ink-600 mt-5 max-w-[560px] mx-auto">
+            수억 원 턴키 컨설팅도, HR 전문가 채용도 부담스럽다면.<br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            전문컨설턴트와 HR마스터 컨설팅을 통해 조직을 어떻게 업그레이드 시킬 수 있는지 체험할 수 있어요.
+            대기업 HR 출신 베테랑이 정기 방문 + 실시간 핫라인으로 함께합니다.
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            5분 인터랙티브 투어로 어떻게 옆에 있는지 직접 확인해보세요.
           </p>
         </motion.div>
 
