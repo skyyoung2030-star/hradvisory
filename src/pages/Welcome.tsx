@@ -207,7 +207,7 @@ function TurnkeyPath({ onCtaClick }: { onCtaClick: () => void }) {
                      active:translate-y-px transition-all
                      shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
         >
-          <span>컨설팅 사업부에서 상담</span>
+          <span>컨설팅 본부에서 상담</span>
           <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </button>
       </div>
