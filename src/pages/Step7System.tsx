@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import {
-  Sparkles, Building2, Layers, Cloud, Bot,
-  CheckCircle2, ArrowRight, Shield, TrendingUp, ExternalLink,
-  Database, GitBranch, type LucideIcon,
+  Sparkles, Cloud, Bot, CheckCircle2, ArrowRight, Shield,
+  ExternalLink, Database, GitBranch, Target, BarChart3,
+  Clock, Coins, Users, type LucideIcon,
 } from "lucide-react";
 import { getStepBySlug } from "@/lib/tour-config";
 import StepShell from "@/components/StepShell";
@@ -11,85 +11,20 @@ import { cn } from "@/lib/utils";
 
 /* ═════════════════ Data ═════════════════ */
 
-type Solution = {
-  id: string;
-  name: string;
-  ko: string;
-  type: string;
-  target: string;
-  tagline: string;
-  features: string[];
-  icon: LucideIcon;
-  featured?: boolean;
-  url: string;
-};
+const TALENX_MODULES: { icon: LucideIcon; name: string; desc: string }[] = [
+  { icon: Target,     name: "성과 관리",    desc: "OKR · Check-in · 상시 피드백" },
+  { icon: BarChart3,  name: "평가 운영",    desc: "Calibration · 등급 분포 관리" },
+  { icon: Clock,      name: "근태 관리",    desc: "근로시간 · 휴가 · OT 자동 집계" },
+  { icon: Coins,      name: "급여 운영",    desc: "급여 · 보상 · Pay Band 시뮬레이션" },
+  { icon: Users,      name: "인사 정보",    desc: "조직도 · 인사 마스터 통합" },
+  { icon: Database,   name: "HR Analytics", desc: "대시보드 · AI 인사이트" },
+];
 
-const SOLUTIONS: Solution[] = [
-  {
-    id: "talenx",
-    name: "talenx",
-    ko: "탈렌엑스",
-    type: "올인원 AI HR SaaS",
-    target: "모든 규모 기업",
-    tagline: "성과·평가·근태·급여·인사 전 영역을 하나의 플랫폼에서",
-    features: [
-      "OKR · 평가 · Check-in · 피드백",
-      "Pay Band · 보상 시뮬레이션",
-      "근태 · 급여 · 인사정보 통합",
-      "HR Analytics · 대시보드",
-    ],
-    icon: Cloud,
-    featured: true,
-    url: "https://e-hcg.com/solutions/talenx",
-  },
-  {
-    id: "elizax",
-    name: "elizax",
-    ko: "일라이자엑스",
-    type: "HR 특화 AI Agent",
-    target: "AI로 HR 의사결정 고도화",
-    tagline: "감과 경험을 넘어, AI 기반 의사결정의 지능화",
-    features: [
-      "HR 도메인 지식 결합 AI",
-      "인재 관리 · 판단 품질 향상",
-      "AI 피드백 감정 분석 (특허)",
-      "범용 AI가 아닌 HR 특화",
-    ],
-    icon: Bot,
-    url: "https://e-hcg.com/solutions/elizax",
-  },
-  {
-    id: "hunel",
-    name: "hunel",
-    ko: "휴넬",
-    type: "구축형 AI HR 솔루션",
-    target: "대기업 · 그룹사",
-    tagline: "복잡한 인사제도를 정교하게 구현",
-    features: [
-      "대기업 · 글로벌 조직 대응",
-      "Global 인사 패키지",
-      "그룹사 다법인 통합 관리",
-      "맞춤 커스터마이징",
-    ],
-    icon: Building2,
-    url: "https://e-hcg.com/solutions/hunel",
-  },
-  {
-    id: "jade",
-    name: "JaDE",
-    ko: "제이드",
-    type: "구축형 AI HR 솔루션",
-    target: "중견 · 중소기업",
-    tagline: "고유 인사제도 구현에 최적화된 세팅 기반",
-    features: [
-      "직무 · 평가 · 보상 · 승진",
-      "조직 · 급여 · 근태 · 복리후생",
-      "세팅 기반 빠른 도입",
-      "운영 효율 극대화",
-    ],
-    icon: Layers,
-    url: "https://e-hcg.com/solutions/jade",
-  },
+const TALENX_HIGHLIGHTS: { icon: LucideIcon; title: string; desc: string }[] = [
+  { icon: Bot,    title: "HR 도메인 특화 AI",  desc: "범용 AI가 아닌, HR 영역 데이터로 학습된 AI가 의사결정을 보조" },
+  { icon: Cloud,  title: "Cloud SaaS",        desc: "별도 구축 없이 빠른 도입. 지속적 업데이트와 신기능 제공" },
+  { icon: GitBranch, title: "자문 산출물 자동 연동", desc: "Master 자문에서 설계한 제도가 talenx 셋업으로 그대로 반영" },
+  { icon: Shield, title: "보안 · 정보보호",   desc: "ISO/IEC 27001 · ISMS 인증. 기업 데이터 안전하게 보관" },
 ];
 
 type SynergyItem = { from: string; to: string; module: string };
@@ -120,36 +55,25 @@ export default function Step7System() {
           className="body text-ink-600 max-w-[760px]"
           style={{ display: "block", margin: 0, marginBottom: 24, padding: 0, position: "static" }}
         >
-          제도를 같이 짠 사람이 시스템도 만들어요. HCG는{" "}
-          <strong className="text-accent-400">국내 1위 AI HR Tech 리더</strong>로,{" "}
-          KOSPI 200 상장사 30% 이상이 선택한 HR 솔루션을 보유하고 있습니다. 자문에서 설계한 제도를 같은 회사의 시스템으로 운영하면 호환성이 다릅니다.
+          제도를 같이 짠 사람이 시스템도 만들어요. HCG의{" "}
+          <strong className="text-accent-400">talenx</strong>는 국내 굴지의 대기업부터 중소형 기업까지 수많은 기업이 도입해 사용하고 있는 올인원 AI HR SaaS입니다. 자문에서 설계한 제도를 같은 회사의 시스템으로 운영하면 호환성이 다릅니다.
         </p>
 
         {/* End-to-End flow */}
         <EndToEndFlow />
 
-        {/* Solutions */}
+        {/* Talenx hero */}
         <SectionHeader
-          eyebrow="SOLUTIONS"
-          title="HCG의 4개 AI HR 솔루션"
-          subtitle="회사 규모와 단계에 맞춰 골라 쓸 수 있는 통합 라인업"
+          eyebrow="SOLUTION"
+          title="talenx — 올인원 AI HR SaaS"
+          subtitle="성과 · 평가 · 근태 · 급여 · 인사를 하나의 플랫폼에서 운영"
         />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
-          {SOLUTIONS.map((s, i) => (
-            <motion.div
-              key={s.id}
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: i * 0.06 }}
-            >
-              <SolutionCard solution={s} />
-            </motion.div>
-          ))}
-        </div>
+        <TalenxHero />
 
-        {/* Synergy — the core message */}
+        {/* Synergy */}
         <SectionHeader
           eyebrow="SYNERGY"
-          title="자문 + SaaS, 같은 회사라서 가능한 호환성"
+          title="자문 + talenx, 같은 회사라서 가능한 호환성"
           subtitle="다른 회사 컨설팅 + 다른 회사 시스템 = 통역 비용 · 도입 지연 · 산출물 재작업"
         />
         <SynergyPanel />
@@ -158,13 +82,13 @@ export default function Step7System() {
         <SectionHeader
           eyebrow="PROVEN"
           title="검증된 성과"
-          subtitle="국내 주요 기업들이 HCG의 솔루션으로 만든 변화"
+          subtitle="HCG 솔루션으로 만든 실제 변화"
         />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
           {STATS.map((s, i) => <StatCard key={i} stat={s} />)}
         </div>
 
-        {/* Trust indicators */}
+        {/* Trust bar */}
         <TrustBar />
 
         {/* CTA */}
@@ -210,7 +134,7 @@ function SectionHeader({ eyebrow, title, subtitle }: { eyebrow: string; title: s
 function EndToEndFlow() {
   const phases = [
     { icon: Sparkles, label: "컨설팅", sub: "제도 설계", color: "bg-white/[0.05] border-white/[0.10] text-ink-700" },
-    { icon: Cloud,    label: "솔루션", sub: "AI HR 시스템", color: "bg-accent-500/15 border-accent-500/40 text-accent-300", featured: true },
+    { icon: Cloud,    label: "talenx", sub: "AI HR SaaS", color: "bg-accent-500/15 border-accent-500/40 text-accent-300", featured: true },
     { icon: Shield,   label: "운영", sub: "유지보수 · Payroll", color: "bg-white/[0.05] border-white/[0.10] text-ink-700" },
   ];
   return (
@@ -249,102 +173,141 @@ function EndToEndFlow() {
   );
 }
 
-/* ═════════════════ Solution card ═════════════════ */
+/* ═════════════════ Talenx hero panel ═════════════════ */
 
-function SolutionCard({ solution }: { solution: Solution }) {
-  const Icon = solution.icon;
+function TalenxHero() {
   return (
-    <div className={cn(
-      "card !p-4 h-full flex flex-col relative overflow-hidden transition-all hover:-translate-y-0.5",
-      solution.featured
-        ? "border-accent-500/40 bg-accent-500/[0.06] shadow-[0_0_28px_-6px_rgba(14,165,233,0.5),inset_0_1px_0_rgba(255,255,255,0.06)]"
-        : "hover:border-accent-500/30",
-    )}>
-      {solution.featured && (
-        <>
-          <span aria-hidden className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-500/70 to-transparent" />
-          <span className="absolute top-2 right-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-accent-500 text-white text-[9px] font-bold uppercase tracking-wider shadow-[0_0_10px_-2px_rgba(14,165,233,0.7)]">
-            <Sparkles size={8} /> 추천
+    <div className="card !p-0 overflow-hidden mb-10 relative">
+      <span aria-hidden className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-500/70 to-transparent" />
+      <span aria-hidden className="absolute inset-0 bg-gradient-to-b from-accent-500/[0.04] via-transparent to-transparent pointer-events-none" />
+
+      {/* Header band */}
+      <div className="relative px-5 sm:px-6 py-5 border-b border-white/[0.08]">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-xl bg-accent-500 text-white flex items-center justify-center flex-shrink-0 shadow-[0_4px_16px_-4px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.25)]">
+            <Cloud size={22} />
+          </div>
+          <div className="flex-1 min-w-0" style={{ display: "block", lineHeight: 1 }}>
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <div
+                className="text-[26px] font-bold text-ink-900"
+                style={{ display: "inline-block", margin: 0, padding: 0, lineHeight: 1 }}
+              >
+                talenx
+              </div>
+              <div
+                className="text-[12px] font-mono text-ink-500"
+                style={{ display: "inline-block", margin: 0, padding: 0, lineHeight: 1 }}
+              >
+                탈렌엑스
+              </div>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-500/20 border border-accent-500/30 text-accent-300 text-[10px] font-bold uppercase tracking-wider">
+                <Sparkles size={9} /> 올인원 AI HR SaaS
+              </span>
+            </div>
+            <div
+              className="text-[13px] text-ink-600 mt-2 leading-snug"
+              style={{ display: "block", margin: 0, marginTop: 8, padding: 0, lineHeight: 1.5 }}
+            >
+              모든 규모 기업을 위한 HR 전 영역 통합 플랫폼. 자문에서 설계한 제도를 그대로 시스템에서 운영합니다.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modules grid */}
+      <div className="relative p-5 sm:p-6">
+        <div
+          className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-ink-500 mb-3 px-1"
+          style={{ display: "block", margin: 0, marginBottom: 12, padding: "0 4px", position: "static" }}
+        >
+          핵심 모듈 6개
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2.5 mb-6">
+          {TALENX_MODULES.map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: i * 0.04 }}
+              className="p-3 rounded-lg bg-white/[0.025] border border-white/[0.06] hover:border-accent-500/30 hover:bg-white/[0.04] transition-all"
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="w-7 h-7 rounded-md bg-accent-500/15 border border-accent-500/30 text-accent-400 flex items-center justify-center flex-shrink-0">
+                  <m.icon size={13} />
+                </div>
+                <div
+                  className="text-[13px] font-bold text-ink-900"
+                  style={{ display: "inline-block", margin: 0, padding: 0, lineHeight: 1.2 }}
+                >
+                  {m.name}
+                </div>
+              </div>
+              <div
+                className="text-[11px] text-ink-600 leading-snug pl-9"
+                style={{ display: "block", margin: 0, padding: "0 0 0 36px", position: "static" }}
+              >
+                {m.desc}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div
+          className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-ink-500 mb-3 px-1"
+          style={{ display: "block", margin: 0, marginBottom: 12, padding: "0 4px", position: "static" }}
+        >
+          talenx의 차별점
+        </div>
+        <div className="grid sm:grid-cols-2 gap-2.5 mb-5">
+          {TALENX_HIGHLIGHTS.map((h, i) => (
+            <div key={i} className="flex items-start gap-2.5 p-3 rounded-lg bg-accent-500/[0.04] border border-accent-500/15">
+              <h.icon size={14} className="text-accent-400 mt-0.5 flex-shrink-0" />
+              <div style={{ display: "block", lineHeight: 1 }}>
+                <div
+                  className="text-[12px] font-bold text-ink-800"
+                  style={{ display: "block", margin: 0, padding: 0, lineHeight: 1.3 }}
+                >
+                  {h.title}
+                </div>
+                <div
+                  className="text-[11px] text-ink-600 mt-1 leading-snug"
+                  style={{ display: "block", margin: 0, marginTop: 4, padding: 0, lineHeight: 1.5 }}
+                >
+                  {h.desc}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 pt-2">
+          <a
+            href="https://e-hcg.com/solutions/talenx" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent-500 hover:bg-accent-400 text-white text-[12px] font-semibold transition-all shadow-[0_4px_12px_-2px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.2)]"
+          >
+            talenx 자세히 알아보기 <ExternalLink size={11} />
+          </a>
+          <span className="text-[11px] font-mono text-ink-500 ml-1">
+            e-hcg.com/solutions/talenx
           </span>
-        </>
-      )}
-
-      <div className="flex items-center gap-2 mb-2.5">
-        <div className={cn(
-          "w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0",
-          solution.featured
-            ? "bg-accent-500 text-white shadow-[0_4px_12px_-4px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.25)]"
-            : "bg-white/[0.06] border border-white/[0.08] text-accent-400",
-        )}>
-          <Icon size={16} />
-        </div>
-        <div style={{ display: "block", lineHeight: 1 }}>
-          <div
-            className="text-[15px] font-bold text-ink-900"
-            style={{ display: "block", margin: 0, padding: 0, lineHeight: 1 }}
-          >
-            {solution.name}
-          </div>
-          <div
-            className="text-[10px] font-mono text-ink-500"
-            style={{ display: "block", margin: 0, marginTop: 3, padding: 0, lineHeight: 1 }}
-          >
-            {solution.ko}
-          </div>
         </div>
       </div>
-
-      <div
-        className="text-[10px] font-mono font-bold uppercase tracking-wider text-accent-400 mb-1"
-        style={{ display: "block", margin: 0, marginBottom: 4, padding: 0, position: "static" }}
-      >
-        {solution.type}
-      </div>
-      <div
-        className="text-[11px] text-ink-600 mb-2"
-        style={{ display: "block", margin: 0, marginBottom: 8, padding: 0, position: "static" }}
-      >
-        {solution.target}
-      </div>
-      <div
-        className="text-[12px] text-ink-700 leading-snug mb-3"
-        style={{ display: "block", margin: 0, marginBottom: 12, padding: 0, position: "static" }}
-      >
-        {solution.tagline}
-      </div>
-
-      <ul className="space-y-1 flex-1">
-        {solution.features.map((f, i) => (
-          <li key={i} className="flex items-start gap-1.5 text-[11px] text-ink-600 leading-snug">
-            <CheckCircle2 size={10} className={cn("mt-0.5 flex-shrink-0", solution.featured ? "text-accent-400" : "text-ink-500")} />
-            <span>{f}</span>
-          </li>
-        ))}
-      </ul>
-
-      <a
-        href={solution.url} target="_blank" rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-[11px] font-mono text-accent-400 hover:text-accent-300 mt-3 pt-3 border-t border-white/[0.06]"
-      >
-        자세히 알아보기 <ExternalLink size={10} />
-      </a>
     </div>
   );
 }
 
-/* ═════════════════ Synergy panel — the core message ═════════════════ */
+/* ═════════════════ Synergy panel ═════════════════ */
 
 function SynergyPanel() {
   return (
     <div className="card !p-0 overflow-hidden mb-10">
-      {/* Header band */}
       <div className="px-4 py-3 border-b border-white/[0.08] bg-gradient-to-b from-accent-500/[0.08] to-transparent flex items-center gap-2.5">
         <Database size={14} className="text-accent-400" />
         <span
           className="text-[11px] font-mono font-bold uppercase tracking-[0.22em] text-accent-400"
           style={{ display: "inline-block", margin: 0, padding: 0, position: "static" }}
         >
-          자문 산출물 → 시스템 자동 연동
+          자문 산출물 → talenx 자동 연동
         </span>
       </div>
 
@@ -427,7 +390,7 @@ function StatCard({ stat }: { stat: Stat }) {
 
 function TrustBar() {
   const items = [
-    { icon: TrendingUp, label: "KOSPI 200 상장사 30% 이상" },
+    { icon: Users, label: "국내 굴지의 대기업·중견·중소기업 다수 도입" },
     { icon: Shield, label: "ISO/IEC 27001:2022 · ISMS 인증" },
     { icon: Bot, label: "AI 피드백 감정 분석 특허 (10-2954894)" },
   ];
@@ -482,10 +445,10 @@ function CTABanner() {
           <ExternalLink size={12} className="ml-2 opacity-70" />
         </a>
         <a
-          href="https://e-hcg.com/solutions" target="_blank" rel="noopener noreferrer"
+          href="https://e-hcg.com/solutions/talenx" target="_blank" rel="noopener noreferrer"
           className="btn-secondary"
         >
-          솔루션 전체 보기
+          talenx 알아보기
           <ExternalLink size={12} className="ml-2 opacity-70" />
         </a>
       </div>
