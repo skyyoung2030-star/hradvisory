@@ -42,7 +42,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     index: 4, number: 4, slug: "4-simulate", path: "/tour/4-simulate",
     label: "시뮬레이션",
-    title: "수치를 조정하면 효과가 보입니다",
+    title: "시뮬레이션을 통해 영향을 숫자로 확인하세요",
     subtitle: "Pay Band·평가 분포·직급 단계를 바꿔보면서 기대효과를 미리 확인",
     showInProgress: true,
   },
