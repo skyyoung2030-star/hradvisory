@@ -38,9 +38,9 @@ const SYNERGY: SynergyItem[] = [
 type Stat = { value: string; label: string };
 const STATS: Stat[] = [
   { value: "80%",    label: "글로벌 헬스케어 A사 — 시스템 일원화 비용 절감" },
-  { value: "57%",    label: "에스디바이오센서 — 평가 운영 기간 단축" },
-  { value: "95%",    label: "대상 — 성과 면담 이행률 달성" },
-  { value: "1,100명", label: "SK바이오사이언스 — 성과관리 혁신" },
+  { value: "57%",    label: "바이오 B사 — 평가 운영 기간 단축" },
+  { value: "95%",    label: "제조 C사 — 성과 면담 이행률 달성" },
+  { value: "1,100명", label: "IT D사 — 성과관리 혁신" },
 ];
 
 /* ═════════════════ Page ═════════════════ */
