@@ -7,6 +7,7 @@ import Step3Deliverables from "@/pages/Step3Deliverables";
 import Step4Simulate from "@/pages/Step4Simulate";
 import Step5Modes from "@/pages/Step5Modes";
 import Step6Master from "@/pages/Step6Master";
+import Step7System from "@/pages/Step7System";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="4-simulate"     element={<Step4Simulate />} />
         <Route path="5-modes"        element={<Step5Modes />} />
         <Route path="6-master"       element={<Step6Master />} />
+        <Route path="7-system"       element={<Step7System />} />
       </Route>
     </Routes>
   );
