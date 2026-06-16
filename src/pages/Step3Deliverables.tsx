@@ -31,8 +31,12 @@ export default function Step3Deliverables() {
       if (raw) {
         const s = JSON.parse(raw) as DiagnoseState;
         setUserPains(s.pains || []);
-        const firstArea = s.pains?.[0] && PAIN_TO_AREA[s.pains[0]];
-        if (firstArea) setActive(firstArea);
+        // 페인이 1개일 때만 그 area로 진입 — 여러 개 선택 시엔 ALL 유지
+        // (특정 area를 무작위로 우선시키지 않음)
+        if (s.pains?.length === 1) {
+          const firstArea = PAIN_TO_AREA[s.pains[0]];
+          if (firstArea) setActive(firstArea);
+        }
       }
     } catch { /* */ }
   }, []);
