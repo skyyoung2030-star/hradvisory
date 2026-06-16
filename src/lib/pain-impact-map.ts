@@ -120,4 +120,12 @@ export const PAIN_IMPACT_MAP: PainImpact[] = [
     metric_text: "eNPS +15, 1년 retention +3%p",
     question: "직원 몰입도가 점점 떨어지고 있어요. 어디부터 손대야 하나요?",
   },
+  {
+    id: "ai_adoption",
+    pain_text: "AI 도입으로 생산성 향상하고 싶은데 어디서부터 시작할지 모르겠다",
+    area: "AI",
+    after_text: "HR AI 에이전트 도입 + 직무 명확화 + 자동화 우선순위 설계",
+    metric_text: "HR 운영 부담 30~50% 감소, 의사결정 품질 향상",
+    question: "AI를 도입해서 HR 생산성을 높이고 싶은데, 어디서부터 시작해야 할까요?",
+  },
 ];
