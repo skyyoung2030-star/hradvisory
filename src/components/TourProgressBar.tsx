@@ -20,7 +20,7 @@ export default function TourProgressBar() {
             aria-label="처음으로 돌아가기"
           >
             <LogoMark />
-            <span className="hidden md:inline text-[14px]">HCG Master</span>
+            <span className="hidden md:inline text-[14px]">HR Master</span>
           </Link>
 
           <span className="w-px h-5 bg-white/10 mx-1 hidden md:block" />

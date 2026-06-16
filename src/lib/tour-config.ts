@@ -42,14 +42,14 @@ export const TOUR_STEPS: TourStep[] = [
   {
     index: 4, number: 4, slug: "4-simulate", path: "/tour/4-simulate",
     label: "시뮬레이션",
-    title: "수치를 조정하면 효과가 보입니다",
+    title: "시뮬레이션을 통해 영향을 숫자로 확인하세요",
     subtitle: "Pay Band·평가 분포·직급 단계를 바꿔보면서 기대효과를 미리 확인",
     showInProgress: true,
   },
   {
     index: 5, number: 5, slug: "5-modes", path: "/tour/5-modes",
     label: "협업 방식",
-    title: "이런 4가지 모드로 옆에 있어요",
+    title: "6가지 모드로 지원합니다",
     subtitle: "Master 자문은 정해진 일정이 아니라, 필요할 때 호출하는 협업입니다",
     showInProgress: true,
   },
@@ -63,8 +63,8 @@ export const TOUR_STEPS: TourStep[] = [
   {
     index: 7, number: 7, slug: "7-system", path: "/tour/7-system",
     label: "시스템",
-    title: "자문이 끝이 아닙니다",
-    subtitle: "HCG의 e-HR 솔루션으로 자문 결과를 지속적으로 운영",
+    title: "(Extra)시스템 도입도 심리스하게 가능합니다",
+    subtitle: "HCG의 e-HR 솔루션으로 최적의 Fit을 구현",
     showInProgress: true,
   },
 ];

@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 /* ═════════════════ Drivers ═════════════════ */
 
-type Module = "보상" | "평가" | "직급" | "직무" | "조직문화" | "리더십" | "AI";
+type Module = "보상" | "평가" | "직급" | "직무" | "조직문화" | "리더십";
 type Driver = {
   id: string; module: Module; label: string; unit: string;
   default: number; min: number; max: number;
@@ -30,7 +30,6 @@ const DRIVERS: Driver[] = [
   { id: "alignment_workshops", module: "조직문화", label: "정렬 워크숍 빈도",       unit: "회/년",  default: 2,  min: 0,  max: 12 },
   { id: "psych_safety",        module: "조직문화", label: "심리적 안전 점수",       unit: "/100",   default: 55, min: 30, max: 100 },
   { id: "leader_coaching",     module: "리더십",   label: "팀장 코칭 빈도",         unit: "회/분기",default: 1,  min: 0,  max: 6  },
-  { id: "ai_automation",       module: "AI",       label: "HR AI 자동화 수준",       unit: "/100",   default: 0,  min: 0,  max: 100 },
 ];
 
 type OutcomeGroup = "Retention" | "Hiring" | "성과·생산성" | "몰입·문화" | "비용";
@@ -50,17 +49,17 @@ const OUTCOMES: Outcome[] = [
   { id: "hire_days",            group: "Hiring",     label: "평균 채용 소요일",     unit: "일",   base: 58,  range: 22, higherIsBetter: false, decimals: 0,
     weights: { payband_uplift: -0.20, job_clarity: -0.30, psych_safety: -0.10, alignment_workshops: -0.05, leader_coaching: -0.05 } },
   { id: "productivity",         group: "성과·생산성",label: "생산성 지수",          unit: "",     base: 100, range: 28, higherIsBetter: true,  decimals: 0,
-    weights: { perf_differential: 0.15, grade_top_ratio: 0.05, eval_frequency: 0.10, grade_levels: -0.15, job_clarity: 0.25, psych_safety: 0.20, leader_coaching: 0.25, ai_automation: 0.20 } },
+    weights: { perf_differential: 0.15, grade_top_ratio: 0.05, eval_frequency: 0.10, grade_levels: -0.15, job_clarity: 0.25, psych_safety: 0.20, leader_coaching: 0.25 } },
   { id: "decision_speed",       group: "성과·생산성",label: "의사결정 속도",        unit: "",     base: 100, range: 35, higherIsBetter: true,  decimals: 0,
-    weights: { grade_levels: -0.50, job_clarity: 0.20, psych_safety: 0.15, alignment_workshops: 0.10, leader_coaching: 0.10, ai_automation: 0.15 } },
+    weights: { grade_levels: -0.50, job_clarity: 0.20, psych_safety: 0.15, alignment_workshops: 0.10, leader_coaching: 0.10 } },
   { id: "goal_achievement",     group: "성과·생산성",label: "목표 달성률",          unit: "%",    base: 72,  range: 18, higherIsBetter: true,  decimals: 0,
     weights: { grade_top_ratio: 0.05, eval_frequency: 0.20, perf_differential: 0.10, job_clarity: 0.20, alignment_workshops: 0.15, psych_safety: 0.10, leader_coaching: 0.25 } },
   { id: "engagement",           group: "몰입·문화", label: "몰입도 (eNPS)",        unit: "",     base: 18,  range: 35, higherIsBetter: true,  decimals: 0,
-    weights: { payband_uplift: 0.15, perf_differential: -0.05, eval_frequency: -0.10, grade_levels: -0.10, job_clarity: 0.15, alignment_workshops: 0.20, psych_safety: 0.30, leader_coaching: 0.25, ai_automation: 0.10 } },
+    weights: { payband_uplift: 0.15, perf_differential: -0.05, eval_frequency: -0.10, grade_levels: -0.10, job_clarity: 0.15, alignment_workshops: 0.20, psych_safety: 0.30, leader_coaching: 0.25 } },
   { id: "change_readiness",     group: "몰입·문화", label: "변화 수용성",          unit: "/100", base: 52,  range: 28, higherIsBetter: true,  decimals: 0,
     weights: { alignment_workshops: 0.30, psych_safety: 0.35, leader_coaching: 0.20, job_clarity: 0.10, eval_frequency: 0.05 } },
   { id: "hr_burden",            group: "비용",      label: "HR 운영 부담",         unit: "h/월", base: 70,  range: 45, higherIsBetter: false, decimals: 0,
-    weights: { eval_frequency: 0.40, alignment_workshops: 0.25, leader_coaching: 0.15, grade_top_ratio: 0.05, job_clarity: -0.10, ai_automation: -0.50 } },
+    weights: { eval_frequency: 0.40, alignment_workshops: 0.25, leader_coaching: 0.15, grade_top_ratio: 0.05, job_clarity: -0.10 } },
 ];
 
 const OUTCOME_GROUPS: OutcomeGroup[] = ["Retention", "Hiring", "성과·생산성", "몰입·문화", "비용"];
@@ -147,27 +146,8 @@ const SCENARIOS: Scenario[] = [
     preview: ["productivity", "hire_days"],
   },
   {
-    id: "ai_productivity",
-    num: "04",
-    name: "AI HR 생산성 가속",
-    tagline: "AI 에이전트로 운영 부담 줄이고 의사결정 품질 향상",
-    modules: ["AI", "직무", "평가"],
-    fitFor: "HR 운영 효율 / 데이터 기반 의사결정 필요 / HR 1~2명 회사",
-    drivers: { ai_automation: 80, job_clarity: 85, eval_frequency: 4 },
-    insights: [
-      "AI HR 에이전트는 단순 자동화가 아니라 의사결정 보조 — 평가 코멘트, 면담 가이드, 채용 검토 등 품질이 균질해집니다.",
-      "HR 운영 부담 30~50% 감소 가능 — 인사팀이 단순 운영보다 전략 업무에 집중할 수 있게 됩니다.",
-      "AI는 평가·면담·코칭의 일관성을 높여 팀장 역량 편차를 좁히는 효과도 가져옵니다.",
-    ],
-    caveats: [
-      "AI 도입은 단독으로는 효과 제한적 — 직무 명확화와 평가 체계가 함께 가야 시너지 발생.",
-      "AI가 사람을 대체하는 게 아니라 의사결정 품질을 높이는 도구로 자리매김하는 게 중요합니다.",
-    ],
-    preview: ["hr_burden", "productivity"],
-  },
-  {
     id: "goal_alignment",
-    num: "05",
+    num: "04",
     name: "조직성과 최적화",
     tagline: "OKR과 정렬 워크숍으로 전사 목표 alignment 강화",
     modules: ["평가", "조직문화", "리더십"],
@@ -186,7 +166,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: "scale_up",
-    num: "06",
+    num: "05",
     name: "스케일업 (Scale-Up)",
     tagline: "급성장기 — 채용 가속과 조직 정렬 동시 진행",
     modules: ["직무", "직급", "리더십"],
@@ -205,7 +185,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: "progressive_culture",
-    num: "07",
+    num: "06",
     name: "일하고 싶은 선진 조직",
     tagline: "심리적 안전 · 코칭 · 명확한 직무로 인재 자석 만들기",
     modules: ["보상", "조직문화", "리더십"],
@@ -223,7 +203,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: "engagement_trust",
-    num: "08",
+    num: "07",
     name: "신뢰와 안전",
     tagline: "심리적 안전과 정렬 워크숍으로 평균 만족도 회복",
     modules: ["보상", "조직문화"],
@@ -238,7 +218,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: "decision_speed",
-    num: "09",
+    num: "08",
     name: "빠른 의사결정",
     tagline: "직급 통합과 직무 명확화로 조직 평탄화",
     modules: ["직급", "직무"],
@@ -256,7 +236,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     id: "all_in",
-    num: "10",
+    num: "09",
     name: "올인 패키지",
     tagline: "보상 · 평가 · 문화 · 리더십 전 영역 동시 강화",
     modules: ["보상", "평가", "조직문화", "리더십"],
@@ -382,7 +362,7 @@ export default function Step4Simulate() {
                   className="text-[10px] font-mono text-ink-500 mt-2 text-center flex-shrink-0"
                   style={{ display: "block", margin: 0, marginTop: 8, padding: 0, position: "static" }}
                 >
-                  ⓘ HCG 평균 사례 기반 추정. 실제 자문에서는 회사 데이터로 시나리오를 맞춤화합니다.
+                  ⓘ 평균 사례 기반 추정. 실제 자문에서는 회사 데이터로 시나리오를 맞춤화합니다.
                 </p>
               </main>
             </div>
