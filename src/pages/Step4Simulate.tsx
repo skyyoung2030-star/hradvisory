@@ -311,7 +311,7 @@ export default function Step4Simulate() {
     <>
       <StepShell step={step}>
         <p
-          className="body-sm text-ink-600 max-w-[720px]"
+          className="body-sm text-ink-600"
           style={{ display: "block", margin: 0, marginBottom: 16, padding: 0, position: "static" }}
         >
           Master 컨설턴트가 큐레이션한 개선 시나리오. 카드를 클릭하면 그 조합이 어떤 변수를 어떻게 조정하고, 어떤 효과를 내는지 한눈에 보입니다.
