@@ -64,7 +64,11 @@ export default function Step3Deliverables() {
         >
           Master 자문에서는 제도를 같이 짜는 사이사이, 즉시 쓸 수 있는 매뉴얼과 템플릿을 전달드립니다. 국내 굴지의 대기업·중견기업 컨설팅 프로젝트에서 만들어진 자료를 라이브러리화한 것입니다.
           {userPains.length > 0 && (
-            <> 회사 페인포인트 기반으로 <strong className="text-accent-400">{Array.from(userAreas).join(" · ")}</strong> 영역이 강조됩니다.</>
+            <> 회사 페인포인트 기반으로 <strong className="text-accent-400">{
+              Array.from(userAreas)
+                .sort((a, b) => (a === "조직문화" ? 1 : 0) - (b === "조직문화" ? 1 : 0))
+                .join(" · ")
+            }</strong> 영역이 강조됩니다.</>
           )}
         </p>
 
