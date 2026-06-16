@@ -382,7 +382,7 @@ function IncentiveBars() {
   return (
     <PreviewFrame title="경영성과급 설계.xlsx">
       <div className="space-y-2.5">
-        <div className="text-[10px] font-mono text-ink-500 mb-1">연봉 구성 비중 (제조업 A사 사례)</div>
+        <div className="text-[10px] font-mono text-ink-500 mb-1">연봉 구성 비중 (동희 사례)</div>
         {items.map((it, i) => (
           <div key={i} className="space-y-1">
             <div className="flex justify-between text-[10px]">

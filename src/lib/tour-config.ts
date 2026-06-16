@@ -64,7 +64,7 @@ export const TOUR_STEPS: TourStep[] = [
     index: 7, number: 7, slug: "7-system", path: "/tour/7-system",
     label: "시스템",
     title: "(Extra)시스템 도입도 심리스하게 가능합니다",
-    subtitle: "검증된 e-HR 솔루션으로 최적의 Fit을 구현",
+    subtitle: "HCG의 e-HR 솔루션으로 최적의 Fit을 구현",
     showInProgress: true,
   },
 ];

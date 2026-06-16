@@ -5,7 +5,7 @@
 
 export type Template = {
   id: string;
-  area: "직급" | "평가" | "보상" | "직무" | "승진" | "리더십" | "조직문화" | "AI";
+  area: "직급" | "평가" | "보상" | "직무" | "승진" | "리더십" | "조직문화";
   name: string;
   description: string;
   /** 한 줄 핵심 메시지 — 카드/모달 상단에 강조 표시 */
@@ -30,7 +30,7 @@ export const TEMPLATES: Template[] = [
       "직급단계 통합 시 고려사항 — 인력구조 / 인건비 관리 / 수용성 / 동기부여",
       "통합 시나리오 비교: 2단계 vs 3단계 vs 4단계 (장단점 매트릭스)",
       "역할기반(Job Role) · 역량기반(Competency) · 직무기반(Job Value) · 연공기반 비교표",
-      "동종업계 직급단계 벤치마크 (물류기업 A사 4단계 · 식품기업 A사 3~7단계 탄력 운영)",
+      "동종업계 직급단계 벤치마크 (HMM 4단계 / CJ제일제당 3-7단계 탄력 운영)",
       "통합 후 호칭체계 운영 옵션 (선임·책임·수석 vs 매니저·책임 매니저)",
     ],
     format: "PDF 가이드북 + Excel 시뮬레이터",
@@ -45,7 +45,7 @@ export const TEMPLATES: Template[] = [
     highlight: "G1(실무자) → G2(전문가) → G3(조직 리딩) 역할 정의 + 체류연한 산정",
     contents: [
       "직급별 역할 정의: 업무 실무자 / 업무 전문가 / 조직 리딩(및 후보)",
-      "표준 체류연한 산출 로직 (운송업 A사 케이스: G2 7년, G3 8년)",
+      "표준 체류연한 산출 로직 (HMM 케이스: G2 7년 / G3 8년)",
       "직급별 기대 성과 수준 — Quality·Quantity·Timing 5점 척도",
       "직급별 필수 역량 행동지표 (공통역량 3개 / 직무역량 6개)",
       "외부 채용 시 직급 매칭 기준표",
@@ -84,7 +84,7 @@ export const TEMPLATES: Template[] = [
       "Objectives 작성 가이드 — 분기 단위, 평균 기대수준 70% 정의",
       "Key Results 설계 — 측정 가능한 수치, 최대 5개 이하",
       "BII 목표 예시: Build(신규) / Innovate(재창조) / Improve(발전)",
-      "Bad OKR vs Good OKR — 실제 제조업 A사 · 화장품기업 A사 사례 12선",
+      "Bad OKR vs Good OKR — 실제 동희·에이블씨엔씨 사례 12선",
       "분기별 Check-in 미팅 진행 가이드",
     ],
     format: "Notion 워크스페이스",
@@ -175,7 +175,7 @@ export const TEMPLATES: Template[] = [
       "직급별 초임 설정 (사원/대리/책임/수석) — Pay Policy Line 반영",
       "Range Spread 산출 — Compound Rate = (1+α)^n - 1",
       "예시: 사원 21.6% / 대리 26.5% / 책임 36.9% / 수석 42.6%",
-      "Overlap 검증 — 제조업 A사 사례 10.7% · 17.9% · 52.6%",
+      "Overlap 검증 — 동희 사례 10.7% / 17.9% / 52.6%",
       "Reference Point Progression — 기준값 상승률 18.8% / 23.5% / 10.2%",
       "단계적 Catch-up 운영 방안 (3년 50% → 75% → 100%)",
     ],
@@ -195,7 +195,7 @@ export const TEMPLATES: Template[] = [
       "Opt 2: Pay Zone 방식 — Band 내 구간별 인상률 차등 (예: -2% / +0% / +2%)",
       "직급 내·간 보상 역전 현상 진단 체크리스트",
       "Merit Matrix 설계 가이드 (평가등급 × Compa-Ratio 격자)",
-      "화장품기업 A사 · 식품기업 B사 보상 분포 분석 사례",
+      "에이블씨엔씨 · LEM 보상 분포 분석 사례",
     ],
     format: "PDF + Excel",
     pages: "18 페이지",
@@ -212,7 +212,7 @@ export const TEMPLATES: Template[] = [
       "S 7.7% / A 6.4% / B 4.9% / C 2.3% / D 0.8% (AON Korea 2013-14 기준)",
       "절대평가 도입 시 재원 고정 방식 (Opt 1/2/3 비교)",
       "성과연봉 지급률 차등폭 설계 (10/7.5/5/2.5/0 vs 8/6/5/2/0)",
-      "Variable Pay 강화 트렌드 (식품기업 A사 NEXT HR 사례)",
+      "Variable Pay 강화 트렌드 (CJ제일제당 NEXT HR 사례)",
       "Profit Sharing · Target Incentive · Retention 보너스 설계",
     ],
     format: "PDF + Excel 시뮬레이터",
@@ -227,7 +227,7 @@ export const TEMPLATES: Template[] = [
     highlight: "전사 균등 배분 + Circuit Breaker 설정",
     contents: [
       "Profit Sharing 설계 옵션: 영업이익 % 배분 / EVA 기반 / Target 대비",
-      "제조업 A사 사례: 영업이익 2.1% 전사 균등 배분, 목표 85% Circuit Breaker",
+      "동희 사례: 영업이익 2.1% 전사 균등 배분, 목표 85% Circuit Breaker",
       "직책수당 설계 (실/팀장 월 20만 → 조직 재정비 시 실장급 상향)",
       "재량보상 운영 — 본부장 재량, 5% 대상 약 300만원 권장 수준",
       "차량유지비 · 특지수당 등 기타임금 재정비 가이드",
@@ -280,7 +280,7 @@ export const TEMPLATES: Template[] = [
     area: "직무",
     name: "직무역량 진단 도구",
     description: "직군별 역량 항목 및 Level 진단",
-    highlight: "IT보안기업 A사 케이스 — R&D 직군 12개 역량 × 5 Level",
+    highlight: "안랩 케이스 — R&D 직군 12개 역량 × 5 Level",
     contents: [
       "직무체계도 — 직군/직종/직무 트리 구조",
       "역량 항목 정의 — 직군별 핵심 역량 5~8개",
@@ -341,7 +341,7 @@ export const TEMPLATES: Template[] = [
     contents: [
       "최근 3개년 직급별 승진율 분석 (사원→주임 98% / 주임→대리 93% ...)",
       "직급별 T/O 산출 로직 — 인력구조 항아리형 vs 피라미드형",
-      "승진 인상 상실분 보전 — Discount 계수 적용 (운송업 A사 사례: 단기 약 2.0억)",
+      "승진 인상 상실분 보전 — Discount 계수 적용 (HMM 사례 단기 2.0억)",
       "직급 통합 시 보전금 산정 — 체류연한·승진율 가중",
       "사원/주임 연차가급 지급 vs 일괄 인상 옵션 비교",
       "임원 초임과의 Gap 관리 (G3 상한 = 이사 초임 90%)",
@@ -435,7 +435,7 @@ export const TEMPLATES: Template[] = [
     contents: [
       "9개 영역 × 38개 문항: 전략·조직·일하는 방식·평가·보상·승진·복지·리더십·조직문화",
       "직원 유형 분석 — Driver(지원환경) × Outcome(몰입·만족) 4사분면",
-      "Effective 유형 비중 진단 (예: 제조업 B사 Effective 52% · Ineffective 22% · Frustrated 23%)",
+      "Effective 유형 비중 진단 (예: LEM 52% / Ineffective 22% / Frustrated 23%)",
       "Top 5 / Bottom 5 영역 추출 — 노력·소속감·가치추구 vs 외부경쟁력·복리후생",
       "IPA 분석 — 중요도 × 만족도 매트릭스로 개선 우선순위 도출",
       "상관관계 분석 — 만족도에 가장 영향 큰 요인 식별",
@@ -454,7 +454,7 @@ export const TEMPLATES: Template[] = [
       "협업조직 멘토링 / 경영진 멘토스쿨 / 리버스 멘토링",
       "실패에 대한 인정 (P&G·BMW·Honda·3M 사례)",
       "업무개선 아이디어 (1차 투표 → 2차 심사 → 포상)",
-      "응답하라 2033 (식품기업 B사 케이스) (구성원 아이디어 제작/공유)",
+      "응답하라 2033 LEM (구성원 아이디어 제작/공유)",
       "사내 전문가 그룹 — 연구 주제 자유 활동, 우수사례 포상",
       "조직 시너지 미팅 — 협업 필요 업무·이슈 분기별 운영",
       "리더십 개선사항 도출 — 구성원 의견 → 개선 계획 수립 → 행동 관찰 → 평가",
@@ -481,101 +481,22 @@ export const TEMPLATES: Template[] = [
     pages: "32 페이지",
     isFree: false,
   },
-
-  /* ─────────────── AI ─────────────── */
-  {
-    id: "ai-eval-comment-assistant",
-    area: "AI",
-    name: "AI 평가 코멘트 어시스턴트",
-    description: "평가자가 키워드만 입력하면 평가 코멘트 초안을 자동 생성하는 AI 도구",
-    highlight: "평가 코멘트 작성 시간 70% 단축 · 일관된 톤 자동 유지",
-    contents: [
-      "핵심 성과 키워드 3-5개 입력 → 평가 코멘트 3가지 톤(긍정/균형/개선) 자동 생성",
-      "공통역량 · 직무역량 평가 코멘트 분리 출력",
-      "팀장별 코멘트 편차 진단 — 너무 후하거나 너무 짧은 패턴 자동 탐지",
-      "평가자 가이드 — AI가 놓치기 쉬운 정성 포인트 chk list",
-      "talenx의 elizax AI 엔진과 연동 — 도메인 특화 학습 결과",
-    ],
-    format: "talenx 모듈 + 가이드 PDF",
-    pages: "도입 가이드 12 페이지",
-    isFree: false,
-  },
-  {
-    id: "ai-1on1-coaching-guide",
-    area: "AI",
-    name: "AI 면담 코칭 가이드",
-    description: "팀장이 1:1 미팅 전 AI에게 직원 컨텍스트를 입력하면 맞춤 코칭 질문 자동 추천",
-    highlight: "팀장 리더십 편차 좁히기 · 면담 품질 균질화",
-    contents: [
-      "직원별 OKR · 최근 평가 데이터 기반 맞춤 코칭 질문 5-7개 자동 추천",
-      "유형별 면담 시나리오 — 신임자 / 정체기 / 고성과자 / 저성과자",
-      "면담 후 follow-up 액션 자동 정리 — 다음 분기 1:1 미팅 연계",
-      "팀장 코칭 자가진단 — Derailer 항목 기반 자동 체크리스트",
-      "코칭 대화 예시 라이브러리 (40+ 시나리오)",
-    ],
-    format: "talenx 모듈 + 코칭 카드 PDF",
-    pages: "코칭 카드 40+",
-    isFree: false,
-  },
-  {
-    id: "ai-hr-analytics-dashboard",
-    area: "AI",
-    name: "AI HR Analytics 대시보드",
-    description: "이탈률 · eNPS · Compa-Ratio · 평가 분포 등 핵심 지표를 자동 분석하고 인사이트 추출",
-    highlight: "분기 진단 자동화 · 의사결정 sparring partner",
-    contents: [
-      "분기별 HR Health Check 자동 리포트 (이탈률 · 평가 분포 · 승진율 등 6개 핵심 지표)",
-      "이탈 위험군 자동 탐지 — Compa-Ratio · 평가 트렌드 · 면담 빈도 결합 분석",
-      "AI 인사이트 — '왜 이 segment 이탈률이 높은가?' 자동 추론",
-      "경영진 보고용 대시보드 자동 생성 (월간/분기/연간)",
-      "이상치 알림 — 특정 부서 이탈률 급증 시 즉시 통보",
-    ],
-    format: "talenx 대시보드 + 샘플 리포트 PDF",
-    pages: "샘플 리포트 24 페이지",
-    isFree: false,
-  },
-  {
-    id: "ai-onboarding-bot",
-    area: "AI",
-    name: "AI 온보딩 어시스턴트",
-    description: "신입사원이 회사 정보 · 제도 · 시스템 사용법을 챗봇으로 학습하는 AI 도우미",
-    highlight: "신입 적응 기간 단축 · HR 반복 문의 80% 감소",
-    contents: [
-      "회사 위키 · 인사규정 · 복리후생 챗봇 형태 학습",
-      "30-60-90일 온보딩 체크리스트 자동 푸시 · 진행 상황 추적",
-      "신입 적응 진단 — 입사 30일/90일 자동 면담 알림 + 설문",
-      "멘토 · 버디 매칭 자동화 — 부서 · 연차 · 관심사 기반",
-      "FAQ 자동 답변 — '연차 며칠 남았어?' '회식비 정산 어디서?' 같은 반복 문의 처리",
-    ],
-    format: "talenx 챗봇 + 도입 가이드",
-    pages: "도입 가이드 16 페이지",
-    isFree: false,
-  },
 ];
 
-/* PAIN_TO_AREAS — 1:N 매핑 (페인당 1~2개, 평균 1.3개)
-   여러 모듈이 영향 주는 건 맞지만, 정말 본질적 driver만 남겨야 강조의 의미가 살아남.
-   "관련 있음" 정도로 끼우지 않고 "이게 핵심이다"인 것만. */
-export const PAIN_TO_AREAS: Record<string, Template["area"][]> = {
-  job_grade_complex: ["직급"],
-  decision_slow:     ["직급"],              // 직급 단축이 압도. R&R은 부차.
-  eval_unfair:       ["평가"],
-  goal_miss:         ["평가", "리더십"],    // OKR + 1:1 코칭이 진짜 driver
-  poor_alignment:    ["조직문화"],          // 정렬 = 문화 영역
-  low_motivation:    ["조직문화", "보상"],  // 인정(문화) + 차등(보상)
-  culture_drift:     ["조직문화"],          // 몰입은 문화가 거의 전부
-  no_payband:        ["보상"],
-  key_talent_risk:   ["보상", "평가"],      // 시장 보상 + 변별 신호
-  unclear_job:       ["직무"],              // 직무가 압도
-  hire_difficulty:   ["직무"],              // JD 명확화가 핵심. 보상은 부차.
-  promo_unclear:     ["승진", "평가"],      // 자격요건 + 평가 hurdle
-  weak_leadership:   ["리더십"],
-  low_performers:    ["리더십", "평가"],    // PIP = 리더 + 변별
-  ai_adoption:       ["AI"],                // AI 단독
+/* PAIN_TO_AREA — Step 1에서 선택한 페인포인트 id를 area에 매핑 */
+export const PAIN_TO_AREA: Record<string, Template["area"]> = {
+  job_grade_complex: "직급",
+  decision_slow:     "직급",
+  eval_unfair:       "평가",
+  goal_miss:         "평가",
+  poor_alignment:    "조직문화",
+  low_motivation:    "조직문화",
+  culture_drift:     "조직문화",
+  no_payband:        "보상",
+  key_talent_risk:   "보상",
+  unclear_job:       "직무",
+  hire_difficulty:   "직무",
+  promo_unclear:     "승진",
+  weak_leadership:   "리더십",
+  low_performers:    "리더십",
 };
-
-/* PAIN_TO_AREA — 1:1 backward-compat (primary area).
-   Step 3의 초기 active 탭 선택 등에서 사용. */
-export const PAIN_TO_AREA: Record<string, Template["area"]> = Object.fromEntries(
-  Object.entries(PAIN_TO_AREAS).map(([k, v]) => [k, v[0]])
-);
