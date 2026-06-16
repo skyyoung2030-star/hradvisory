@@ -553,25 +553,25 @@ export const TEMPLATES: Template[] = [
   },
 ];
 
-/* PAIN_TO_AREAS — 1:N 매핑 (페인당 1~3개)
-   "여러 모듈이 복합적으로 작용한다"는 현실을 반영하되, 가장 임팩트 큰 driver
-   만 남겨 강조의 의미를 보존. 배열 첫 번째가 primary. */
+/* PAIN_TO_AREAS — 1:N 매핑 (페인당 1~2개, 평균 1.3개)
+   여러 모듈이 영향 주는 건 맞지만, 정말 본질적 driver만 남겨야 강조의 의미가 살아남.
+   "관련 있음" 정도로 끼우지 않고 "이게 핵심이다"인 것만. */
 export const PAIN_TO_AREAS: Record<string, Template["area"][]> = {
-  job_grade_complex: ["직급"],                      // 직급 통합이 곧 해법
-  decision_slow:     ["직급", "직무"],              // 단계 축소 + R&R 명확화
-  eval_unfair:       ["평가"],                      // 변별력 자체가 평가 이슈
-  goal_miss:         ["평가", "리더십"],            // OKR + 코칭이 달성률 driver
-  poor_alignment:    ["조직문화", "리더십"],        // 정렬 워크숍 + 팀장 정렬
-  low_motivation:    ["조직문화", "보상", "리더십"], // 인정 + 차등보상 + 코칭
-  culture_drift:     ["조직문화", "리더십"],        // 몰입도는 문화·리더가 압도적
+  job_grade_complex: ["직급"],
+  decision_slow:     ["직급"],              // 직급 단축이 압도. R&R은 부차.
+  eval_unfair:       ["평가"],
+  goal_miss:         ["평가", "리더십"],    // OKR + 1:1 코칭이 진짜 driver
+  poor_alignment:    ["조직문화"],          // 정렬 = 문화 영역
+  low_motivation:    ["조직문화", "보상"],  // 인정(문화) + 차등(보상)
+  culture_drift:     ["조직문화"],          // 몰입은 문화가 거의 전부
   no_payband:        ["보상"],
-  key_talent_risk:   ["보상", "평가"],              // 시장 보상 + 변별 신호
-  unclear_job:       ["직무", "평가"],              // R&R 없으면 평가 불가
-  hire_difficulty:   ["직무", "보상"],              // JD 명확 + 시장 보상
-  promo_unclear:     ["승진", "평가"],              // 자격요건 + 평가 hurdle
-  weak_leadership:   ["리더십", "조직문화"],        // 코칭 + 다면 진단
-  low_performers:    ["리더십", "평가"],            // PIP = 평가 변별 + 리더 관리
-  ai_adoption:       ["AI", "직무"],                // AI + 자동화 대상 R&R 정의
+  key_talent_risk:   ["보상", "평가"],      // 시장 보상 + 변별 신호
+  unclear_job:       ["직무"],              // 직무가 압도
+  hire_difficulty:   ["직무"],              // JD 명확화가 핵심. 보상은 부차.
+  promo_unclear:     ["승진", "평가"],      // 자격요건 + 평가 hurdle
+  weak_leadership:   ["리더십"],
+  low_performers:    ["리더십", "평가"],    // PIP = 리더 + 변별
+  ai_adoption:       ["AI"],                // AI 단독
 };
 
 /* PAIN_TO_AREA — 1:1 backward-compat (primary area).
