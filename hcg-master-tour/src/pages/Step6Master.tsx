@@ -77,19 +77,15 @@ export default function Step6Master() {
           transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
           className="w-16 h-16 rounded-full bg-success-500 text-white flex items-center justify-center mb-6 shadow-[0_0_32px_-4px_rgba(16,185,129,0.8)]"
         ><Check size={28} strokeWidth={3} /></motion.div>
-        <h1
-          className="text-[28px] font-bold text-ink-900"
-          style={{ display: "block", margin: 0, marginBottom: 16, padding: 0, position: "static", lineHeight: 1.3, float: "none", clear: "both" }}
-        >
-          상담 신청이 접수되었습니다
-        </h1>
-        <p
-          className="text-[14px] text-ink-600 max-w-[500px]"
-          style={{ display: "block", margin: 0, padding: 0, position: "static", lineHeight: 1.6, float: "none", clear: "both" }}
-        >
+        <h1 className="h-1">상담 신청이 접수되었습니다</h1>
+        <p className="body-lg text-ink-600 mt-4 max-w-[500px]">
           영업일 기준 1일 내에 담당 컨설턴트가 직접 연락드립니다.<br />
           제출하신 진단 결과를 사전 검토하고 찾아뵙겠습니다.
         </p>
+        <a href="https://e-hcg.com" className="btn-secondary mt-10" target="_blank" rel="noopener">
+          HCG 더 알아보기
+          <ArrowRight size={16} className="ml-2" />
+        </a>
       </section>
     );
   }
@@ -160,18 +156,8 @@ export default function Step6Master() {
                 <Sparkles size={11} />
                 상담 신청
               </div>
-              <h2
-                className="text-[22px] font-bold text-ink-900"
-                style={{ display: "block", margin: 0, marginBottom: 6, padding: 0, position: "static", lineHeight: 1.3, float: "none", clear: "both" }}
-              >
-                담당 컨설턴트가 직접 연락드립니다
-              </h2>
-              <p
-                className="text-[12px] text-ink-500"
-                style={{ display: "block", margin: 0, padding: 0, position: "static", lineHeight: 1.4, float: "none", clear: "both" }}
-              >
-                영업일 기준 1일 내 회신
-              </p>
+              <h2 className="h-3">담당 컨설턴트가 직접 연락드립니다</h2>
+              <p className="body-sm text-ink-500 mt-1">영업일 기준 1일 내 회신</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3 mt-6">
@@ -205,7 +191,7 @@ export default function Step6Master() {
         </AnimatePresence>
       </StepShell>
 
-      <TourNav current={step} nextLabel="시스템 소개도 보기" nextSubtle={true} />
+      <TourNav current={step} disableNext={true} nextLabel="투어 완료" />
     </>
   );
 }

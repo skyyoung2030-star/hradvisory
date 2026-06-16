@@ -34,24 +34,17 @@ export type LeadSubmission = {
   diagnose?: DiagnosePartial | null;
 };
 
-export async function saveDiagnosePartial(_data: DiagnosePartial): Promise<void> {
-  // 자동 저장 비활성화 — 실제 contact_requested lead만 Supabase에 저장합니다.
-  // 진단 데이터는 sessionStorage에 살아있어서 Step 2 chip 연동 + Step 6 제출 시
-  // metadata로 함께 전달됩니다.
-  // funnel 분석을 다시 켜고 싶다면 아래 주석을 풀고 인자명 _data → data 로 바꾸세요.
-  return;
-  /*
+export async function saveDiagnosePartial(data: DiagnosePartial): Promise<void> {
   const supabase = getSupabase();
   if (!supabase) return;
   try {
     await supabase.from("leads").insert({
       status: "diagnosing",
-      metadata: _data,
+      metadata: data,
     });
   } catch (e) {
     console.warn("[saveDiagnosePartial] failed:", e);
   }
-  */
 }
 
 export async function submitLead(data: LeadSubmission): Promise<{ ok: boolean }> {
