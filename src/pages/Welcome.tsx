@@ -39,7 +39,7 @@ export default function Welcome() {
       <header className="relative z-10 h-14 flex items-center container-x">
         <Link to="/" className="flex items-center gap-2 font-semibold text-ink-900 tracking-tight">
           <LogoMark />
-          <span>HR Master</span>
+          <span>HCG Master</span>
         </Link>
         <span className="ml-auto inline-flex items-center gap-2 text-[11px] font-mono text-ink-500 tracking-wider">
           <span className="hidden md:inline">INTERACTIVE TOUR</span>
@@ -56,7 +56,7 @@ export default function Welcome() {
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur text-[11px] font-mono font-semibold text-ink-700 tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse-soft shadow-[0_0_8px_rgba(14,165,233,0.8)]" />
-            국내 굴지의 기업과 중소형 기업이 함께 선택한 컨설팅
+            국내 굴지의 기업과 중소형 기업이 함께 선택한 HCG
           </div>
 
           <h1 className="h-hero mt-5">
@@ -76,7 +76,7 @@ export default function Welcome() {
           <p className="body text-ink-600 mt-5 max-w-[560px] mx-auto">
             HR 전문가 채용이 부담스러우시죠?<br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            베테랑 HR 컨설턴트가 매월 함께하며 조직을 한 단계 성장시켜드립니다.
+            HCG의 베테랑 HR 컨설턴트가 매월 함께하며 조직을 한 단계 성장시켜드립니다.
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
             5분 인터랙티브 투어로 어떻게 함께하는지 확인해보세요.
@@ -200,15 +200,14 @@ function TurnkeyPath({ onCtaClick }: { onCtaClick: () => void }) {
       <div className="p-7 sm:p-8 pt-0">
         <button
           type="button"
-          onClick={onCtaClick}
-          className="group inline-flex items-center gap-2 px-4 h-11 rounded-lg font-semibold text-[14px]
-                     border border-white/15 bg-white/[0.06] text-ink-800
-                     hover:bg-white/[0.10] hover:border-white/30 hover:text-ink-900
-                     active:translate-y-px transition-all
-                     shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+          disabled
+          aria-disabled="true"
+          className="inline-flex items-center gap-2 px-4 h-11 rounded-lg font-semibold text-[14px]
+                     border border-white/10 bg-white/[0.03] text-ink-500
+                     cursor-not-allowed opacity-60"
         >
-          <span>컨설팅 본부에서 상담</span>
-          <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <span>별도 상담</span>
+          <ArrowUpRight size={14} />
         </button>
       </div>
     </div>
