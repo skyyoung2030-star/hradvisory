@@ -83,7 +83,7 @@ export default function TourNav({
               type="button"
               onClick={() => void goNext()}
               disabled={disableNext}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium text-ink-300 border border-white/15 rounded-lg hover:text-ink-100 hover:border-white/30 hover:bg-white/[0.04] transition-all group disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium text-ink-200 bg-white/[0.04] border border-white/25 rounded-lg hover:text-ink-50 hover:bg-white/[0.08] hover:border-white/40 transition-all group disabled:opacity-40"
               aria-label={`추가: ${next.label}`}
             >
               <span>{nextLabel ?? next.label}</span>
