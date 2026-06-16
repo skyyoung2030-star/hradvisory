@@ -16,6 +16,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "직급", label: "직급" }, { key: "평가", label: "평가" }, { key: "보상", label: "보상" },
   { key: "직무", label: "직무" }, { key: "승진", label: "승진" }, { key: "리더십", label: "리더십" },
   { key: "조직문화", label: "조직문화" },
+  { key: "AI", label: "AI" },
 ];
 
 export default function Step3Deliverables() {
