@@ -23,24 +23,24 @@ const TALENX_MODULES: { icon: LucideIcon; name: string; desc: string }[] = [
 const TALENX_HIGHLIGHTS: { icon: LucideIcon; title: string; desc: string }[] = [
   { icon: Bot,    title: "HR 도메인 특화 AI",  desc: "범용 AI가 아닌, HR 영역 데이터로 학습된 AI가 의사결정을 보조" },
   { icon: Cloud,  title: "Cloud SaaS",        desc: "별도 구축 없이 빠른 도입. 지속적 업데이트와 신기능 제공" },
-  { icon: GitBranch, title: "자문 산출물 자동 연동", desc: "Master 자문에서 설계한 제도가 talenx 셋업으로 그대로 반영" },
+  { icon: GitBranch, title: "자문 산출물 자동 연동", desc: "Master 자문에서 설계한 제도가 AI HR SaaS 셋업으로 그대로 반영" },
   { icon: Shield, title: "보안 · 정보보호",   desc: "ISO/IEC 27001 · ISMS 인증. 기업 데이터 안전하게 보관" },
 ];
 
 type SynergyItem = { from: string; to: string; module: string };
 const SYNERGY: SynergyItem[] = [
-  { module: "직급",   from: "자문에서 설계한 직급체계 (G1~G4 통합)", to: "talenx에 직급 마스터로 자동 셋업" },
-  { module: "평가",   from: "자문에서 만든 OKR · Calibration 프로세스", to: "talenx에서 분기 사이클로 자동 실행" },
-  { module: "보상",   from: "자문에서 정한 Pay Band · 차등 구조",       to: "talenx에서 인상률 시뮬레이션 + 산정" },
-  { module: "리더십", from: "자문에서 진단한 리더십 Snapshot",          to: "talenx에서 코칭 사이클 + Successor Pool 관리" },
+  { module: "직급",   from: "자문에서 설계한 직급체계 (G1~G4 통합)", to: "AI HR SaaS에 직급 마스터로 자동 셋업" },
+  { module: "평가",   from: "자문에서 만든 OKR · Calibration 프로세스", to: "AI HR SaaS에서 분기 사이클로 자동 실행" },
+  { module: "보상",   from: "자문에서 정한 Pay Band · 차등 구조",       to: "AI HR SaaS에서 인상률 시뮬레이션 + 산정" },
+  { module: "리더십", from: "자문에서 진단한 리더십 Snapshot",          to: "AI HR SaaS에서 코칭 사이클 + Successor Pool 관리" },
 ];
 
 type Stat = { value: string; label: string };
 const STATS: Stat[] = [
   { value: "80%",    label: "글로벌 헬스케어 A사 — 시스템 일원화 비용 절감" },
-  { value: "57%",    label: "바이오장비 B사 — 평가 운영 기간 단축" },
-  { value: "95%",    label: "IT C사 — 성과 면담 이행률 달성" },
-  { value: "1,100명", label: "제조업 D사 — 성과관리 혁신" },
+  { value: "57%",    label: "에스디바이오센서 — 평가 운영 기간 단축" },
+  { value: "95%",    label: "대상 — 성과 면담 이행률 달성" },
+  { value: "1,100명", label: "SK바이오사이언스 — 성과관리 혁신" },
 ];
 
 /* ═════════════════ Page ═════════════════ */
@@ -55,8 +55,8 @@ export default function Step7System() {
           className="body text-ink-600 max-w-[760px]"
           style={{ display: "block", margin: 0, marginBottom: 24, padding: 0, position: "static" }}
         >
-          제도를 같이 짠 사람이 시스템도 만들어요. HCG의{" "}
-          <strong className="text-accent-400">talenx</strong>는 국내 굴지의 대기업부터 중소형 기업까지 수많은 기업이 도입해 사용하고 있는 올인원 AI HR SaaS입니다. 자문에서 설계한 제도를 같은 회사의 시스템으로 운영하면 호환성이 다릅니다.
+          제도를 같이 짠 사람이 시스템도 만들어요.{" "}
+          <strong className="text-accent-400">올인원 AI HR SaaS</strong>는 성과·평가·근태·급여·인사를 하나의 플랫폼에서 운영하며, 자문에서 설계한 제도를 시스템에 그대로 반영해 호환성을 극대화합니다.
         </p>
 
         {/* End-to-End flow */}
@@ -65,7 +65,7 @@ export default function Step7System() {
         {/* Talenx hero */}
         <SectionHeader
           eyebrow="SOLUTION"
-          title="talenx — 올인원 AI HR SaaS"
+          title="올인원 AI HR SaaS"
           subtitle="성과 · 평가 · 근태 · 급여 · 인사를 하나의 플랫폼에서 운영"
         />
         <TalenxHero />
@@ -73,7 +73,7 @@ export default function Step7System() {
         {/* Synergy */}
         <SectionHeader
           eyebrow="SYNERGY"
-          title="자문 + talenx, 같은 회사라서 가능한 호환성"
+          title="자문 + AI HR SaaS, 자연스럽게 이어지는 호환성"
           subtitle="다른 회사 컨설팅 + 다른 회사 시스템 = 통역 비용 · 도입 지연 · 산출물 재작업"
         />
         <SynergyPanel />
@@ -82,7 +82,7 @@ export default function Step7System() {
         <SectionHeader
           eyebrow="PROVEN"
           title="검증된 성과"
-          subtitle="HCG 솔루션으로 만든 실제 변화"
+          subtitle="AI HR SaaS 도입으로 만든 실제 변화"
         />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
           {STATS.map((s, i) => <StatCard key={i} stat={s} />)}
@@ -131,7 +131,7 @@ function SectionHeader({ eyebrow, title, subtitle }: { eyebrow: string; title: s
 function EndToEndFlow() {
   const phases = [
     { icon: Sparkles, label: "컨설팅", sub: "제도 설계", color: "bg-white/[0.05] border-white/[0.10] text-ink-700" },
-    { icon: Cloud,    label: "talenx", sub: "AI HR SaaS", color: "bg-accent-500/15 border-accent-500/40 text-accent-300", featured: true },
+    { icon: Cloud,    label: "AI HR SaaS", sub: "통합 플랫폼", color: "bg-accent-500/15 border-accent-500/40 text-accent-300", featured: true },
     { icon: Shield,   label: "운영", sub: "유지보수 · Payroll", color: "bg-white/[0.05] border-white/[0.10] text-ink-700" },
   ];
   return (
@@ -187,16 +187,16 @@ function TalenxHero() {
           <div className="flex-1 min-w-0" style={{ display: "block", lineHeight: 1 }}>
             <div className="flex items-baseline gap-2 flex-wrap">
               <div
-                className="text-[26px] font-bold text-ink-900"
+                className="text-[24px] font-bold text-ink-900"
                 style={{ display: "inline-block", margin: 0, padding: 0, lineHeight: 1 }}
               >
-                talenx
+                AI HR SaaS
               </div>
               <div
                 className="text-[12px] font-mono text-ink-500"
                 style={{ display: "inline-block", margin: 0, padding: 0, lineHeight: 1 }}
               >
-                탈렌엑스
+                All-in-One Platform
               </div>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-500/20 border border-accent-500/30 text-accent-300 text-[10px] font-bold uppercase tracking-wider">
                 <Sparkles size={9} /> 올인원 AI HR SaaS
@@ -253,7 +253,7 @@ function TalenxHero() {
           className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-ink-500 mb-3 px-1"
           style={{ display: "block", margin: 0, marginBottom: 12, padding: "0 4px", position: "static" }}
         >
-          talenx의 차별점
+          AI HR SaaS의 차별점
         </div>
         <div className="grid sm:grid-cols-2 gap-2.5 mb-5">
           {TALENX_HIGHLIGHTS.map((h, i) => (
@@ -277,16 +277,8 @@ function TalenxHero() {
           ))}
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 pt-2">
-          <a
-            href="https://e-hcg.com/solutions/talenx" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent-500 hover:bg-accent-400 text-white text-[12px] font-semibold transition-all shadow-[0_4px_12px_-2px_rgba(14,165,233,0.6),inset_0_1px_0_rgba(255,255,255,0.2)]"
-          >
-            talenx 자세히 알아보기 <ExternalLink size={11} />
-          </a>
-          <span className="text-[11px] font-mono text-ink-500 ml-1">
-            e-hcg.com/solutions/talenx
-          </span>
+        <div className="pt-2 text-[11px] font-mono text-ink-500">
+          상담 신청 후 담당 컨설턴트가 도입 절차를 자세히 안내해드립니다.
         </div>
       </div>
     </div>
@@ -304,7 +296,7 @@ function SynergyPanel() {
           className="text-[11px] font-mono font-bold uppercase tracking-[0.22em] text-accent-400"
           style={{ display: "inline-block", margin: 0, padding: 0, position: "static" }}
         >
-          자문 산출물 → talenx 자동 연동
+          자문 산출물 → AI HR SaaS 자동 연동
         </span>
       </div>
 
@@ -321,7 +313,7 @@ function SynergyPanel() {
             className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-accent-400 px-1"
             style={{ display: "block", margin: 0, padding: "0 4px", position: "static" }}
           >
-            talenx에서 운영
+            AI HR SaaS에서 운영
           </div>
         </div>
 
@@ -336,7 +328,7 @@ function SynergyPanel() {
             style={{ display: "block", margin: 0, padding: 0, position: "static" }}
           >
             <strong className="text-accent-300">디자인한 사람이 시스템도 만들어요.</strong>{" "}
-            다른 회사 컨설팅 + 다른 회사 시스템 조합은 산출물 재작업·통역 비용·도입 지연이 늘 발생합니다. HCG는 자문 워크숍 결과가 talenx 셋업으로, 다시 운영·유지보수로 매끄럽게 이어집니다.
+            다른 회사 컨설팅 + 다른 회사 시스템 조합은 산출물 재작업·통역 비용·도입 지연이 늘 발생합니다. 같은 팀이 자문부터 시스템 셋업, 운영·유지보수까지 매끄럽게 연결합니다.
           </p>
         </div>
       </div>
