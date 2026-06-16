@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { getStepBySlug } from "@/lib/tour-config";
 import StepShell from "@/components/StepShell";
 import TourNav from "@/components/TourNav";
-import { TEMPLATES, PAIN_TO_AREA, type Template } from "@/lib/templates";
+import { TEMPLATES, PAIN_TO_AREA, PAIN_TO_AREAS, type Template } from "@/lib/templates";
 import { TemplatePreview } from "@/components/TemplatePreview";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +16,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "직급", label: "직급" }, { key: "평가", label: "평가" }, { key: "보상", label: "보상" },
   { key: "직무", label: "직무" }, { key: "승진", label: "승진" }, { key: "리더십", label: "리더십" },
   { key: "조직문화", label: "조직문화" },
+  { key: "AI", label: "AI" },
 ];
 
 export default function Step3Deliverables() {
@@ -30,14 +31,18 @@ export default function Step3Deliverables() {
       if (raw) {
         const s = JSON.parse(raw) as DiagnoseState;
         setUserPains(s.pains || []);
-        const firstArea = s.pains?.[0] && PAIN_TO_AREA[s.pains[0]];
-        if (firstArea) setActive(firstArea);
+        // 페인이 1개일 때만 그 area로 진입 — 여러 개 선택 시엔 ALL 유지
+        // (특정 area를 무작위로 우선시키지 않음)
+        if (s.pains?.length === 1) {
+          const firstArea = PAIN_TO_AREA[s.pains[0]];
+          if (firstArea) setActive(firstArea);
+        }
       }
     } catch { /* */ }
   }, []);
 
   const userAreas = useMemo(
-    () => new Set(userPains.map((p) => PAIN_TO_AREA[p]).filter(Boolean) as Template["area"][]),
+    () => new Set(userPains.flatMap((p) => PAIN_TO_AREAS[p] ?? []) as Template["area"][]),
     [userPains],
   );
   const filtered = useMemo(
@@ -57,9 +62,13 @@ export default function Step3Deliverables() {
           className="body text-ink-600 max-w-[680px]"
           style={{ display: "block", margin: 0, marginBottom: 24, padding: 0, position: "static" }}
         >
-          Master 자문에서는 제도를 같이 짜는 사이사이, 즉시 쓸 수 있는 매뉴얼과 템플릿을 전달드립니다. 실제 컨설팅 프로젝트(HMM·동희·한림제약·LEM 등)에서 만들어진 자료를 라이브러리화한 것입니다.
+          Master 자문에서는 제도를 같이 짜는 사이사이, 즉시 쓸 수 있는 매뉴얼과 템플릿을 전달드립니다. 국내 굴지의 대기업·중견기업 컨설팅 프로젝트에서 만들어진 자료를 라이브러리화한 것입니다.
           {userPains.length > 0 && (
-            <> 회사 페인포인트 기반으로 <strong className="text-accent-400">{Array.from(userAreas).join(" · ")}</strong> 영역이 강조됩니다.</>
+            <> 회사 페인포인트 기반으로 <strong className="text-accent-400">{
+              Array.from(userAreas)
+                .sort((a, b) => (a === "조직문화" ? 1 : 0) - (b === "조직문화" ? 1 : 0))
+                .join(" · ")
+            }</strong> 영역이 강조됩니다.</>
           )}
         </p>
 
