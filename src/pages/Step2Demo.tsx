@@ -31,7 +31,7 @@ export default function Step2Demo() {
     <>
       <StepShell step={step}>
         <p
-          className="body text-ink-600 max-w-[680px]"
+          className="body text-ink-600"
           style={{ display: "block", margin: 0, marginBottom: 24, padding: 0, position: "static" }}
         >
           Master 자문은 두 가지 채널이 양쪽으로 함께 굴러갑니다. 정기적으로 깊이 다루는 현장 방문과, 사이사이 즉시 응답하는 핫라인.
