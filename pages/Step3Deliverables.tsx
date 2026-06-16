@@ -259,4 +259,4 @@ function TemplateModal({ template, onClose }: { template: Template; onClose: () 
       </motion.div>
     </div>
   );
-}
+} 
