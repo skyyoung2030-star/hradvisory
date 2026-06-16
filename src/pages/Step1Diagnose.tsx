@@ -17,20 +17,23 @@ const HR_CAPACITIES = [
   { value: "fulltime-1-2", label: "전담 1~2명" }, { value: "team", label: "전담 팀" },
 ];
 const PAIN_POINTS = [
+  // 사용자 요청 — 상단 우선순위
+  { id: "culture_drift",     area: "조직문화", label: "직원 몰입도·만족도가 낮다" },
+  { id: "low_motivation",    area: "조직문화", label: "직원 동기부여가 약하다 / 의욕이 낮다" },
+  { id: "ai_adoption",       area: "AI",       label: "AI 도입으로 생산성 향상하고 싶은데 어디서부터 시작할지 모르겠다" },
+  { id: "key_talent_risk",   area: "보상",     label: "S급 핵심인재 이탈 우려 / 경쟁사 적극 영입" },
+  { id: "weak_leadership",   area: "리더십",   label: "팀장 리더십이 약하거나 편차가 크다" },
+  { id: "goal_miss",         area: "평가",     label: "팀·개인의 목표 달성률이 낮아 조직성과가 향상되지 않는다" },
+  { id: "low_performers",    area: "리더십",   label: "저성과자 관리가 안 된다 / 무임승차" },
+  // 나머지
+  { id: "eval_unfair",       area: "평가",     label: "평가가 공정하지 않다 / 변별력이 없다" },
+  { id: "no_payband",        area: "보상",     label: "Pay Band 없이 보상이 임의적이다" },
+  { id: "poor_alignment",    area: "조직문화", label: "부서 간 silo / 목표 정렬이 안 된다" },
   { id: "job_grade_complex", area: "직급",     label: "직급체계가 복잡하거나 연공서열에 묶여있다" },
   { id: "decision_slow",     area: "직급",     label: "의사결정이 느리고 조직이 비대하다" },
-  { id: "eval_unfair",       area: "평가",     label: "평가가 공정하지 않다 / 변별력이 없다" },
-  { id: "goal_miss",         area: "평가",     label: "팀·개인의 목표 달성률이 낮아 조직성과가 향상되지 않는다" },
-  { id: "poor_alignment",    area: "조직문화", label: "부서 간 silo / 목표 정렬이 안 된다" },
-  { id: "low_motivation",    area: "조직문화", label: "직원 동기부여가 약하다 / 의욕이 낮다" },
-  { id: "culture_drift",     area: "조직문화", label: "직원 몰입도·만족도가 낮다" },
-  { id: "no_payband",        area: "보상",     label: "Pay Band 없이 보상이 임의적이다" },
-  { id: "key_talent_risk",   area: "보상",     label: "S급 핵심인재 이탈 우려 / 경쟁사 적극 영입" },
   { id: "unclear_job",       area: "직무",     label: "직무 분장이 모호하다" },
   { id: "hire_difficulty",   area: "직무",     label: "채용이 어렵거나 신규 입사자 적응이 느리다" },
   { id: "promo_unclear",     area: "승진",     label: "승진 기준이 불명확하다" },
-  { id: "weak_leadership",   area: "리더십",   label: "팀장 리더십이 약하거나 편차가 크다" },
-  { id: "low_performers",    area: "리더십",   label: "저성과자 관리가 안 된다 / 무임승차" },
 ];
 const STORAGE_KEY = "hcg_tour_diagnose";
 
