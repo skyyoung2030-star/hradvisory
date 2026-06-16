@@ -376,4 +376,4 @@ function TypingBubble() {
 
 function Dot({ delay }: { delay: number }) {
   return <span className="w-1.5 h-1.5 rounded-full bg-ink-500 animate-pulse-soft" style={{ animationDelay: `${delay}ms` }} />;
-}
+} 
