@@ -63,7 +63,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     index: 7, number: 7, slug: "7-system", path: "/tour/7-system",
     label: "시스템",
-    title: "자문이 끝이 아닙니다",
+    title: "(Extra)시스템 도입도 Seamless하게 가능합니다",
     subtitle: "e-HR 솔루션으로 자문 결과를 지속적으로 운영",
     showInProgress: true,
   },
