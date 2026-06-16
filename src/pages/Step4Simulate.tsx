@@ -390,7 +390,7 @@ export default function Step4Simulate() {
         </div>
       </StepShell>
 
-      <TourNav current={step} nextLabel="협업 방식 보기" />
+      <TourNav current={step} nextLabel="지원 방식 보기" />
 
       {/* Custom scrollbar styling — inline so no global CSS edit needed */}
       <style>{`
