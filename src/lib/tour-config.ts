@@ -49,7 +49,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     index: 5, number: 5, slug: "5-modes", path: "/tour/5-modes",
     label: "지원 방식",
-    title: "이런 4가지 모드로 옆에 있어요",
+    title: "지원은 6가지 모드로 이루어져요",
     subtitle: "Master 자문은 정해진 일정이 아니라, 필요할 때 호출하는 협업입니다",
     showInProgress: true,
   },
