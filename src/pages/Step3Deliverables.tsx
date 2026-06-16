@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { getStepBySlug } from "@/lib/tour-config";
 import StepShell from "@/components/StepShell";
 import TourNav from "@/components/TourNav";
-import { TEMPLATES, PAIN_TO_AREA, type Template } from "@/lib/templates";
+import { TEMPLATES, PAIN_TO_AREA, PAIN_TO_AREAS, type Template } from "@/lib/templates";
 import { TemplatePreview } from "@/components/TemplatePreview";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +38,7 @@ export default function Step3Deliverables() {
   }, []);
 
   const userAreas = useMemo(
-    () => new Set(userPains.map((p) => PAIN_TO_AREA[p]).filter(Boolean) as Template["area"][]),
+    () => new Set(userPains.flatMap((p) => PAIN_TO_AREAS[p] ?? []) as Template["area"][]),
     [userPains],
   );
   const filtered = useMemo(
