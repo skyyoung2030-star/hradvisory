@@ -553,21 +553,29 @@ export const TEMPLATES: Template[] = [
   },
 ];
 
-/* PAIN_TO_AREA — Step 1에서 선택한 페인포인트 id를 area에 매핑 */
-export const PAIN_TO_AREA: Record<string, Template["area"]> = {
-  job_grade_complex: "직급",
-  decision_slow:     "직급",
-  eval_unfair:       "평가",
-  goal_miss:         "평가",
-  poor_alignment:    "조직문화",
-  low_motivation:    "조직문화",
-  culture_drift:     "조직문화",
-  no_payband:        "보상",
-  key_talent_risk:   "보상",
-  unclear_job:       "직무",
-  hire_difficulty:   "직무",
-  promo_unclear:     "승진",
-  weak_leadership:   "리더십",
-  low_performers:    "리더십",
-  ai_adoption:       "AI",
+/* PAIN_TO_AREAS — 1:N 매핑
+   한 페인포인트가 여러 모듈에 복합적으로 작용한다는 현실을 반영.
+   배열 첫 번째가 primary, 나머지는 secondary (가중 영향) */
+export const PAIN_TO_AREAS: Record<string, Template["area"][]> = {
+  job_grade_complex: ["직급"],
+  decision_slow:     ["직급", "직무"],                  // 직급 단축 + R&R 명확화
+  eval_unfair:       ["평가"],
+  goal_miss:         ["평가", "조직문화", "리더십"],     // OKR + 정렬 + 코칭
+  poor_alignment:    ["조직문화", "평가", "리더십"],     // 정렬 워크숍 + OKR + 코칭
+  low_motivation:    ["조직문화", "평가", "보상", "리더십"], // 인정·차등·코칭 모두
+  culture_drift:     ["조직문화", "리더십", "보상"],     // 몰입 = 문화 + 리더 + 보상
+  no_payband:        ["보상"],
+  key_talent_risk:   ["보상", "평가", "리더십"],         // retention = 보상 + 변별 + 리더
+  unclear_job:       ["직무", "직급"],
+  hire_difficulty:   ["직무", "리더십"],                 // 직무 명확화 + 팀장 면접
+  promo_unclear:     ["승진", "평가"],                   // 자격요건 + 평가 hurdle
+  weak_leadership:   ["리더십", "평가", "조직문화"],     // 코칭 + 다면 + 문화
+  low_performers:    ["리더십", "평가"],                 // PIP = 평가 + 리더
+  ai_adoption:       ["AI", "직무", "평가"],             // AI 도입 = 직무 명확화 + 평가 자동화
 };
+
+/* PAIN_TO_AREA — 1:1 backward-compat (primary area).
+   Step 3의 초기 active 탭 선택 등에서 사용. */
+export const PAIN_TO_AREA: Record<string, Template["area"]> = Object.fromEntries(
+  Object.entries(PAIN_TO_AREAS).map(([k, v]) => [k, v[0]])
+);
