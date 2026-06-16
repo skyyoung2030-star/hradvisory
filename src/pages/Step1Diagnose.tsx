@@ -18,13 +18,13 @@ const HR_CAPACITIES = [
 ];
 const PAIN_POINTS = [
   // 사용자 요청 — 상단 우선순위
-  { id: "culture_drift",     area: "조직문화", label: "직원 몰입도·만족도가 낮다" },
   { id: "low_motivation",    area: "조직문화", label: "직원 동기부여가 약하다 / 의욕이 낮다" },
   { id: "ai_adoption",       area: "AI",       label: "AI 도입으로 생산성 향상하고 싶은데 어디서부터 시작할지 모르겠다" },
   { id: "key_talent_risk",   area: "보상",     label: "S급 핵심인재 이탈 우려 / 경쟁사 적극 영입" },
   { id: "weak_leadership",   area: "리더십",   label: "팀장 리더십이 약하거나 편차가 크다" },
   { id: "goal_miss",         area: "평가",     label: "팀·개인의 목표 달성률이 낮아 조직성과가 향상되지 않는다" },
   { id: "low_performers",    area: "리더십",   label: "저성과자 관리가 안 된다 / 무임승차" },
+  { id: "culture_drift",     area: "조직문화", label: "직원 몰입도·만족도가 낮다" },
   // 나머지
   { id: "eval_unfair",       area: "평가",     label: "평가가 공정하지 않다 / 변별력이 없다" },
   { id: "no_payband",        area: "보상",     label: "Pay Band 없이 보상이 임의적이다" },
