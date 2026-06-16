@@ -553,25 +553,25 @@ export const TEMPLATES: Template[] = [
   },
 ];
 
-/* PAIN_TO_AREAS — 1:N 매핑
-   한 페인포인트가 여러 모듈에 복합적으로 작용한다는 현실을 반영.
-   배열 첫 번째가 primary, 나머지는 secondary (가중 영향) */
+/* PAIN_TO_AREAS — 1:N 매핑 (페인당 1~3개)
+   "여러 모듈이 복합적으로 작용한다"는 현실을 반영하되, 가장 임팩트 큰 driver
+   만 남겨 강조의 의미를 보존. 배열 첫 번째가 primary. */
 export const PAIN_TO_AREAS: Record<string, Template["area"][]> = {
-  job_grade_complex: ["직급"],
-  decision_slow:     ["직급", "직무"],                  // 직급 단축 + R&R 명확화
-  eval_unfair:       ["평가"],
-  goal_miss:         ["평가", "조직문화", "리더십"],     // OKR + 정렬 + 코칭
-  poor_alignment:    ["조직문화", "평가", "리더십"],     // 정렬 워크숍 + OKR + 코칭
-  low_motivation:    ["조직문화", "평가", "보상", "리더십"], // 인정·차등·코칭 모두
-  culture_drift:     ["조직문화", "리더십", "보상"],     // 몰입 = 문화 + 리더 + 보상
+  job_grade_complex: ["직급"],                      // 직급 통합이 곧 해법
+  decision_slow:     ["직급", "직무"],              // 단계 축소 + R&R 명확화
+  eval_unfair:       ["평가"],                      // 변별력 자체가 평가 이슈
+  goal_miss:         ["평가", "리더십"],            // OKR + 코칭이 달성률 driver
+  poor_alignment:    ["조직문화", "리더십"],        // 정렬 워크숍 + 팀장 정렬
+  low_motivation:    ["조직문화", "보상", "리더십"], // 인정 + 차등보상 + 코칭
+  culture_drift:     ["조직문화", "리더십"],        // 몰입도는 문화·리더가 압도적
   no_payband:        ["보상"],
-  key_talent_risk:   ["보상", "평가", "리더십"],         // retention = 보상 + 변별 + 리더
-  unclear_job:       ["직무", "직급"],
-  hire_difficulty:   ["직무", "리더십"],                 // 직무 명확화 + 팀장 면접
-  promo_unclear:     ["승진", "평가"],                   // 자격요건 + 평가 hurdle
-  weak_leadership:   ["리더십", "평가", "조직문화"],     // 코칭 + 다면 + 문화
-  low_performers:    ["리더십", "평가"],                 // PIP = 평가 + 리더
-  ai_adoption:       ["AI", "직무", "평가"],             // AI 도입 = 직무 명확화 + 평가 자동화
+  key_talent_risk:   ["보상", "평가"],              // 시장 보상 + 변별 신호
+  unclear_job:       ["직무", "평가"],              // R&R 없으면 평가 불가
+  hire_difficulty:   ["직무", "보상"],              // JD 명확 + 시장 보상
+  promo_unclear:     ["승진", "평가"],              // 자격요건 + 평가 hurdle
+  weak_leadership:   ["리더십", "조직문화"],        // 코칭 + 다면 진단
+  low_performers:    ["리더십", "평가"],            // PIP = 평가 변별 + 리더 관리
+  ai_adoption:       ["AI", "직무"],                // AI + 자동화 대상 R&R 정의
 };
 
 /* PAIN_TO_AREA — 1:1 backward-compat (primary area).
