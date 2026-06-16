@@ -52,7 +52,7 @@ export default function Step7System() {
     <>
       <StepShell step={step}>
         <p
-          className="body text-ink-600 max-w-[760px]"
+          className="body text-ink-600"
           style={{ display: "block", margin: 0, marginBottom: 24, padding: 0, position: "static" }}
         >
           제도를 같이 짠 사람이 시스템도 만들어요.{" "}
