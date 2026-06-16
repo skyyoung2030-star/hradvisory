@@ -212,7 +212,7 @@ export const TEMPLATES: Template[] = [
       "S 7.7% / A 6.4% / B 4.9% / C 2.3% / D 0.8% (AON Korea 2013-14 기준)",
       "절대평가 도입 시 재원 고정 방식 (Opt 1/2/3 비교)",
       "성과연봉 지급률 차등폭 설계 (10/7.5/5/2.5/0 vs 8/6/5/2/0)",
-      "Variable Pay 강화 트렌드 (CJ제일제당 NEXT HR 사례)",
+      "Variable Pay 강화 트렌드 (식품기업 A사 NEXT HR 사례)",
       "Profit Sharing · Target Incentive · Retention 보너스 설계",
     ],
     format: "PDF + Excel 시뮬레이터",
