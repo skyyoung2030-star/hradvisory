@@ -578,4 +578,4 @@ export const PAIN_TO_AREAS: Record<string, Template["area"][]> = {
    Step 3의 초기 active 탭 선택 등에서 사용. */
 export const PAIN_TO_AREA: Record<string, Template["area"]> = Object.fromEntries(
   Object.entries(PAIN_TO_AREAS).map(([k, v]) => [k, v[0]])
-);
+); 
