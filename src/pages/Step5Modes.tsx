@@ -121,7 +121,7 @@ export default function Step5Modes() {
   return (
     <>
       <StepShell step={step}>
-        <p className="body text-ink-600 mb-8 max-w-[720px]">
+        <p className="body text-ink-600 mb-8">
           Master 자문은 정해진 일정대로 가는 풀패키지 컨설팅이 아닙니다.
           회사 상황에 따라 <strong className="text-ink-900">아래 6가지 모드를 elastic하게</strong> 호출해서 씁니다.
           어떤 달은 페어 디자인 위주, 어떤 달은 분기 진단 위주 — 자유롭게.
