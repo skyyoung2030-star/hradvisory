@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { recordTurnkeyClick } from "@/lib/api";
 import KeyHint from "@/components/KeyHint";
+import WelcomeMiniChat from "@/components/WelcomeMiniChat";
 
 export default function Welcome() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export default function Welcome() {
       <header className="relative z-10 h-14 flex items-center container-x">
         <Link to="/" className="flex items-center gap-2 font-semibold text-ink-900 tracking-tight">
           <LogoMark />
-          <span>HR Master</span>
+          <span>HCG Master</span>
         </Link>
         <span className="ml-auto inline-flex items-center gap-2 text-[11px] font-mono text-ink-500 tracking-wider">
           <span className="hidden md:inline">INTERACTIVE TOUR</span>
@@ -82,6 +83,9 @@ export default function Welcome() {
             5분 인터랙티브 투어로 어떻게 함께하는지 확인해보세요.
           </p>
         </motion.div>
+
+        {/* 실시간 자문 채팅 위젯 */}
+        <WelcomeMiniChat />
 
         <motion.div
           initial={{ opacity: 0 }}
