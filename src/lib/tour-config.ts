@@ -56,7 +56,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     index: 6, number: 6, slug: "6-master", path: "/tour/6-master",
     label: "플랜 선택",
-    title: "Master 플랜을 골라주세요",
+    title: "자문 플랜을 골라주세요",
     subtitle: "회사 규모와 단계에 맞는 3가지 옵션",
     showInProgress: true,
   },
