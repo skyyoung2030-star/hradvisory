@@ -3,6 +3,7 @@
 // Supabase Realtime으로 어드민 답변을 실시간 수신.
 
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import KeyHint from "@/components/KeyHint";
@@ -28,6 +29,7 @@ const GREETING =
   "안녕하세요. HCG의 Master 컨설턴트입니다. 평가·보상·직급·조직성과·리더십 등 HR 관련 어떤 질문이든 평일 실시간으로 답변드립니다. 가벼운 질문부터 편하게 물어보세요.";
 
 export default function WelcomeMiniChat() {
+  const navigate = useNavigate();
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -101,14 +103,10 @@ export default function WelcomeMiniChat() {
         convId = conv.id;
         setConversationId(convId);
       }
-      const msg = await sendMessage(convId, "visitor", content);
-      if (msg) {
-        setMessages((prev) => {
-          if (prev.some((m) => m.id === msg.id)) return prev;
-          return [...prev, msg];
-        });
-      }
+      await sendMessage(convId, "visitor", content);
       setInput("");
+      // 메시지 보낸 후 풀스크린 채팅 페이지로 이동
+      navigate("/chat");
     } finally {
       setSending(false);
     }
@@ -155,7 +153,7 @@ export default function WelcomeMiniChat() {
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-success-400">PATH 01</span>
             <span className="w-1 h-1 rounded-full bg-success-400/40" />
-            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-success-400">당장 궁금한 것 물어보기</span>
+            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-success-400">실시간 자문</span>
           </div>
           <KeyHint variant="dark">1</KeyHint>
         </div>
@@ -177,13 +175,13 @@ export default function WelcomeMiniChat() {
           {/* Title block — PATH 02와 정확히 동일한 사이즈 */}
           <div className="relative">
             <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
-              전문 HRBP가 실시간으로 답변
+              HRBP가 실시간으로 답변드립니다
             </h2>
             <p
               className="block text-[14px] font-medium mt-1.5"
               style={{ color: "#34d399" }}
             >
-              간단한 HR 자문을 지금 바로 무료로 받아보세요 · 평일 업무시간
+              간단한 HR 자문은 바로 받아보세요 · 평일 업무시간
             </p>
           </div>
 
