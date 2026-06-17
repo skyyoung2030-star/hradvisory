@@ -177,7 +177,7 @@ export default function WelcomeMiniChat() {
           {/* Title block — PATH 02와 정확히 동일한 사이즈 */}
           <div className="relative">
             <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
-              전문 HRBP가 실시간으로 답변합니다
+              전문 HRBP가 실시간으로 답변
             </h2>
             <p
               className="block text-[14px] font-medium mt-1.5"
