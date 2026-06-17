@@ -21,7 +21,7 @@ const FALLBACK_SUGGESTED: { number: string; q: string }[] = [
 
 const SEED: ChatMessage = {
   role: "assistant",
-  content: "안녕하세요. HCG Master 자문 컨설턴트입니다. 직급·평가·보상·리더십·조직문화 — 무엇이든 편하게 물어보세요. 실제 자문에서도 이런 식으로 함께 풀어갑니다.",
+  content: "안녕하세요. HR Master 자문 컨설턴트입니다. 직급·평가·보상·리더십·조직문화 — 무엇이든 편하게 물어보세요. 실제 자문에서도 이런 식으로 함께 풀어갑니다.",
 };
 
 export default function Step2Demo() {
