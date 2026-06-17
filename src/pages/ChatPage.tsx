@@ -123,31 +123,45 @@ export default function ChatPage() {
       <div aria-hidden className="absolute inset-0 bg-grid-line mask-vignette opacity-60 pointer-events-none" />
 
       {/* Header */}
-      <header className="relative z-10 h-14 flex items-center container-x border-b border-white/[0.06]">
+      <header className="relative z-10 h-14 flex items-center gap-3 container-x border-b border-white/[0.06]">
+        {/* Left — back link */}
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-[13px] text-ink-600 hover:text-ink-900 transition-colors"
+          className="inline-flex items-center gap-1.5 text-[13px] text-ink-600 hover:text-ink-900 transition-colors flex-shrink-0"
         >
           <ArrowLeft size={14} />
-          <span>Welcome으로</span>
+          <span className="hidden sm:inline">Welcome</span>
         </Link>
 
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2.5">
-          <div className="relative">
+        {/* Center — consultant info */}
+        <div className="flex-1 flex items-center justify-center gap-2.5 min-w-0">
+          <div className="relative flex-shrink-0">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-success-500 to-success-700 flex items-center justify-center shadow-[0_4px_12px_-2px_rgba(16,185,129,0.5)]">
               <MessageCircle size={14} className="text-white" />
             </div>
             <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success-400 border-2 border-ink-50 animate-pulse-soft" />
           </div>
-          <div className="flex flex-col leading-tight">
-            <span className="text-[13px] font-bold text-ink-900">전문 HRBP 실시간 자문</span>
-            <span className="text-[10px] font-mono" style={{ color: "#34d399" }}>
+          <div className="flex flex-col leading-tight min-w-0">
+            <span
+              className="text-[13px] font-bold text-ink-900 truncate"
+              style={{ display: "block", margin: 0, padding: 0, lineHeight: 1.2 }}
+            >
+              전문 HRBP 실시간 자문
+            </span>
+            <span
+              className="text-[10px] font-mono truncate"
+              style={{ color: "#34d399", display: "block", margin: 0, padding: 0, lineHeight: 1.3 }}
+            >
               온라인 · 평일 응답
             </span>
           </div>
         </div>
 
-        <span className="ml-auto inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-500/15 border border-success-500/30 text-[10px] font-mono font-bold" style={{ color: "#34d399" }}>
+        {/* Right — LIVE chip */}
+        <span
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-500/15 border border-success-500/30 text-[10px] font-mono font-bold flex-shrink-0"
+          style={{ color: "#34d399" }}
+        >
           <span className="w-1.5 h-1.5 rounded-full bg-success-400 animate-pulse-soft" />
           LIVE
         </span>
