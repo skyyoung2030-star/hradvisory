@@ -39,7 +39,7 @@ export default function Welcome() {
       <header className="relative z-10 h-14 flex items-center container-x">
         <Link to="/" className="flex items-center gap-2 font-semibold text-ink-900 tracking-tight">
           <LogoMark />
-          <span>HCG Master</span>
+          <span>HR Master</span>
         </Link>
         <span className="ml-auto inline-flex items-center gap-2 text-[11px] font-mono text-ink-500 tracking-wider">
           <span className="hidden md:inline">INTERACTIVE TOUR</span>
