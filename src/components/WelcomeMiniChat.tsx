@@ -183,7 +183,7 @@ export default function WelcomeMiniChat() {
               className="block text-[14px] font-medium mt-1.5"
               style={{ color: "#34d399" }}
             >
-              간단한 HR 자문을 여기서 바로 받아보세요 · 평일 업무시간
+              간단한 HR 자문을 지금 바로 받아보세요 · 평일 업무시간
             </p>
           </div>
 
