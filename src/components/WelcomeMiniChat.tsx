@@ -153,7 +153,7 @@ export default function WelcomeMiniChat() {
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-success-400">PATH 01</span>
             <span className="w-1 h-1 rounded-full bg-success-400/40" />
-            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-success-400">실시간 자문</span>
+            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-success-400">당장 해결하고 싶은 것 물어보기</span>
           </div>
           <KeyHint variant="dark">1</KeyHint>
         </div>
