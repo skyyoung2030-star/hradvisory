@@ -271,7 +271,7 @@ function MasterPath({ onCtaClick }: { onCtaClick: () => void }) {
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-accent-400">PATH 02</span>
             <span className="w-1 h-1 rounded-full bg-accent-400/40" />
-            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-accent-400">지금 체험</span>
+            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-accent-400">자문 서비스 알아보기</span>
           </div>
           <KeyHint variant="dark">2</KeyHint>
         </div>
