@@ -84,9 +84,6 @@ export default function Welcome() {
           </p>
         </motion.div>
 
-        {/* 실시간 자문 채팅 위젯 */}
-        <WelcomeMiniChat />
-
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -94,7 +91,7 @@ export default function Welcome() {
           className="mt-12 sm:mt-14 flex items-center justify-center gap-3 text-[10px] font-mono font-bold tracking-[0.22em] text-ink-500 uppercase"
         >
           <span className="h-px w-12 bg-white/10" />
-          <span>경로를 선택하세요</span>
+          <span>지금 바로 시작하세요</span>
           <span className="h-px w-12 bg-white/10" />
         </motion.div>
 
@@ -103,12 +100,12 @@ export default function Welcome() {
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } } }}
           className="grid md:grid-cols-2 gap-4 mt-6 text-left"
         >
-          {/* ─────────── PATH 01 — Turnkey (muted, but CTA is alive) ─────────── */}
+          {/* ─────────── 왼쪽: 실시간 자문 채팅 ─────────── */}
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }}>
-            <TurnkeyPath onCtaClick={handleTurnkeyClick} />
+            <WelcomeMiniChat />
           </motion.div>
 
-          {/* ─────────── PATH 02 — Master (featured) ─────────── */}
+          {/* ─────────── 오른쪽: PATH 02 — Master (featured) ─────────── */}
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }}>
             <MasterPath onCtaClick={startMasterTour} />
           </motion.div>
@@ -128,6 +125,32 @@ export default function Welcome() {
             <KeyHint>↵</KeyHint>
             <span>추천 경로 시작</span>
           </span>
+        </motion.div>
+
+        {/* ─────────── 하단: PATH 01 — 통합 컨설팅 (중견기업 이상) ─────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="mt-16 pt-12 border-t border-white/[0.06]"
+        >
+          <div className="text-center mb-6">
+            <p className="text-[10px] font-mono font-bold tracking-[0.22em] text-ink-500 uppercase">
+              그 외 옵션
+            </p>
+            <h2 className="text-[22px] font-bold text-ink-900 mt-2">
+              규모가 크다면, 통합 컨설팅도 가능합니다
+            </h2>
+            <p className="text-[13.5px] text-ink-600 mt-2.5 max-w-[520px] mx-auto leading-relaxed">
+              중견기업 이상, 3~4개월 상주형 풀세트 컨설팅.
+              <br className="hidden sm:block" />
+              직급·평가·보상·진단을 한 번에 새로 설계해야 할 때.
+            </p>
+          </div>
+          <div className="max-w-[720px] mx-auto text-left">
+            <TurnkeyPath onCtaClick={handleTurnkeyClick} />
+          </div>
         </motion.div>
 
         <motion.div
