@@ -77,7 +77,7 @@ export default function Welcome() {
           <p className="body text-ink-600 mt-5 max-w-[560px] mx-auto">
             HR 전문가 채용이 부담스러우시죠?<br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            HCG의 베테랑 HR 컨설턴트가 매월 함께하며 조직을 한 단계 성장시켜드립니다.
+            베테랑 HR 컨설턴트가 매월 함께하며 조직을 한 단계 성장시켜드립니다.
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
             5분 인터랙티브 투어로 어떻게 함께하는지 확인해보세요.
