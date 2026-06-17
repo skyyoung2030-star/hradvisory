@@ -139,9 +139,9 @@ export default function WelcomeMiniChat() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.15 }}
-      className="mt-10 max-w-[640px] mx-auto"
+      className="h-full"
     >
-      <div className="card relative overflow-hidden shadow-depth-2 backdrop-blur-xl">
+      <div className="card relative overflow-hidden shadow-depth-2 backdrop-blur-xl h-full flex flex-col">
         {/* Header */}
         <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.06] bg-white/[0.02]">
           <div className="relative">
@@ -164,15 +164,15 @@ export default function WelcomeMiniChat() {
               온라인 · 평일 실시간 응답
             </span>
           </div>
-          <span className="ml-auto text-[10px] font-mono text-ink-500 tracking-wider hidden sm:inline">
-            INSTANT CHAT
+          <span className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-500/20 border border-accent-500/30">
+            <span className="text-[10px] font-mono font-bold text-accent-400 tracking-wider">INSTANT</span>
           </span>
         </div>
 
-        {/* Messages */}
+        {/* Messages — flex grows to fill card */}
         <div
           ref={scrollRef}
-          className="h-[260px] overflow-y-auto px-4 py-3 space-y-2.5"
+          className="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-2.5"
         >
           {displayMessages.map((m) => (
             <div
@@ -192,7 +192,7 @@ export default function WelcomeMiniChat() {
             </div>
           ))}
 
-          {/* Starter chips — greeting만 있을 때 표시 */}
+          {/* Starter chips */}
           {showChips && (
             <div className="flex flex-wrap gap-1.5 pt-2">
               {STARTER_CHIPS.map((chip) => (
@@ -208,7 +208,7 @@ export default function WelcomeMiniChat() {
             </div>
           )}
 
-          {/* "답변 입력 중" indicator — visitor가 메시지 보낸 후 admin 답변 기다리는 중 */}
+          {/* "답변 입력 중" indicator */}
           {messages.length > 0 &&
             messages[messages.length - 1].role === "visitor" && (
               <div className="flex justify-start">
@@ -243,7 +243,7 @@ export default function WelcomeMiniChat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKey}
             disabled={sending}
-            placeholder="HR · 조직성과 관련 무엇이든 물어보세요"
+            placeholder="HR · 조직성과 관련 무엇이든"
             className="flex-1 bg-white/[0.04] border border-white/10 rounded-lg px-3 py-2 text-[13px] text-ink-900 placeholder:text-ink-500 outline-none focus:border-accent-500/50 focus:bg-white/[0.06] transition-colors disabled:opacity-60"
           />
           <button
@@ -256,12 +256,14 @@ export default function WelcomeMiniChat() {
             <Send size={14} />
           </button>
         </div>
-      </div>
 
-      {/* Subtle note */}
-      <p className="text-center text-[11.5px] text-ink-500 mt-3">
-        평일 업무시간 내에 답변 드립니다. 자리 비울 땐 메시지 남겨주시면 회신드립니다.
-      </p>
+        {/* Footer caption — inside card */}
+        <div className="px-4 py-2 border-t border-white/[0.04] bg-white/[0.02]">
+          <p className="text-[10.5px] text-ink-500 text-center">
+            평일 업무시간 내 답변 · 자리 비울 땐 메시지 남기시면 회신드립니다
+          </p>
+        </div>
+      </div>
     </motion.div>
   );
 }
