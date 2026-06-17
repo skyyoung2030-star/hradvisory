@@ -174,12 +174,15 @@ export default function WelcomeMiniChat() {
             className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gradient-to-br from-success-500/30 to-success-700/10 blur-3xl pointer-events-none"
           />
 
-          {/* Title block — PATH 02의 h2/p와 동일한 weight */}
+          {/* Title block — PATH 02와 정확히 동일한 사이즈 */}
           <div className="relative">
-            <h2 className="block text-[clamp(20px,2.8vw,26px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
+            <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
               HRBP가 실시간으로 답변드립니다
             </h2>
-            <p className="block text-[13.5px] text-success-400 font-medium mt-1.5">
+            <p
+              className="block text-[14px] font-medium mt-1.5"
+              style={{ color: "#34d399" }}
+            >
               간단한 HR 자문은 바로 받아보세요 · 평일 업무시간
             </p>
           </div>
