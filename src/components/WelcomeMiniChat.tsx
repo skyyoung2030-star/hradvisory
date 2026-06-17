@@ -181,7 +181,7 @@ export default function WelcomeMiniChat() {
               className="block text-[14px] font-medium mt-1.5"
               style={{ color: "#34d399" }}
             >
-              무료로 우리 회사의 HR 이슈에 대해 간단히 채팅 자문 받아보세요 · 실시간 응답
+              무료로 우리 회사의 HR 이슈에 대해 간단히 채팅 자문 받아보세요. 전문 HRBP가 바로 답변해드립니다 · 평일 업무시간
             </p>
           </div>
 
