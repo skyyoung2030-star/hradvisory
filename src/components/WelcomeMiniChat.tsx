@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Send, MessageCircle } from "lucide-react";
+import KeyHint from "@/components/KeyHint";
 import {
   type Message,
   createConversation,
@@ -141,8 +142,31 @@ export default function WelcomeMiniChat() {
       transition={{ duration: 0.5, delay: 0.15 }}
       className="h-full"
     >
-      <div className="card relative overflow-hidden shadow-depth-2 backdrop-blur-xl h-full flex flex-col">
-        {/* Header */}
+      <div className="card relative overflow-hidden shadow-depth-2 backdrop-blur-xl h-full flex flex-col border-success-500/20">
+        {/* Top accent line — PATH 02 같은 디자인 (success 톤) */}
+        <span
+          aria-hidden
+          className="absolute top-0 inset-x-0 h-px z-10"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(16,185,129,0.6), transparent)" }}
+        />
+
+        {/* PATH label stripe */}
+        <div className="relative flex items-center justify-between gap-3 px-5 py-3 border-b border-success-500/20 bg-success-500/[0.06]">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono font-bold tracking-[0.22em] text-success-400">PATH 01</span>
+            <span className="w-1 h-1 rounded-full bg-success-400/40" />
+            <span className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase text-success-400">실시간 자문</span>
+          </div>
+          <KeyHint variant="dark">1</KeyHint>
+        </div>
+
+        {/* Floating LIVE chip — PATH 02 "추천" 칩과 같은 자리 */}
+        <span className="absolute top-3 right-14 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-success-500 text-white text-[10px] font-bold tracking-wider z-10 shadow-[0_4px_12px_-2px_rgba(16,185,129,0.7)]">
+          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse-soft" />
+          LIVE
+        </span>
+
+        {/* Consultant header */}
         <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.06] bg-white/[0.02]">
           <div className="relative">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center shadow-[0_4px_12px_-2px_rgba(14,165,233,0.5)]">
@@ -152,21 +176,18 @@ export default function WelcomeMiniChat() {
           </div>
           <div className="flex flex-col leading-tight">
             <span
-              className="text-[14px] font-bold text-ink-900"
+              className="text-[15px] font-bold text-ink-900"
               style={{ display: "block", margin: 0, padding: 0, lineHeight: 1.2 }}
             >
-              HR Master 컨설턴트
+              HRBP가 실시간으로 답변드립니다
             </span>
             <span
-              className="text-[11px] font-mono text-success-400"
+              className="text-[11px] text-ink-500 mt-0.5"
               style={{ display: "block", margin: 0, padding: 0, lineHeight: 1.3 }}
             >
-              온라인 · 평일 실시간 응답
+              간단한 HR 자문은 바로 받아보세요 · 평일 업무시간
             </span>
           </div>
-          <span className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-500/20 border border-accent-500/30">
-            <span className="text-[10px] font-mono font-bold text-accent-400 tracking-wider">INSTANT</span>
-          </span>
         </div>
 
         {/* Messages — flex grows to fill card */}
