@@ -20,7 +20,7 @@ import { getSupabase } from "@/lib/supabase";
 const PIN_KEY = "hcg_admin_pin_ok";
 
 type Lead = {
-  id: string;
+  id: string | number;
   created_at: string;
   name: string;
   email: string;
@@ -192,7 +192,7 @@ function LeadCard({ lead }: { lead: Lead }) {
       {/* Footer: time + id */}
       <div className="flex items-center justify-between text-[10.5px] font-mono text-ink-500">
         <span>{fmtDate(lead.created_at)}</span>
-        <span>{lead.id.slice(0, 8)}</span>
+        <span>#{String(lead.id).slice(0, 8)}</span>
       </div>
     </div>
   );
