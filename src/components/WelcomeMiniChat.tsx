@@ -26,7 +26,7 @@ const STARTER_CHIPS = [
 ];
 
 const GREETING =
-  "안녕하세요. HR Master 컨설턴트입니다. 평가·보상·직급·조직성과·리더십 등 HR 관련 어떤 질문이든 평일 실시간으로 답변드립니다. 가벼운 질문부터 편하게 물어보세요.";
+  "안녕하세요. HCG의 Master 컨설턴트입니다. 평가·보상·직급·조직성과·리더십 등 HR 관련 어떤 질문이든 평일 실시간으로 답변드립니다. 가벼운 질문부터 편하게 물어보세요.";
 
 export default function WelcomeMiniChat() {
   const navigate = useNavigate();
@@ -34,6 +34,8 @@ export default function WelcomeMiniChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  /** 초기 진입 시 컨설턴트가 인사 메시지를 "입력 중"으로 보이게 한 뒤 등장 */
+  const [greetingShown, setGreetingShown] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const unsubRef = useRef<(() => void) | null>(null);
 
@@ -45,15 +47,23 @@ export default function WelcomeMiniChat() {
       if (existingId) {
         const conv = await loadConversation(existingId);
         if (conv && mounted) {
-          // 기존 대화 복원
+          // 기존 대화 복원 — greeting은 즉시 표시
           setConversationId(existingId);
           const msgs = await loadMessages(existingId);
           setMessages(msgs);
+          setGreetingShown(true);
           return;
         } else if (mounted) {
           // localStorage에 있던 conversation이 DB에 없음 → 정리
           clearStoredConversationId();
         }
+      }
+      // 새 방문자: typing indicator 먼저 잠깐 → greeting 등장
+      if (mounted) {
+        const t = setTimeout(() => {
+          setGreetingShown(true);
+        }, 1400);
+        return () => clearTimeout(t);
       }
     })();
     return () => {
@@ -119,19 +129,26 @@ export default function WelcomeMiniChat() {
     }
   }
 
-  /* 실제 표시되는 메시지 = greeting (가상) + DB 메시지들 */
-  const displayMessages: Message[] = [
-    {
-      id: "_greeting",
-      conversation_id: "_init",
-      created_at: new Date().toISOString(),
-      role: "admin",
-      content: GREETING,
-    },
-    ...messages,
-  ];
+  /* 실제 표시되는 메시지 = (조건부) greeting + DB 메시지들 */
+  const displayMessages: Message[] = greetingShown
+    ? [
+        {
+          id: "_greeting",
+          conversation_id: "_init",
+          created_at: new Date().toISOString(),
+          role: "admin",
+          content: GREETING,
+        },
+        ...messages,
+      ]
+    : [...messages];
 
-  const showChips = messages.length === 0 && !sending;
+  // chips는 greeting이 보이고 + DB 메시지 0개일 때만
+  const showChips = greetingShown && messages.length === 0 && !sending;
+  // typing indicator: ① greeting 아직 안 나타남 OR ② 마지막이 visitor 메시지 (답변 대기)
+  const showTyping =
+    !greetingShown ||
+    (messages.length > 0 && messages[messages.length - 1].role === "visitor");
 
   return (
     <motion.div
@@ -175,13 +192,13 @@ export default function WelcomeMiniChat() {
           {/* Title block — PATH 02와 정확히 동일한 사이즈 */}
           <div className="relative">
             <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
-              간단한 질문은, 무료로 자문하세요
+              HRBP가 실시간으로 응답
             </h2>
             <p
               className="block text-[14px] font-medium mt-1.5"
               style={{ color: "#34d399" }}
             >
-              계약 하지 않아도 언제든 무료 자문해보세요. 20년+ 컨설팅 노하우로 성심성의껏 답변드립니다 · 평일 업무시간
+              무료로 우리 회사의 HR 이슈에 대해 간단히 채팅 자문 받아보세요. 전문 HRBP가 바로 답변해드립니다 · 평일 업무시간
             </p>
           </div>
 
@@ -226,31 +243,31 @@ export default function WelcomeMiniChat() {
                 </div>
               )}
 
-              {/* 컨설턴트 입력 중 indicator */}
-              {messages.length > 0 &&
-                messages[messages.length - 1].role === "visitor" && (
-                  <div className="flex justify-start">
-                    <div className="bg-white/[0.06] border border-white/[0.06] rounded-xl rounded-tl-md px-3 py-2.5">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[11px] text-ink-500 mr-1">
-                          컨설턴트가 답변 입력 중
-                        </span>
-                        <span
-                          className="w-1.5 h-1.5 rounded-full bg-ink-400 animate-bounce"
-                          style={{ animationDelay: "0ms" }}
-                        />
-                        <span
-                          className="w-1.5 h-1.5 rounded-full bg-ink-400 animate-bounce"
-                          style={{ animationDelay: "150ms" }}
-                        />
-                        <span
-                          className="w-1.5 h-1.5 rounded-full bg-ink-400 animate-bounce"
-                          style={{ animationDelay: "300ms" }}
-                        />
-                      </div>
+              {/* 컨설턴트 입력 중 indicator
+                  — 초기 진입 시 greeting 등장 전 + 사용자 메시지 직후 답변 대기 시 */}
+              {showTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-white/[0.06] border border-white/[0.06] rounded-xl rounded-tl-md px-3 py-2.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] text-ink-500 mr-1">
+                        컨설턴트가 답변 입력 중
+                      </span>
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-ink-400 animate-bounce"
+                        style={{ animationDelay: "0ms" }}
+                      />
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-ink-400 animate-bounce"
+                        style={{ animationDelay: "150ms" }}
+                      />
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-ink-400 animate-bounce"
+                        style={{ animationDelay: "300ms" }}
+                      />
                     </div>
                   </div>
-                )}
+                </div>
+              )}
             </div>
 
             {/* Input bar */}
