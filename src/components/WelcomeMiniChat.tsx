@@ -175,13 +175,13 @@ export default function WelcomeMiniChat() {
           {/* Title block — PATH 02와 정확히 동일한 사이즈 */}
           <div className="relative">
             <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
-              먼저, 무료로 언제든 간단히 자문해보세요
+              간단한 질문이라면, 무료로 자문하세요
             </h2>
             <p
               className="block text-[14px] font-medium mt-1.5"
               style={{ color: "#34d399" }}
             >
-              자유롭게 우리 회사의 HR 이슈에 대해 물어보세요. 언제든 전문 HRBP가 바로 답변해드립니다 · 평일 업무시간
+              계약 하지 않아도 언제든 무료 자문해보세요. 20년+ 컨설팅 노하우로 성심성의껏 답변드립니다 · 평일 업무시간
             </p>
           </div>
 
