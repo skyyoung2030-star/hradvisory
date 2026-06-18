@@ -145,10 +145,16 @@ export default function WelcomeMiniChat() {
 
   // chips는 greeting이 보이고 + DB 메시지 0개일 때만
   const showChips = greetingShown && messages.length === 0 && !sending;
-  // typing indicator: ① greeting 아직 안 나타남 OR ② 마지막이 visitor 메시지 (답변 대기)
+  // typing indicator — 컨설턴트가 옆에서 입력 중인 느낌을 영구 노출
+  //   ① 초기 진입 (greeting 등장 전)
+  //   ② greeting 등장 후 + 메시지 없음 (응답 대기 중)
+  //   ③ 사용자 메시지 직후 (답변 대기 중)
+  // → admin 메시지가 마지막이면 사라짐 (방금 답변 받음)
+  const lastMsg = messages[messages.length - 1];
   const showTyping =
     !greetingShown ||
-    (messages.length > 0 && messages[messages.length - 1].role === "visitor");
+    messages.length === 0 ||
+    (lastMsg && lastMsg.role === "visitor");
 
   return (
     <motion.div
