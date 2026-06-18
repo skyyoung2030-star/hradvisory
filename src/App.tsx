@@ -11,6 +11,7 @@ import Step6Master from "@/pages/Step6Master";
 import Step7System from "@/pages/Step7System";
 import AdminInbox from "@/pages/AdminInbox";
 import ChatPage from "@/pages/ChatPage";
+import LeadsPage from "@/pages/LeadsPage";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/" element={<Welcome />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/admin" element={<AdminInbox />} />
+        <Route path="/leads" element={<LeadsPage />} />
         <Route path="/tour" element={<TourLayout />}>
           <Route path="1-diagnose"     element={<Step1Diagnose />} />
           <Route path="2-demo"         element={<Step2Demo />} />
