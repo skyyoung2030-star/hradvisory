@@ -92,7 +92,7 @@ export default function Step5BeforeAfter() {
         </div>
 
         <p className="caption mt-8">
-          위 수치는 HCG 평균 사례 기준이며, 회사 상황에 따라 달라질 수 있습니다.
+          위 수치는 평균 사례 기준이며, 회사 상황에 따라 달라질 수 있습니다.
         </p>
       </StepShell>
 
