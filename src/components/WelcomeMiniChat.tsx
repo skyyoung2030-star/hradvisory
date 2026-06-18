@@ -301,4 +301,4 @@ export default function WelcomeMiniChat() {
       </div>
     </motion.div>
   );
-} 
+}
