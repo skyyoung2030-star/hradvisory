@@ -57,7 +57,7 @@ export default function Welcome() {
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur text-[11px] font-mono font-semibold text-ink-700 tracking-wider shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-500 animate-pulse-soft shadow-[0_0_8px_rgba(14,165,233,0.8)]" />
-            국내 굴지의 기업과 중소형 기업이 함께 선택한 HCG
+            국내 굴지의 기업과 중소형 기업이 함께 선택한 자문 컨설팅
           </div>
 
           <h1 className="h-hero mt-5">
