@@ -17,7 +17,7 @@ import {
 } from "@/lib/chat-client";
 
 const GREETING =
-  "안녕하세요. HR Master 컨설턴트입니다. 평가·보상·직급·조직성과·리더십 등 HR 관련 어떤 질문이든 평일 실시간으로 답변드립니다. 가벼운 질문부터 편하게 물어보세요.";
+  "안녕하세요. HCG의 Master 컨설턴트입니다. 평가·보상·직급·조직성과·리더십 등 HR 관련 어떤 질문이든 평일 실시간으로 답변드립니다. 가벼운 질문부터 편하게 물어보세요.";
 
 const STARTER_CHIPS = [
   "직원 동기부여 강화하려면?",
@@ -31,6 +31,8 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  /** 초기 진입 시 컨설턴트가 인사 메시지를 "입력 중"으로 보이게 한 뒤 등장 */
+  const [greetingShown, setGreetingShown] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const unsubRef = useRef<(() => void) | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -46,11 +48,18 @@ export default function ChatPage() {
           setConversationId(existingId);
           const msgs = await loadMessages(existingId);
           setMessages(msgs);
+          // 기존 대화면 greeting 즉시 표시
+          setGreetingShown(true);
         } else if (mounted) {
           clearStoredConversationId();
         }
       }
       if (mounted) inputRef.current?.focus();
+      // 새 방문자: 1.4초 후 greeting 등장 (그동안 typing 표시)
+      if (mounted) {
+        const t = setTimeout(() => setGreetingShown(true), 1400);
+        return () => clearTimeout(t);
+      }
     })();
     return () => {
       mounted = false;
@@ -116,7 +125,10 @@ export default function ChatPage() {
     }
   }
 
-  const showChips = messages.length === 0 && !sending;
+  const showChips = greetingShown && messages.length === 0 && !sending;
+  const showTyping =
+    !greetingShown ||
+    (messages.length > 0 && messages[messages.length - 1].role === "visitor");
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-ink-50 bg-spotlight flex flex-col">
@@ -171,12 +183,14 @@ export default function ChatPage() {
       <section className="relative z-10 flex-1 min-h-0 flex flex-col w-full max-w-[800px] mx-auto px-4 pb-6">
         {/* Messages */}
         <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto py-6 space-y-4">
-          {/* Greeting (가상) */}
-          <div className="flex justify-start">
-            <div className="max-w-[80%] bg-white/[0.06] text-ink-800 rounded-2xl rounded-tl-md border border-white/[0.06] px-4 py-3 text-[14px] whitespace-pre-wrap leading-relaxed">
-              {GREETING}
+          {/* Greeting (가상) — 1.4초 뒤에 등장 */}
+          {greetingShown && (
+            <div className="flex justify-start">
+              <div className="max-w-[80%] bg-white/[0.06] text-ink-800 rounded-2xl rounded-tl-md border border-white/[0.06] px-4 py-3 text-[14px] whitespace-pre-wrap leading-relaxed">
+                {GREETING}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* DB messages */}
           {messages.map((m) => (
@@ -197,7 +211,7 @@ export default function ChatPage() {
             </div>
           ))}
 
-          {/* Starter chips — 메시지 0개일 때 */}
+          {/* Starter chips — greeting 등장 + 메시지 0개일 때 */}
           {showChips && (
             <div className="flex flex-wrap gap-2 pt-2">
               {STARTER_CHIPS.map((chip) => (
@@ -213,8 +227,8 @@ export default function ChatPage() {
             </div>
           )}
 
-          {/* Typing indicator — 마지막이 visitor 메시지면 */}
-          {messages.length > 0 && messages[messages.length - 1].role === "visitor" && (
+          {/* Typing indicator — 초기 greeting 등장 전 + 사용자 메시지 직후 답변 대기 */}
+          {showTyping && (
             <div className="flex justify-start">
               <div className="bg-white/[0.06] border border-white/[0.06] rounded-2xl rounded-tl-md px-4 py-3">
                 <div className="flex items-center gap-2">
