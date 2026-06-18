@@ -175,7 +175,7 @@ export default function WelcomeMiniChat() {
           {/* Title block — PATH 02와 정확히 동일한 사이즈 */}
           <div className="relative">
             <h2 className="block text-[clamp(24px,3.5vw,32px)] font-bold tracking-[-0.02em] leading-tight text-ink-900">
-              간단한 질문이라면, 무료로 자문하세요
+              간단한 질문은, 무료로 자문하세요
             </h2>
             <p
               className="block text-[14px] font-medium mt-1.5"
