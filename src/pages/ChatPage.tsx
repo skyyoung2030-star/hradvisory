@@ -32,6 +32,8 @@ type Consultant = {
   initials: string;
   name: string;
   role: string;
+  tagline: string;       // 컬러 강조 한 줄
+  textColor: string;     // tagline 색상 (gradient와 매칭)
   specialty: string[];
   bio: string;
   gradient: string;
@@ -40,45 +42,55 @@ type Consultant = {
 const CONSULTANTS: Consultant[] = [
   {
     id: "kim_jh",
-    initials: "김",
-    name: "김지환",
-    role: "Master 컨설턴트",
+    initials: "JK",
+    name: "Jihwan Kim",
+    role: "Master Consultant",
+    tagline: "평가·성과관리 전문가",
+    textColor: "#60a5fa",
     specialty: ["평가", "OKR", "성과관리"],
     bio: "대기업·중견기업 평가체계 구축 14년. HR Tech 컨퍼런스 다수 연사.",
     gradient: "from-blue-500 to-blue-700",
   },
   {
     id: "park_my",
-    initials: "박",
-    name: "박미영",
+    initials: "MP",
+    name: "Miyoung Park",
     role: "Principal",
+    tagline: "보상 설계 전문가",
+    textColor: "#c084fc",
     specialty: ["보상", "Pay Band", "Total Reward"],
-    bio: "중견기업 50개+ 보상체계 설계. CCP·GRP 자격. Compensation 분야 18년.",
+    bio: "중견기업 50개+ 보상체계 설계. CCP·GRP 자격. Compensation 18년.",
     gradient: "from-purple-500 to-purple-700",
   },
   {
     id: "lee_dh",
-    initials: "이",
-    name: "이도현",
-    role: "Senior 컨설턴트",
+    initials: "DL",
+    name: "Dohyun Lee",
+    role: "Senior Consultant",
+    tagline: "조직문화·리더십 전문가",
+    textColor: "#34d399",
     specialty: ["조직문화", "리더십", "변화관리"],
     bio: "조직개발 16년. 임원 코칭 200+ 세션. ICF PCC 자격.",
     gradient: "from-emerald-500 to-emerald-700",
   },
   {
     id: "choi_su",
-    initials: "최",
-    name: "최서윤",
-    role: "AI HR 전문",
+    initials: "SC",
+    name: "Seoyun Choi",
+    role: "AI HR Lead",
+    tagline: "AI HR 도입 전문가",
+    textColor: "#fbbf24",
     specialty: ["AI HR", "HR Analytics", "직무 분석"],
     bio: "AI·데이터 기반 HR 도입 컨설팅. SaaS 도입 30개사. Stanford MBA.",
     gradient: "from-amber-500 to-amber-700",
   },
   {
     id: "jung_hs",
-    initials: "정",
-    name: "정현석",
-    role: "Senior 컨설턴트",
+    initials: "HJ",
+    name: "Hyunseok Jung",
+    role: "Senior Consultant",
+    tagline: "직급·승진 설계 전문가",
+    textColor: "#f472b6",
     specialty: ["직급", "승진", "조직 설계"],
     bio: "스타트업·중견기업 직급체계 정비 35건+. PMI 통합 프로젝트 다수.",
     gradient: "from-pink-500 to-pink-700",
@@ -94,10 +106,15 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false);
   /** 초기 진입 시 컨설턴트가 인사 메시지를 "입력 중"으로 보이게 한 뒤 등장 */
   const [greetingShown, setGreetingShown] = useState(false);
-  /** 선택된 컨설턴트 ID (localStorage 영구 저장) */
-  const [selectedConsultantId, setSelectedConsultantId] = useState<string | null>(
-    typeof window !== "undefined" ? localStorage.getItem(CONSULTANT_KEY) : null,
-  );
+  /** 선택된 컨설턴트 ID — localStorage에 없으면 첫 컨설턴트 자동 선택 */
+  const [selectedConsultantId, setSelectedConsultantId] = useState<string>(() => {
+    if (typeof window === "undefined") return CONSULTANTS[0].id;
+    const stored = localStorage.getItem(CONSULTANT_KEY);
+    if (stored && CONSULTANTS.some((c) => c.id === stored)) return stored;
+    // 첫 진입 — 디폴트로 첫 카드 선택하고 localStorage에도 저장
+    localStorage.setItem(CONSULTANT_KEY, CONSULTANTS[0].id);
+    return CONSULTANTS[0].id;
+  });
   const scrollRef = useRef<HTMLDivElement>(null);
   const unsubRef = useRef<(() => void) | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -258,7 +275,7 @@ export default function ChatPage() {
       <div className="relative z-10 border-b border-white/[0.06] bg-white/[0.015]">
         <div className="max-w-[1100px] mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span
                 className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase"
                 style={{ color: "#34d399" }}
@@ -268,18 +285,21 @@ export default function ChatPage() {
               {selectedConsultant && (
                 <>
                   <span className="text-[10px] text-ink-500">·</span>
-                  <span className="text-[11px] text-ink-700">
-                    <span className="font-semibold">{selectedConsultant.name}</span>{" "}
-                    <span className="text-ink-500">와(과) 대화 중</span>
+                  <span className="text-[12px] font-semibold text-ink-800">
+                    {selectedConsultant.name}
+                  </span>
+                  <span
+                    className="text-[11px] font-semibold hidden sm:inline"
+                    style={{ color: selectedConsultant.textColor }}
+                  >
+                    {selectedConsultant.tagline}
                   </span>
                 </>
               )}
             </div>
-            {!selectedConsultant && (
-              <span className="text-[10px] text-ink-500 hidden sm:inline">
-                전문가를 선택하면 해당 분야 답변을 우선 받을 수 있어요
-              </span>
-            )}
+            <span className="text-[10px] text-ink-500 hidden md:inline">
+              카드 클릭으로 전문가 변경 가능
+            </span>
           </div>
 
           {/* Horizontal scroll for cards */}
@@ -290,7 +310,7 @@ export default function ChatPage() {
                 <button
                   key={c.id}
                   onClick={() => selectConsultant(c.id)}
-                  className={`group flex-shrink-0 w-[220px] sm:w-[240px] snap-start text-left rounded-xl p-3 border transition-all
+                  className={`group flex-shrink-0 w-[230px] sm:w-[250px] snap-start text-left rounded-xl p-3 border transition-all
                     ${
                       selected
                         ? "bg-success-500/10 border-success-500/60 shadow-[0_0_20px_-4px_rgba(16,185,129,0.4)]"
@@ -301,7 +321,7 @@ export default function ChatPage() {
                     {/* Avatar */}
                     <div className="relative flex-shrink-0">
                       <div
-                        className={`w-11 h-11 rounded-full bg-gradient-to-br ${c.gradient} flex items-center justify-center text-white text-[15px] font-bold shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]`}
+                        className={`w-11 h-11 rounded-full bg-gradient-to-br ${c.gradient} flex items-center justify-center text-white text-[13px] font-bold shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]`}
                       >
                         {c.initials}
                       </div>
@@ -316,8 +336,17 @@ export default function ChatPage() {
                       <Check size={14} className="text-success-400 flex-shrink-0 mt-0.5" />
                     )}
                   </div>
+
+                  {/* Tagline — 컬러 강조 한 줄 */}
+                  <div
+                    className="mt-2.5 text-[11.5px] font-semibold"
+                    style={{ color: c.textColor }}
+                  >
+                    {c.tagline}
+                  </div>
+
                   {/* Specialty chips */}
-                  <div className="mt-2 flex flex-wrap gap-1">
+                  <div className="mt-1.5 flex flex-wrap gap-1">
                     {c.specialty.slice(0, 3).map((s) => (
                       <span
                         key={s}
@@ -328,6 +357,7 @@ export default function ChatPage() {
                       </span>
                     ))}
                   </div>
+
                   {/* Bio */}
                   <p className="mt-2 text-[11px] text-ink-600 leading-snug line-clamp-2">
                     {c.bio}
