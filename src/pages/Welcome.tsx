@@ -80,7 +80,7 @@ export default function Welcome() {
             베테랑 HR 컨설턴트가 매월 함께하며 조직을 한 단계 성장시켜드립니다.
             <br className="hidden sm:block" />
             <span className="sm:hidden"> </span>
-            5분 인터랙티브 투어로 어떻게 함께하는지 확인해보세요.
+            인력과 관련된 모든 것을 부스팅해드립니다.
           </p>
         </motion.div>
 
