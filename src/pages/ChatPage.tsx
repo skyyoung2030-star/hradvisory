@@ -42,8 +42,8 @@ type Consultant = {
 const CONSULTANTS: Consultant[] = [
   {
     id: "kim_jh",
-    initials: "JK",
-    name: "Jihwan Kim",
+    initials: "BK",
+    name: "Brian Kim",
     role: "Master Consultant",
     tagline: "평가·성과관리 전문가",
     textColor: "#60a5fa",
@@ -53,8 +53,8 @@ const CONSULTANTS: Consultant[] = [
   },
   {
     id: "park_my",
-    initials: "MP",
-    name: "Miyoung Park",
+    initials: "SP",
+    name: "Sarah Park",
     role: "Principal",
     tagline: "보상 설계 전문가",
     textColor: "#c084fc",
@@ -65,7 +65,7 @@ const CONSULTANTS: Consultant[] = [
   {
     id: "lee_dh",
     initials: "DL",
-    name: "Dohyun Lee",
+    name: "David Lee",
     role: "Senior Consultant",
     tagline: "조직문화·리더십 전문가",
     textColor: "#34d399",
@@ -75,8 +75,8 @@ const CONSULTANTS: Consultant[] = [
   },
   {
     id: "choi_su",
-    initials: "SC",
-    name: "Seoyun Choi",
+    initials: "EC",
+    name: "Emma Choi",
     role: "AI HR Lead",
     tagline: "AI HR 도입 전문가",
     textColor: "#fbbf24",
@@ -86,8 +86,8 @@ const CONSULTANTS: Consultant[] = [
   },
   {
     id: "jung_hs",
-    initials: "HJ",
-    name: "Hyunseok Jung",
+    initials: "MJ",
+    name: "Michael Jung",
     role: "Senior Consultant",
     tagline: "직급·승진 설계 전문가",
     textColor: "#f472b6",
