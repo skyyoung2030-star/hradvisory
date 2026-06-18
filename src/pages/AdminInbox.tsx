@@ -3,7 +3,7 @@
 // 접근: /admin
 
 import { useEffect, useRef, useState } from "react";
-import { Send, MessageCircle, Lock, LogOut, RefreshCw } from "lucide-react";
+import { Send, MessageCircle, Lock, LogOut, RefreshCw, ArrowLeft } from "lucide-react";
 import {
   type Conversation,
   type Message,
@@ -40,7 +40,7 @@ function PinGate({ onUnlock }: { onUnlock: () => void }) {
       return;
     }
     if (pin === expectedPin) {
-      sessionStorage.setItem(PIN_KEY, "1");
+      localStorage.setItem(PIN_KEY, "1");
       onUnlock();
     } else {
       setError("PIN이 올바르지 않습니다.");
@@ -86,7 +86,7 @@ function PinGate({ onUnlock }: { onUnlock: () => void }) {
 
 export default function AdminInbox() {
   const [unlocked, setUnlocked] = useState(
-    typeof window !== "undefined" && sessionStorage.getItem(PIN_KEY) === "1",
+    typeof window !== "undefined" && localStorage.getItem(PIN_KEY) === "1",
   );
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -184,7 +184,7 @@ export default function AdminInbox() {
   }
 
   function logout() {
-    sessionStorage.removeItem(PIN_KEY);
+    localStorage.removeItem(PIN_KEY);
     setUnlocked(false);
   }
 
@@ -200,17 +200,17 @@ export default function AdminInbox() {
       <div aria-hidden className="fixed inset-0 bg-grid-line mask-vignette opacity-40 pointer-events-none" />
 
       {/* Top bar */}
-      <header className="relative z-10 h-14 px-6 flex items-center border-b border-white/[0.06] bg-ink-50/80 backdrop-blur-xl">
-        <div className="flex items-center gap-2 text-ink-900 font-semibold">
-          <MessageCircle size={18} className="text-accent-500" />
-          <span>Master 컨설턴트 Inbox</span>
+      <header className="relative z-10 h-14 px-4 sm:px-6 flex items-center border-b border-white/[0.06] bg-ink-50/80 backdrop-blur-xl">
+        <div className="flex items-center gap-2 text-ink-900 font-semibold min-w-0">
+          <MessageCircle size={18} className="text-accent-500 flex-shrink-0" />
+          <span className="text-[14px] sm:text-[15px] truncate">Master Inbox</span>
           {unreadCount > 0 && (
-            <span className="ml-2 px-2 py-0.5 rounded-full bg-accent-500 text-white text-[11px] font-bold">
+            <span className="ml-1 sm:ml-2 px-2 py-0.5 rounded-full bg-accent-500 text-white text-[11px] font-bold flex-shrink-0">
               {unreadCount}
             </span>
           )}
         </div>
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <button
             onClick={() => void refresh()}
             className="p-2 rounded-lg hover:bg-white/[0.06] text-ink-500 hover:text-ink-800 transition-colors"
@@ -222,15 +222,20 @@ export default function AdminInbox() {
             onClick={logout}
             className="flex items-center gap-1.5 text-[12px] text-ink-500 hover:text-ink-800 transition-colors"
           >
-            <LogOut size={13} /> 로그아웃
+            <LogOut size={13} />
+            <span className="hidden sm:inline">로그아웃</span>
           </button>
         </div>
       </header>
 
-      {/* 2-column layout */}
-      <div className="relative z-10 grid grid-cols-[340px_1fr] h-[calc(100vh-56px)]">
-        {/* Sidebar — conversation list */}
-        <aside className="border-r border-white/[0.06] overflow-y-auto">
+      {/* Layout: 2-column on desktop / stacked single-view on mobile */}
+      <div className="relative z-10 h-[calc(100vh-56px)] md:grid md:grid-cols-[340px_1fr]">
+        {/* Sidebar — conversation list. 모바일에서는 selectedId 없을 때만 보임 */}
+        <aside
+          className={`border-r border-white/[0.06] overflow-y-auto h-full ${
+            selectedId ? "hidden md:block" : "block"
+          }`}
+        >
           {conversations.length === 0 && !loading && (
             <div className="p-6 text-center text-[12px] text-ink-500">
               아직 대화가 없습니다.
@@ -272,8 +277,12 @@ export default function AdminInbox() {
           ))}
         </aside>
 
-        {/* Main — conversation panel */}
-        <section className="flex flex-col">
+        {/* Main — conversation panel. 모바일에서는 selectedId 있을 때만 보임 */}
+        <section
+          className={`flex-col h-full ${
+            selectedId ? "flex" : "hidden md:flex"
+          }`}
+        >
           {!selectedConv && (
             <div className="flex-1 flex items-center justify-center text-ink-500 text-[13px]">
               왼쪽에서 대화를 선택하세요.
@@ -283,26 +292,33 @@ export default function AdminInbox() {
           {selectedConv && (
             <>
               {/* Header */}
-              <div className="px-5 py-3.5 border-b border-white/[0.06] bg-white/[0.02] flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-ink-600 to-ink-800 flex items-center justify-center text-white text-[12px] font-bold">
+              <div className="px-3 sm:px-5 py-3 sm:py-3.5 border-b border-white/[0.06] bg-white/[0.02] flex items-center gap-2 sm:gap-3">
+                {/* Mobile back button */}
+                <button
+                  onClick={() => setSelectedId(null)}
+                  className="md:hidden p-2 -ml-2 rounded-lg hover:bg-white/[0.06] text-ink-500 hover:text-ink-800 transition-colors flex-shrink-0"
+                  aria-label="목록으로"
+                >
+                  <ArrowLeft size={18} />
+                </button>
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-ink-600 to-ink-800 flex items-center justify-center text-white text-[12px] font-bold flex-shrink-0">
                   {(selectedConv.visitor_name || "?").slice(0, 1)}
                 </div>
-                <div className="flex-1 leading-tight">
-                  <div className="text-[14px] font-bold text-ink-900">
+                <div className="flex-1 leading-tight min-w-0">
+                  <div className="text-[14px] font-bold text-ink-900 truncate">
                     {selectedConv.visitor_name || "익명 방문자"}
                   </div>
-                  <div className="text-[11px] text-ink-500">
-                    {selectedConv.visitor_company || "회사명 미입력"} · 시작:{" "}
-                    {fmtTime(selectedConv.created_at)}
+                  <div className="text-[11px] text-ink-500 truncate">
+                    {selectedConv.visitor_company || "회사명 미입력"} · {fmtTime(selectedConv.created_at)}
                   </div>
                 </div>
-                <span className="text-[10px] font-mono text-ink-500">
+                <span className="hidden sm:inline text-[10px] font-mono text-ink-500 flex-shrink-0">
                   {selectedConv.id.slice(0, 8)}
                 </span>
               </div>
 
               {/* Messages */}
-              <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
+              <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 space-y-3">
                 {messages.length === 0 && (
                   <div className="text-center text-[12px] text-ink-500 py-8">
                     아직 메시지가 없습니다.
@@ -313,7 +329,7 @@ export default function AdminInbox() {
                     key={m.id}
                     className={`flex ${m.role === "admin" ? "justify-end" : "justify-start"}`}
                   >
-                    <div className="max-w-[70%]">
+                    <div className="max-w-[85%] sm:max-w-[70%]">
                       <div
                         className={`rounded-xl px-3.5 py-2.5 text-[13.5px] whitespace-pre-wrap leading-relaxed
                           ${
@@ -344,15 +360,16 @@ export default function AdminInbox() {
                     onKeyDown={onKey}
                     rows={2}
                     disabled={sending}
-                    placeholder="답변 입력… (Enter 전송 / Shift+Enter 줄바꿈)"
+                    placeholder="답변 입력…"
                     className="flex-1 bg-white/[0.04] border border-white/10 rounded-lg px-3 py-2 text-[13.5px] text-ink-900 placeholder:text-ink-500 outline-none focus:border-accent-500/50 focus:bg-white/[0.06] transition-colors resize-none disabled:opacity-60"
                   />
                   <button
                     onClick={() => void handleReply()}
                     disabled={!reply.trim() || sending}
-                    className="h-[60px] px-4 flex items-center justify-center gap-1.5 rounded-lg bg-accent-500 hover:bg-accent-400 text-white text-[13px] font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-[0_4px_12px_-2px_rgba(14,165,233,0.4)]"
+                    className="h-[60px] px-3 sm:px-4 flex items-center justify-center gap-1.5 rounded-lg bg-accent-500 hover:bg-accent-400 text-white text-[13px] font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-[0_4px_12px_-2px_rgba(14,165,233,0.4)] flex-shrink-0"
                   >
-                    <Send size={14} /> 전송
+                    <Send size={14} />
+                    <span className="hidden sm:inline">전송</span>
                   </button>
                 </div>
               </div>
