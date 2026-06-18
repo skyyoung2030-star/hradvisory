@@ -4,7 +4,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Send, ArrowLeft, MessageCircle } from "lucide-react";
+import { Send, ArrowLeft, MessageCircle, Check } from "lucide-react";
 import {
   type Message,
   createConversation,
@@ -26,6 +26,67 @@ const STARTER_CHIPS = [
   "평가 등급 분포는 어떻게?",
 ];
 
+/* ─────────────── 컨설턴트 프로필 (가상) ─────────────── */
+type Consultant = {
+  id: string;
+  initials: string;
+  name: string;
+  role: string;
+  specialty: string[];
+  bio: string;
+  gradient: string;
+};
+
+const CONSULTANTS: Consultant[] = [
+  {
+    id: "kim_jh",
+    initials: "김",
+    name: "김지환",
+    role: "Master 컨설턴트",
+    specialty: ["평가", "OKR", "성과관리"],
+    bio: "대기업·중견기업 평가체계 구축 14년. HR Tech 컨퍼런스 다수 연사.",
+    gradient: "from-blue-500 to-blue-700",
+  },
+  {
+    id: "park_my",
+    initials: "박",
+    name: "박미영",
+    role: "Principal",
+    specialty: ["보상", "Pay Band", "Total Reward"],
+    bio: "중견기업 50개+ 보상체계 설계. CCP·GRP 자격. Compensation 분야 18년.",
+    gradient: "from-purple-500 to-purple-700",
+  },
+  {
+    id: "lee_dh",
+    initials: "이",
+    name: "이도현",
+    role: "Senior 컨설턴트",
+    specialty: ["조직문화", "리더십", "변화관리"],
+    bio: "조직개발 16년. 임원 코칭 200+ 세션. ICF PCC 자격.",
+    gradient: "from-emerald-500 to-emerald-700",
+  },
+  {
+    id: "choi_su",
+    initials: "최",
+    name: "최서윤",
+    role: "AI HR 전문",
+    specialty: ["AI HR", "HR Analytics", "직무 분석"],
+    bio: "AI·데이터 기반 HR 도입 컨설팅. SaaS 도입 30개사. Stanford MBA.",
+    gradient: "from-amber-500 to-amber-700",
+  },
+  {
+    id: "jung_hs",
+    initials: "정",
+    name: "정현석",
+    role: "Senior 컨설턴트",
+    specialty: ["직급", "승진", "조직 설계"],
+    bio: "스타트업·중견기업 직급체계 정비 35건+. PMI 통합 프로젝트 다수.",
+    gradient: "from-pink-500 to-pink-700",
+  },
+];
+
+const CONSULTANT_KEY = "hcg_selected_consultant";
+
 export default function ChatPage() {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -33,9 +94,20 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false);
   /** 초기 진입 시 컨설턴트가 인사 메시지를 "입력 중"으로 보이게 한 뒤 등장 */
   const [greetingShown, setGreetingShown] = useState(false);
+  /** 선택된 컨설턴트 ID (localStorage 영구 저장) */
+  const [selectedConsultantId, setSelectedConsultantId] = useState<string | null>(
+    typeof window !== "undefined" ? localStorage.getItem(CONSULTANT_KEY) : null,
+  );
   const scrollRef = useRef<HTMLDivElement>(null);
   const unsubRef = useRef<(() => void) | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  function selectConsultant(id: string) {
+    setSelectedConsultantId(id);
+    localStorage.setItem(CONSULTANT_KEY, id);
+  }
+
+  const selectedConsultant = CONSULTANTS.find((c) => c.id === selectedConsultantId);
 
   /* 초기 — 기존 대화 로드 */
   useEffect(() => {
@@ -181,6 +253,91 @@ export default function ChatPage() {
           LIVE
         </span>
       </header>
+
+      {/* Consultant profile bar */}
+      <div className="relative z-10 border-b border-white/[0.06] bg-white/[0.015]">
+        <div className="max-w-[1100px] mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span
+                className="text-[10px] font-mono font-bold tracking-[0.18em] uppercase"
+                style={{ color: "#34d399" }}
+              >
+                담당 컨설턴트
+              </span>
+              {selectedConsultant && (
+                <>
+                  <span className="text-[10px] text-ink-500">·</span>
+                  <span className="text-[11px] text-ink-700">
+                    <span className="font-semibold">{selectedConsultant.name}</span>{" "}
+                    <span className="text-ink-500">와(과) 대화 중</span>
+                  </span>
+                </>
+              )}
+            </div>
+            {!selectedConsultant && (
+              <span className="text-[10px] text-ink-500 hidden sm:inline">
+                전문가를 선택하면 해당 분야 답변을 우선 받을 수 있어요
+              </span>
+            )}
+          </div>
+
+          {/* Horizontal scroll for cards */}
+          <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 snap-x">
+            {CONSULTANTS.map((c) => {
+              const selected = c.id === selectedConsultantId;
+              return (
+                <button
+                  key={c.id}
+                  onClick={() => selectConsultant(c.id)}
+                  className={`group flex-shrink-0 w-[220px] sm:w-[240px] snap-start text-left rounded-xl p-3 border transition-all
+                    ${
+                      selected
+                        ? "bg-success-500/10 border-success-500/60 shadow-[0_0_20px_-4px_rgba(16,185,129,0.4)]"
+                        : "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/[0.18]"
+                    }`}
+                >
+                  <div className="flex items-start gap-2.5">
+                    {/* Avatar */}
+                    <div className="relative flex-shrink-0">
+                      <div
+                        className={`w-11 h-11 rounded-full bg-gradient-to-br ${c.gradient} flex items-center justify-center text-white text-[15px] font-bold shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]`}
+                      >
+                        {c.initials}
+                      </div>
+                      <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-success-400 border-2 border-ink-50" />
+                    </div>
+                    {/* Name + role */}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[13px] font-bold text-ink-900 truncate">{c.name}</div>
+                      <div className="text-[10.5px] font-mono text-ink-500 truncate">{c.role}</div>
+                    </div>
+                    {selected && (
+                      <Check size={14} className="text-success-400 flex-shrink-0 mt-0.5" />
+                    )}
+                  </div>
+                  {/* Specialty chips */}
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {c.specialty.slice(0, 3).map((s) => (
+                      <span
+                        key={s}
+                        className={`text-[10px] font-medium px-1.5 py-0.5 rounded
+                          ${selected ? "bg-success-500/20 text-success-300" : "bg-white/[0.06] text-ink-600"}`}
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                  {/* Bio */}
+                  <p className="mt-2 text-[11px] text-ink-600 leading-snug line-clamp-2">
+                    {c.bio}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
 
       {/* Chat body */}
       <section className="relative z-10 flex-1 min-h-0 flex flex-col w-full max-w-[800px] mx-auto px-4 pb-6">
