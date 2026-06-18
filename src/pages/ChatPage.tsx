@@ -126,9 +126,12 @@ export default function ChatPage() {
   }
 
   const showChips = greetingShown && messages.length === 0 && !sending;
+  // typing indicator — 컨설턴트가 옆에서 입력 중인 느낌을 영구 노출 (admin 답변 받기 전까지)
+  const lastMsg = messages[messages.length - 1];
   const showTyping =
     !greetingShown ||
-    (messages.length > 0 && messages[messages.length - 1].role === "visitor");
+    messages.length === 0 ||
+    (lastMsg && lastMsg.role === "visitor");
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-ink-50 bg-spotlight flex flex-col">
